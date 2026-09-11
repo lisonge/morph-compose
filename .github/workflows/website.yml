@@ -49,4 +49,4 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: >-
           pnpm dlx --allow-build=sharp --allow-build=workerd wrangler@4
-          pages deploy morph-website/dist --project-name=morphicons-compose
+          pages deploy morph-website/dist --project-name=morph-compose

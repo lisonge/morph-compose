@@ -41,7 +41,10 @@ const skikoRuntimeDir = join(
   'skiko-runtime-processed-wasmjs',
 );
 const distDir = join(packageDir, 'dist');
-const gradleTask = `:${projectName}:compileProductionExecutableKotlinWasmJs`;
+const gradleTasks = [
+  `:${projectName}:compileProductionExecutableKotlinWasmJs`,
+  `:${projectName}:processSkikoRuntimeForKWasm`,
+];
 const skikoRuntimeFiles = ['skiko.mjs', 'skiko.wasm'];
 const typeDeclarationFileName = 'morph-playground.d.mts';
 const generatedModuleFileName = 'morph-playground.internal.mjs';
@@ -52,8 +55,8 @@ await new Promise<void>((resolvePromise, reject) => {
     ? (process.env.ComSpec ?? 'cmd.exe')
     : gradleWrapper;
   const args = isWindows
-    ? ['/d', '/s', '/c', `""${gradleWrapper}" ${gradleTask}"`]
-    : [gradleTask];
+    ? ['/d', '/s', '/c', `""${gradleWrapper}" ${gradleTasks.join(' ')}"`]
+    : gradleTasks;
   const gradle = spawn(command, args, {
     cwd: repositoryDir,
     stdio: 'inherit',
