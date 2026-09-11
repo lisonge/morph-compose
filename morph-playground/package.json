@@ -6,6 +6,10 @@
     ".": {
       "types": "./dist/morph-playground.d.mts",
       "import": "./dist/morph-playground.mjs"
+    },
+    "./wasm-assets": {
+      "types": "./dist/morph-playground.wasm-assets.d.mts",
+      "import": "./dist/morph-playground.wasm-assets.mjs"
     }
   },
   "files": [

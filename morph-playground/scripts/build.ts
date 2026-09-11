@@ -6,6 +6,7 @@ import {
   readdir,
   rename,
   rm,
+  stat,
   writeFile,
 } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -49,6 +50,12 @@ const skikoRuntimeFiles = ['skiko.mjs', 'skiko.wasm'];
 const typeDeclarationFileName = 'morph-playground.d.mts';
 const generatedModuleFileName = 'morph-playground.internal.mjs';
 const publicModuleFileName = 'morph-playground.mjs';
+const wasmAssetsModuleFileName = 'morph-playground.wasm-assets.mjs';
+const wasmAssetsTypeDeclarationFileName = 'morph-playground.wasm-assets.d.mts';
+const wasmAssetFileNames = [
+  `${projectName}.wasm`,
+  ...skikoRuntimeFiles.filter((name) => name.endsWith('.wasm')),
+];
 
 await new Promise<void>((resolvePromise, reject) => {
   const command = isWindows
@@ -82,6 +89,40 @@ for (const runtimeFileName of skikoRuntimeFiles) {
     join(distDir, runtimeFileName),
   );
 }
+
+const wasmAssets = await Promise.all(
+  wasmAssetFileNames.map(async (fileName) => ({
+    fileName,
+    byteLength: (await stat(join(distDir, fileName))).size,
+  })),
+);
+const totalWasmByteLength = wasmAssets.reduce(
+  (total, asset) => total + asset.byteLength,
+  0,
+);
+
+await writeFile(
+  join(distDir, wasmAssetsModuleFileName),
+  [
+    `export const wasmAssets = ${JSON.stringify(wasmAssets)};`,
+    `export const totalWasmByteLength = ${totalWasmByteLength};`,
+    '',
+  ].join('\n'),
+  'utf8',
+);
+await writeFile(
+  join(distDir, wasmAssetsTypeDeclarationFileName),
+  [
+    'export type WasmAssetMetadata = Readonly<{',
+    '  fileName: string;',
+    '  byteLength: number;',
+    '}>;',
+    'export declare const wasmAssets: readonly WasmAssetMetadata[];',
+    'export declare const totalWasmByteLength: number;',
+    '',
+  ].join('\n'),
+  'utf8',
+);
 
 await rename(
   join(distDir, publicModuleFileName),
@@ -197,5 +238,6 @@ for (const moduleFileName of moduleFileNames) {
 }
 
 console.log(`Copied Kotlin/Wasm and Skiko output to ${distDir}`);
+console.log(`Recorded ${wasmAssets.length} Wasm asset size(s), ${totalWasmByteLength} bytes total`);
 console.log(`Marked ${viteIgnoredNodeImportCount} Node import(s) with Vite ignore comments`);
 console.log(`Validated ${moduleFileNames.length} module(s) and ${mapFileNames.length} source map(s)`);

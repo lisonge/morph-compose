@@ -24,9 +24,14 @@ narrows the generated public TypeScript declaration back to `Element`.
 The Node.js preprocessing script runs the production Wasm link, recreates `morph-playground/dist`, copies
 the Kotlin/Wasm output plus `skiko.mjs` and `skiko.wasm`, normalizes source-map paths, adds
 `/* @vite-ignore */` to compiler-generated Node-only dynamic imports, and validates all relative imports
-and `new URL` assets.
+and `new URL` assets. It also emits a small metadata module containing the original byte length of each
+Wasm asset.
 
 `morph-website` imports that workspace package dynamically after Vue has created the host element.
+During that import it temporarily tracks the two Wasm response streams and presents their aggregate,
+byte-weighted download progress. The original streams continue into `WebAssembly.instantiateStreaming`,
+so progress reporting does not add another download or disable streaming compilation. Once both streams
+finish, the loading state reports startup until Compose mounts its first DOM child.
 Removing the host's Compose child triggers Compose's disconnect cleanup. The website contains no
 Kotlin code and all of its source and configuration files are type-checked TypeScript.
 
