@@ -1,5 +1,7 @@
 # morph-compose
 
+[![Maven Central](https://img.shields.io/maven-central/v/li.songe.morph/morph-compose.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/li.songe.morph/morph-compose)
+
 `morph-compose` is a filled-shape morphing library for Compose Multiplatform. It transforms
 icons and custom paths while preserving rotations, scaling, and multi-contour shapes.
 Use it for animated icons, component outlines, image clips, selection feedback, decorative
@@ -34,7 +36,7 @@ animated Compose APIs without requiring a specific icon pack.
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("li.songe.morph:morph-compose:0.1.0")
+            implementation("li.songe.morph:morph-compose:<latest>")
         }
     }
 }
