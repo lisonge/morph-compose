@@ -1,0 +1,6 @@
+packages:
+  - morph-playground
+  - morph-website
+minimumReleaseAgeExclude:
+  - vite@8.3.0
+  - '@types/node@22.20.2'

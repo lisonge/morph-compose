@@ -1,0 +1,198 @@
+public final class li/songe/morph/compose/ImageVectorAdapterKt {
+	public static final fun buildMorphPlan (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;Lli/songe/morph/compose/MorphOptions;Z)Lli/songe/morph/compose/ImageVectorMorphPlan;
+	public static synthetic fun buildMorphPlan$default (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;Lli/songe/morph/compose/MorphOptions;ZILjava/lang/Object;)Lli/songe/morph/compose/ImageVectorMorphPlan;
+	public static final fun inspectMorphCompatibility (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;Lli/songe/morph/compose/MorphOptions;Z)Lli/songe/morph/compose/MorphCompatibilityReport;
+	public static synthetic fun inspectMorphCompatibility$default (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;Lli/songe/morph/compose/MorphOptions;ZILjava/lang/Object;)Lli/songe/morph/compose/MorphCompatibilityReport;
+}
+
+public final class li/songe/morph/compose/ImageVectorMorphPlan {
+	public static final field $stable I
+	public final fun getCompatibilityReport ()Lli/songe/morph/compose/MorphCompatibilityReport;
+	public final fun getContourCount ()I
+	public final fun getSampleCount ()I
+	public final fun residual (I)D
+	public final fun rotationRadians (I)D
+}
+
+public final class li/songe/morph/compose/MorphCompatibility : java/lang/Enum {
+	public static final field FullPolar Lli/songe/morph/compose/MorphCompatibility;
+	public static final field Hybrid Lli/songe/morph/compose/MorphCompatibility;
+	public static final field Unsupported Lli/songe/morph/compose/MorphCompatibility;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphCompatibility;
+	public static fun values ()[Lli/songe/morph/compose/MorphCompatibility;
+}
+
+public final class li/songe/morph/compose/MorphCompatibilityReport {
+	public static final field $stable I
+	public fun <init> (Lli/songe/morph/compose/MorphCompatibility;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Lli/songe/morph/compose/MorphCompatibility;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lli/songe/morph/compose/MorphCompatibility;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Lli/songe/morph/compose/MorphCompatibility;Ljava/util/List;Ljava/util/List;)Lli/songe/morph/compose/MorphCompatibilityReport;
+	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphCompatibilityReport;Lli/songe/morph/compose/MorphCompatibility;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lli/songe/morph/compose/MorphCompatibilityReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCompatibility ()Lli/songe/morph/compose/MorphCompatibility;
+	public final fun getContours ()Ljava/util/List;
+	public final fun getIssues ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun isSupported ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class li/songe/morph/compose/MorphContentScale : java/lang/Enum {
+	public static final field FillBounds Lli/songe/morph/compose/MorphContentScale;
+	public static final field Fit Lli/songe/morph/compose/MorphContentScale;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphContentScale;
+	public static fun values ()[Lli/songe/morph/compose/MorphContentScale;
+}
+
+public final class li/songe/morph/compose/MorphContourKind : java/lang/Enum {
+	public static final field Hole Lli/songe/morph/compose/MorphContourKind;
+	public static final field Shape Lli/songe/morph/compose/MorphContourKind;
+	public static final field Stroke Lli/songe/morph/compose/MorphContourKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphContourKind;
+	public static fun values ()[Lli/songe/morph/compose/MorphContourKind;
+}
+
+public final class li/songe/morph/compose/MorphContourReport {
+	public static final field $stable I
+	public fun <init> (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;D)V
+	public synthetic fun <init> (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()Lli/songe/morph/compose/MorphContourKind;
+	public final fun component3 ()Lli/songe/morph/compose/MorphInterpolation;
+	public final fun component4 ()Lli/songe/morph/compose/MorphFallbackReason;
+	public final fun component5 ()D
+	public final fun copy (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;D)Lli/songe/morph/compose/MorphContourReport;
+	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphContourReport;ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DILjava/lang/Object;)Lli/songe/morph/compose/MorphContourReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFallbackReason ()Lli/songe/morph/compose/MorphFallbackReason;
+	public final fun getIndex ()I
+	public final fun getInterpolation ()Lli/songe/morph/compose/MorphInterpolation;
+	public final fun getKind ()Lli/songe/morph/compose/MorphContourKind;
+	public final fun getResidual ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class li/songe/morph/compose/MorphFallbackReason : java/lang/Enum {
+	public static final field DegenerateSimilarity Lli/songe/morph/compose/MorphFallbackReason;
+	public static final field MissingSourceContour Lli/songe/morph/compose/MorphFallbackReason;
+	public static final field MissingTargetContour Lli/songe/morph/compose/MorphFallbackReason;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphFallbackReason;
+	public static fun values ()[Lli/songe/morph/compose/MorphFallbackReason;
+}
+
+public final class li/songe/morph/compose/MorphGeometry {
+	public static final field $stable I
+}
+
+public final class li/songe/morph/compose/MorphGeometryKt {
+	public static final fun buildMorphPlan (Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphOptions;)Lli/songe/morph/compose/MorphGeometryPlan;
+	public static synthetic fun buildMorphPlan$default (Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphOptions;ILjava/lang/Object;)Lli/songe/morph/compose/MorphGeometryPlan;
+	public static final fun morphGeometryOf-12SF9DM (Landroidx/compose/ui/graphics/Path;JF)Lli/songe/morph/compose/MorphGeometry;
+	public static synthetic fun morphGeometryOf-12SF9DM$default (Landroidx/compose/ui/graphics/Path;JFILjava/lang/Object;)Lli/songe/morph/compose/MorphGeometry;
+	public static final fun morphGeometryOf-d16Qtg0 (Ljava/util/List;J)Lli/songe/morph/compose/MorphGeometry;
+	public static final fun rememberMorphGeometryState (Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphGeometryState;
+	public static final fun rememberMorphPlan (Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphOptions;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphGeometryPlan;
+}
+
+public final class li/songe/morph/compose/MorphGeometryPlan {
+	public static final field $stable I
+	public final fun createPathWriter ()Lli/songe/morph/compose/MorphPathWriter;
+	public final fun getCompatibilityReport ()Lli/songe/morph/compose/MorphCompatibilityReport;
+	public final fun getContourCount ()I
+	public final fun getSampleCount ()I
+}
+
+public final class li/songe/morph/compose/MorphGeometryState {
+	public static final field $stable I
+	public final fun animateTo (Lli/songe/morph/compose/MorphGeometry;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun animateTo$default (Lli/songe/morph/compose/MorphGeometryState;Lli/songe/morph/compose/MorphGeometry;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun getCompatibilityReport ()Lli/songe/morph/compose/MorphCompatibilityReport;
+	public final fun getProgress ()F
+	public final fun isRunning ()Z
+	public final fun seekTo (Lli/songe/morph/compose/MorphGeometry;Lli/songe/morph/compose/MorphGeometry;FLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun snapTo (Lli/songe/morph/compose/MorphGeometry;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class li/songe/morph/compose/MorphIconKt {
+	public static final fun AnimatedMorphIcon-Hzv_svQ (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;ZLandroidx/compose/ui/Modifier;JLjava/lang/String;Lli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Landroidx/compose/runtime/Composer;II)V
+	public static final fun MorphIcon-NpZTi58 (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;FLandroidx/compose/ui/Modifier;JLjava/lang/String;Lli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)V
+	public static final fun MorphIcon-cf5BqRc (Lli/songe/morph/compose/MorphIconState;Landroidx/compose/ui/Modifier;JLjava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun MorphIcon-fWhpE4E (Lli/songe/morph/compose/ImageVectorMorphPlan;FLandroidx/compose/ui/Modifier;JLjava/lang/String;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberMorphPlan (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;Lli/songe/morph/compose/MorphOptions;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/ImageVectorMorphPlan;
+}
+
+public final class li/songe/morph/compose/MorphIconState {
+	public static final field $stable I
+	public final fun animateTo (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun animateTo$default (Lli/songe/morph/compose/MorphIconState;Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun getCompatibilityReport ()Lli/songe/morph/compose/MorphCompatibilityReport;
+	public final fun getInterpolation ()Lli/songe/morph/compose/MorphInterpolation;
+	public final fun getProgress ()F
+	public final fun getTargetIcon ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun isRunning ()Z
+	public final fun snapTo (Landroidx/compose/ui/graphics/vector/ImageVector;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class li/songe/morph/compose/MorphIconStateKt {
+	public static final fun rememberMorphIconState (Landroidx/compose/ui/graphics/vector/ImageVector;Lli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphIconState;
+}
+
+public final class li/songe/morph/compose/MorphInterpolation : java/lang/Enum {
+	public static final field Linear Lli/songe/morph/compose/MorphInterpolation;
+	public static final field Polar Lli/songe/morph/compose/MorphInterpolation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphInterpolation;
+	public static fun values ()[Lli/songe/morph/compose/MorphInterpolation;
+}
+
+public final class li/songe/morph/compose/MorphMotionPolicy : java/lang/Enum {
+	public static final field Always Lli/songe/morph/compose/MorphMotionPolicy;
+	public static final field Never Lli/songe/morph/compose/MorphMotionPolicy;
+	public static final field System Lli/songe/morph/compose/MorphMotionPolicy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphMotionPolicy;
+	public static fun values ()[Lli/songe/morph/compose/MorphMotionPolicy;
+}
+
+public final class li/songe/morph/compose/MorphOptions {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (ID)V
+	public synthetic fun <init> (IDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()D
+	public final fun copy (ID)Lli/songe/morph/compose/MorphOptions;
+	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphOptions;IDILjava/lang/Object;)Lli/songe/morph/compose/MorphOptions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCornerThresholdRadians ()D
+	public final fun getSampleCount ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class li/songe/morph/compose/MorphPathWriter {
+	public static final field $stable I
+	public final fun writePath-QfoU1oo (Landroidx/compose/ui/graphics/Path;FJLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;)V
+	public static synthetic fun writePath-QfoU1oo$default (Lli/songe/morph/compose/MorphPathWriter;Landroidx/compose/ui/graphics/Path;FJLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;ILjava/lang/Object;)V
+}
+
+public final class li/songe/morph/compose/MorphShape : androidx/compose/ui/graphics/Shape {
+	public static final field $stable I
+	public fun <init> (Lli/songe/morph/compose/MorphGeometryPlan;FLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;)V
+	public synthetic fun <init> (Lli/songe/morph/compose/MorphGeometryPlan;FLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun createOutline-Pq9zytI (JLandroidx/compose/ui/unit/LayoutDirection;Landroidx/compose/ui/unit/Density;)Landroidx/compose/ui/graphics/Outline;
+}
+
+public final class li/songe/morph/compose/MorphShapeKt {
+	public static final fun rememberMorphShape (Lli/songe/morph/compose/MorphGeometryPlan;FLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphShape;
+	public static final fun rememberMorphShape (Lli/songe/morph/compose/MorphGeometryState;Lli/songe/morph/compose/MorphContentScale;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphShape;
+}
+

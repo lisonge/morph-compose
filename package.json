@@ -1,0 +1,36 @@
+{
+  "name": "morphicons-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --sort build",
+    "dev": "pnpm --filter morph-playground build && pnpm --filter morph-website dev",
+    "preview": "pnpm --filter morph-website preview"
+  },
+  "dependencies": {
+    "@vueuse/core": "^14.4.0",
+    "vue": "^3.5.42"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^22.20.2",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "es-module-lexer": "^2.3.2",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.0",
+    "vue-tsc": "^3.3.11"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "26.8.1",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.3.4",
+      "onFail": "error"
+    }
+  }
+}

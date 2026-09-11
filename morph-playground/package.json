@@ -1,0 +1,19 @@
+{
+  "name": "morph-playground",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/morph-playground.d.mts",
+      "import": "./dist/morph-playground.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc && node ./scripts/build.ts",
+    "prepublishOnly": "pnpm run build"
+  }
+}

@@ -1,0 +1,241 @@
+// Klib ABI Dump
+// Targets: [wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <li.songe.morph:morph-compose>
+final enum class li.songe.morph.compose/MorphCompatibility : kotlin/Enum<li.songe.morph.compose/MorphCompatibility> { // li.songe.morph.compose/MorphCompatibility|null[0]
+    enum entry FullPolar // li.songe.morph.compose/MorphCompatibility.FullPolar|null[0]
+    enum entry Hybrid // li.songe.morph.compose/MorphCompatibility.Hybrid|null[0]
+    enum entry Unsupported // li.songe.morph.compose/MorphCompatibility.Unsupported|null[0]
+
+    final val entries // li.songe.morph.compose/MorphCompatibility.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphCompatibility> // li.songe.morph.compose/MorphCompatibility.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphCompatibility // li.songe.morph.compose/MorphCompatibility.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphCompatibility> // li.songe.morph.compose/MorphCompatibility.values|values#static(){}[0]
+}
+
+final enum class li.songe.morph.compose/MorphContentScale : kotlin/Enum<li.songe.morph.compose/MorphContentScale> { // li.songe.morph.compose/MorphContentScale|null[0]
+    enum entry FillBounds // li.songe.morph.compose/MorphContentScale.FillBounds|null[0]
+    enum entry Fit // li.songe.morph.compose/MorphContentScale.Fit|null[0]
+
+    final val entries // li.songe.morph.compose/MorphContentScale.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphContentScale> // li.songe.morph.compose/MorphContentScale.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphContentScale // li.songe.morph.compose/MorphContentScale.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphContentScale> // li.songe.morph.compose/MorphContentScale.values|values#static(){}[0]
+}
+
+final enum class li.songe.morph.compose/MorphContourKind : kotlin/Enum<li.songe.morph.compose/MorphContourKind> { // li.songe.morph.compose/MorphContourKind|null[0]
+    enum entry Hole // li.songe.morph.compose/MorphContourKind.Hole|null[0]
+    enum entry Shape // li.songe.morph.compose/MorphContourKind.Shape|null[0]
+    enum entry Stroke // li.songe.morph.compose/MorphContourKind.Stroke|null[0]
+
+    final val entries // li.songe.morph.compose/MorphContourKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphContourKind> // li.songe.morph.compose/MorphContourKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphContourKind // li.songe.morph.compose/MorphContourKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphContourKind> // li.songe.morph.compose/MorphContourKind.values|values#static(){}[0]
+}
+
+final enum class li.songe.morph.compose/MorphFallbackReason : kotlin/Enum<li.songe.morph.compose/MorphFallbackReason> { // li.songe.morph.compose/MorphFallbackReason|null[0]
+    enum entry DegenerateSimilarity // li.songe.morph.compose/MorphFallbackReason.DegenerateSimilarity|null[0]
+    enum entry MissingSourceContour // li.songe.morph.compose/MorphFallbackReason.MissingSourceContour|null[0]
+    enum entry MissingTargetContour // li.songe.morph.compose/MorphFallbackReason.MissingTargetContour|null[0]
+
+    final val entries // li.songe.morph.compose/MorphFallbackReason.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphFallbackReason> // li.songe.morph.compose/MorphFallbackReason.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphFallbackReason // li.songe.morph.compose/MorphFallbackReason.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphFallbackReason> // li.songe.morph.compose/MorphFallbackReason.values|values#static(){}[0]
+}
+
+final enum class li.songe.morph.compose/MorphInterpolation : kotlin/Enum<li.songe.morph.compose/MorphInterpolation> { // li.songe.morph.compose/MorphInterpolation|null[0]
+    enum entry Linear // li.songe.morph.compose/MorphInterpolation.Linear|null[0]
+    enum entry Polar // li.songe.morph.compose/MorphInterpolation.Polar|null[0]
+
+    final val entries // li.songe.morph.compose/MorphInterpolation.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphInterpolation> // li.songe.morph.compose/MorphInterpolation.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphInterpolation // li.songe.morph.compose/MorphInterpolation.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphInterpolation> // li.songe.morph.compose/MorphInterpolation.values|values#static(){}[0]
+}
+
+final enum class li.songe.morph.compose/MorphMotionPolicy : kotlin/Enum<li.songe.morph.compose/MorphMotionPolicy> { // li.songe.morph.compose/MorphMotionPolicy|null[0]
+    enum entry Always // li.songe.morph.compose/MorphMotionPolicy.Always|null[0]
+    enum entry Never // li.songe.morph.compose/MorphMotionPolicy.Never|null[0]
+    enum entry System // li.songe.morph.compose/MorphMotionPolicy.System|null[0]
+
+    final val entries // li.songe.morph.compose/MorphMotionPolicy.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphMotionPolicy> // li.songe.morph.compose/MorphMotionPolicy.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphMotionPolicy // li.songe.morph.compose/MorphMotionPolicy.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphMotionPolicy> // li.songe.morph.compose/MorphMotionPolicy.values|values#static(){}[0]
+}
+
+final class li.songe.morph.compose/ImageVectorMorphPlan { // li.songe.morph.compose/ImageVectorMorphPlan|null[0]
+    final val compatibilityReport // li.songe.morph.compose/ImageVectorMorphPlan.compatibilityReport|{}compatibilityReport[0]
+        final fun <get-compatibilityReport>(): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/ImageVectorMorphPlan.compatibilityReport.<get-compatibilityReport>|<get-compatibilityReport>(){}[0]
+    final val contourCount // li.songe.morph.compose/ImageVectorMorphPlan.contourCount|{}contourCount[0]
+        final fun <get-contourCount>(): kotlin/Int // li.songe.morph.compose/ImageVectorMorphPlan.contourCount.<get-contourCount>|<get-contourCount>(){}[0]
+    final val sampleCount // li.songe.morph.compose/ImageVectorMorphPlan.sampleCount|{}sampleCount[0]
+        final fun <get-sampleCount>(): kotlin/Int // li.songe.morph.compose/ImageVectorMorphPlan.sampleCount.<get-sampleCount>|<get-sampleCount>(){}[0]
+
+    final fun residual(kotlin/Int): kotlin/Double // li.songe.morph.compose/ImageVectorMorphPlan.residual|residual(kotlin.Int){}[0]
+    final fun rotationRadians(kotlin/Int): kotlin/Double // li.songe.morph.compose/ImageVectorMorphPlan.rotationRadians|rotationRadians(kotlin.Int){}[0]
+}
+
+final class li.songe.morph.compose/MorphCompatibilityReport { // li.songe.morph.compose/MorphCompatibilityReport|null[0]
+    constructor <init>(li.songe.morph.compose/MorphCompatibility, kotlin.collections/List<li.songe.morph.compose/MorphContourReport>, kotlin.collections/List<kotlin/String> = ...) // li.songe.morph.compose/MorphCompatibilityReport.<init>|<init>(li.songe.morph.compose.MorphCompatibility;kotlin.collections.List<li.songe.morph.compose.MorphContourReport>;kotlin.collections.List<kotlin.String>){}[0]
+
+    final val compatibility // li.songe.morph.compose/MorphCompatibilityReport.compatibility|{}compatibility[0]
+        final fun <get-compatibility>(): li.songe.morph.compose/MorphCompatibility // li.songe.morph.compose/MorphCompatibilityReport.compatibility.<get-compatibility>|<get-compatibility>(){}[0]
+    final val contours // li.songe.morph.compose/MorphCompatibilityReport.contours|{}contours[0]
+        final fun <get-contours>(): kotlin.collections/List<li.songe.morph.compose/MorphContourReport> // li.songe.morph.compose/MorphCompatibilityReport.contours.<get-contours>|<get-contours>(){}[0]
+    final val isSupported // li.songe.morph.compose/MorphCompatibilityReport.isSupported|{}isSupported[0]
+        final fun <get-isSupported>(): kotlin/Boolean // li.songe.morph.compose/MorphCompatibilityReport.isSupported.<get-isSupported>|<get-isSupported>(){}[0]
+    final val issues // li.songe.morph.compose/MorphCompatibilityReport.issues|{}issues[0]
+        final fun <get-issues>(): kotlin.collections/List<kotlin/String> // li.songe.morph.compose/MorphCompatibilityReport.issues.<get-issues>|<get-issues>(){}[0]
+
+    final fun component1(): li.songe.morph.compose/MorphCompatibility // li.songe.morph.compose/MorphCompatibilityReport.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<li.songe.morph.compose/MorphContourReport> // li.songe.morph.compose/MorphCompatibilityReport.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/List<kotlin/String> // li.songe.morph.compose/MorphCompatibilityReport.component3|component3(){}[0]
+    final fun copy(li.songe.morph.compose/MorphCompatibility = ..., kotlin.collections/List<li.songe.morph.compose/MorphContourReport> = ..., kotlin.collections/List<kotlin/String> = ...): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/MorphCompatibilityReport.copy|copy(li.songe.morph.compose.MorphCompatibility;kotlin.collections.List<li.songe.morph.compose.MorphContourReport>;kotlin.collections.List<kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // li.songe.morph.compose/MorphCompatibilityReport.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // li.songe.morph.compose/MorphCompatibilityReport.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // li.songe.morph.compose/MorphCompatibilityReport.toString|toString(){}[0]
+}
+
+final class li.songe.morph.compose/MorphContourReport { // li.songe.morph.compose/MorphContourReport|null[0]
+    constructor <init>(kotlin/Int, li.songe.morph.compose/MorphContourKind, li.songe.morph.compose/MorphInterpolation, li.songe.morph.compose/MorphFallbackReason? = ..., kotlin/Double) // li.songe.morph.compose/MorphContourReport.<init>|<init>(kotlin.Int;li.songe.morph.compose.MorphContourKind;li.songe.morph.compose.MorphInterpolation;li.songe.morph.compose.MorphFallbackReason?;kotlin.Double){}[0]
+
+    final val fallbackReason // li.songe.morph.compose/MorphContourReport.fallbackReason|{}fallbackReason[0]
+        final fun <get-fallbackReason>(): li.songe.morph.compose/MorphFallbackReason? // li.songe.morph.compose/MorphContourReport.fallbackReason.<get-fallbackReason>|<get-fallbackReason>(){}[0]
+    final val index // li.songe.morph.compose/MorphContourReport.index|{}index[0]
+        final fun <get-index>(): kotlin/Int // li.songe.morph.compose/MorphContourReport.index.<get-index>|<get-index>(){}[0]
+    final val interpolation // li.songe.morph.compose/MorphContourReport.interpolation|{}interpolation[0]
+        final fun <get-interpolation>(): li.songe.morph.compose/MorphInterpolation // li.songe.morph.compose/MorphContourReport.interpolation.<get-interpolation>|<get-interpolation>(){}[0]
+    final val kind // li.songe.morph.compose/MorphContourReport.kind|{}kind[0]
+        final fun <get-kind>(): li.songe.morph.compose/MorphContourKind // li.songe.morph.compose/MorphContourReport.kind.<get-kind>|<get-kind>(){}[0]
+    final val residual // li.songe.morph.compose/MorphContourReport.residual|{}residual[0]
+        final fun <get-residual>(): kotlin/Double // li.songe.morph.compose/MorphContourReport.residual.<get-residual>|<get-residual>(){}[0]
+
+    final fun component1(): kotlin/Int // li.songe.morph.compose/MorphContourReport.component1|component1(){}[0]
+    final fun component2(): li.songe.morph.compose/MorphContourKind // li.songe.morph.compose/MorphContourReport.component2|component2(){}[0]
+    final fun component3(): li.songe.morph.compose/MorphInterpolation // li.songe.morph.compose/MorphContourReport.component3|component3(){}[0]
+    final fun component4(): li.songe.morph.compose/MorphFallbackReason? // li.songe.morph.compose/MorphContourReport.component4|component4(){}[0]
+    final fun component5(): kotlin/Double // li.songe.morph.compose/MorphContourReport.component5|component5(){}[0]
+    final fun copy(kotlin/Int = ..., li.songe.morph.compose/MorphContourKind = ..., li.songe.morph.compose/MorphInterpolation = ..., li.songe.morph.compose/MorphFallbackReason? = ..., kotlin/Double = ...): li.songe.morph.compose/MorphContourReport // li.songe.morph.compose/MorphContourReport.copy|copy(kotlin.Int;li.songe.morph.compose.MorphContourKind;li.songe.morph.compose.MorphInterpolation;li.songe.morph.compose.MorphFallbackReason?;kotlin.Double){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // li.songe.morph.compose/MorphContourReport.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // li.songe.morph.compose/MorphContourReport.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // li.songe.morph.compose/MorphContourReport.toString|toString(){}[0]
+}
+
+final class li.songe.morph.compose/MorphGeometry // li.songe.morph.compose/MorphGeometry|null[0]
+
+final class li.songe.morph.compose/MorphGeometryPlan { // li.songe.morph.compose/MorphGeometryPlan|null[0]
+    final val compatibilityReport // li.songe.morph.compose/MorphGeometryPlan.compatibilityReport|{}compatibilityReport[0]
+        final fun <get-compatibilityReport>(): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/MorphGeometryPlan.compatibilityReport.<get-compatibilityReport>|<get-compatibilityReport>(){}[0]
+    final val contourCount // li.songe.morph.compose/MorphGeometryPlan.contourCount|{}contourCount[0]
+        final fun <get-contourCount>(): kotlin/Int // li.songe.morph.compose/MorphGeometryPlan.contourCount.<get-contourCount>|<get-contourCount>(){}[0]
+    final val sampleCount // li.songe.morph.compose/MorphGeometryPlan.sampleCount|{}sampleCount[0]
+        final fun <get-sampleCount>(): kotlin/Int // li.songe.morph.compose/MorphGeometryPlan.sampleCount.<get-sampleCount>|<get-sampleCount>(){}[0]
+
+    final fun createPathWriter(): li.songe.morph.compose/MorphPathWriter // li.songe.morph.compose/MorphGeometryPlan.createPathWriter|createPathWriter(){}[0]
+}
+
+final class li.songe.morph.compose/MorphGeometryState { // li.songe.morph.compose/MorphGeometryState|null[0]
+    final val compatibilityReport // li.songe.morph.compose/MorphGeometryState.compatibilityReport|{}compatibilityReport[0]
+        final fun <get-compatibilityReport>(): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/MorphGeometryState.compatibilityReport.<get-compatibilityReport>|<get-compatibilityReport>(){}[0]
+    final val isRunning // li.songe.morph.compose/MorphGeometryState.isRunning|{}isRunning[0]
+        final fun <get-isRunning>(): kotlin/Boolean // li.songe.morph.compose/MorphGeometryState.isRunning.<get-isRunning>|<get-isRunning>(){}[0]
+    final val progress // li.songe.morph.compose/MorphGeometryState.progress|{}progress[0]
+        final fun <get-progress>(): kotlin/Float // li.songe.morph.compose/MorphGeometryState.progress.<get-progress>|<get-progress>(){}[0]
+
+    final suspend fun animateTo(li.songe.morph.compose/MorphGeometry, androidx.compose.animation.core/AnimationSpec<kotlin/Float> = ..., li.songe.morph.compose/MorphMotionPolicy = ...) // li.songe.morph.compose/MorphGeometryState.animateTo|animateTo(li.songe.morph.compose.MorphGeometry;androidx.compose.animation.core.AnimationSpec<kotlin.Float>;li.songe.morph.compose.MorphMotionPolicy){}[0]
+    final suspend fun seekTo(li.songe.morph.compose/MorphGeometry, li.songe.morph.compose/MorphGeometry, kotlin/Float) // li.songe.morph.compose/MorphGeometryState.seekTo|seekTo(li.songe.morph.compose.MorphGeometry;li.songe.morph.compose.MorphGeometry;kotlin.Float){}[0]
+    final suspend fun snapTo(li.songe.morph.compose/MorphGeometry) // li.songe.morph.compose/MorphGeometryState.snapTo|snapTo(li.songe.morph.compose.MorphGeometry){}[0]
+}
+
+final class li.songe.morph.compose/MorphIconState { // li.songe.morph.compose/MorphIconState|null[0]
+    final val compatibilityReport // li.songe.morph.compose/MorphIconState.compatibilityReport|{}compatibilityReport[0]
+        final fun <get-compatibilityReport>(): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/MorphIconState.compatibilityReport.<get-compatibilityReport>|<get-compatibilityReport>(){}[0]
+    final val interpolation // li.songe.morph.compose/MorphIconState.interpolation|{}interpolation[0]
+        final fun <get-interpolation>(): li.songe.morph.compose/MorphInterpolation // li.songe.morph.compose/MorphIconState.interpolation.<get-interpolation>|<get-interpolation>(){}[0]
+    final val targetIcon // li.songe.morph.compose/MorphIconState.targetIcon|{}targetIcon[0]
+        final fun <get-targetIcon>(): androidx.compose.ui.graphics.vector/ImageVector // li.songe.morph.compose/MorphIconState.targetIcon.<get-targetIcon>|<get-targetIcon>(){}[0]
+
+    final var isRunning // li.songe.morph.compose/MorphIconState.isRunning|{}isRunning[0]
+        final fun <get-isRunning>(): kotlin/Boolean // li.songe.morph.compose/MorphIconState.isRunning.<get-isRunning>|<get-isRunning>(){}[0]
+    final var progress // li.songe.morph.compose/MorphIconState.progress|{}progress[0]
+        final fun <get-progress>(): kotlin/Float // li.songe.morph.compose/MorphIconState.progress.<get-progress>|<get-progress>(){}[0]
+
+    final suspend fun animateTo(androidx.compose.ui.graphics.vector/ImageVector, androidx.compose.animation.core/AnimationSpec<kotlin/Float> = ..., li.songe.morph.compose/MorphMotionPolicy = ...) // li.songe.morph.compose/MorphIconState.animateTo|animateTo(androidx.compose.ui.graphics.vector.ImageVector;androidx.compose.animation.core.AnimationSpec<kotlin.Float>;li.songe.morph.compose.MorphMotionPolicy){}[0]
+    final suspend fun snapTo(androidx.compose.ui.graphics.vector/ImageVector) // li.songe.morph.compose/MorphIconState.snapTo|snapTo(androidx.compose.ui.graphics.vector.ImageVector){}[0]
+}
+
+final class li.songe.morph.compose/MorphOptions { // li.songe.morph.compose/MorphOptions|null[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Double = ...) // li.songe.morph.compose/MorphOptions.<init>|<init>(kotlin.Int;kotlin.Double){}[0]
+
+    final val cornerThresholdRadians // li.songe.morph.compose/MorphOptions.cornerThresholdRadians|{}cornerThresholdRadians[0]
+        final fun <get-cornerThresholdRadians>(): kotlin/Double // li.songe.morph.compose/MorphOptions.cornerThresholdRadians.<get-cornerThresholdRadians>|<get-cornerThresholdRadians>(){}[0]
+    final val sampleCount // li.songe.morph.compose/MorphOptions.sampleCount|{}sampleCount[0]
+        final fun <get-sampleCount>(): kotlin/Int // li.songe.morph.compose/MorphOptions.sampleCount.<get-sampleCount>|<get-sampleCount>(){}[0]
+
+    final fun component1(): kotlin/Int // li.songe.morph.compose/MorphOptions.component1|component1(){}[0]
+    final fun component2(): kotlin/Double // li.songe.morph.compose/MorphOptions.component2|component2(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Double = ...): li.songe.morph.compose/MorphOptions // li.songe.morph.compose/MorphOptions.copy|copy(kotlin.Int;kotlin.Double){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // li.songe.morph.compose/MorphOptions.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // li.songe.morph.compose/MorphOptions.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // li.songe.morph.compose/MorphOptions.toString|toString(){}[0]
+}
+
+final class li.songe.morph.compose/MorphPathWriter { // li.songe.morph.compose/MorphPathWriter|null[0]
+    final fun writePath(androidx.compose.ui.graphics/Path, kotlin/Float, androidx.compose.ui.geometry/Size, li.songe.morph.compose/MorphContentScale = ..., li.songe.morph.compose/MorphInterpolation = ...) // li.songe.morph.compose/MorphPathWriter.writePath|writePath(androidx.compose.ui.graphics.Path;kotlin.Float;androidx.compose.ui.geometry.Size;li.songe.morph.compose.MorphContentScale;li.songe.morph.compose.MorphInterpolation){}[0]
+}
+
+final class li.songe.morph.compose/MorphShape : androidx.compose.ui.graphics/Shape { // li.songe.morph.compose/MorphShape|null[0]
+    constructor <init>(li.songe.morph.compose/MorphGeometryPlan, kotlin/Float, li.songe.morph.compose/MorphContentScale = ..., li.songe.morph.compose/MorphInterpolation = ...) // li.songe.morph.compose/MorphShape.<init>|<init>(li.songe.morph.compose.MorphGeometryPlan;kotlin.Float;li.songe.morph.compose.MorphContentScale;li.songe.morph.compose.MorphInterpolation){}[0]
+
+    final fun createOutline(androidx.compose.ui.geometry/Size, androidx.compose.ui.unit/LayoutDirection, androidx.compose.ui.unit/Density): androidx.compose.ui.graphics/Outline // li.songe.morph.compose/MorphShape.createOutline|createOutline(androidx.compose.ui.geometry.Size;androidx.compose.ui.unit.LayoutDirection;androidx.compose.ui.unit.Density){}[0]
+}
+
+final val li.songe.morph.compose/li_songe_morph_compose_ImageVectorMorphPlan$stableprop // li.songe.morph.compose/li_songe_morph_compose_ImageVectorMorphPlan$stableprop|#static{}li_songe_morph_compose_ImageVectorMorphPlan$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphCompatibilityReport$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphCompatibilityReport$stableprop|#static{}li_songe_morph_compose_MorphCompatibilityReport$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphContourReport$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphContourReport$stableprop|#static{}li_songe_morph_compose_MorphContourReport$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphGeometry$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphGeometry$stableprop|#static{}li_songe_morph_compose_MorphGeometry$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphGeometryPlan$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphGeometryPlan$stableprop|#static{}li_songe_morph_compose_MorphGeometryPlan$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphGeometryState$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphGeometryState$stableprop|#static{}li_songe_morph_compose_MorphGeometryState$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphIconState$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphIconState$stableprop|#static{}li_songe_morph_compose_MorphIconState$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphOptions$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphOptions$stableprop|#static{}li_songe_morph_compose_MorphOptions$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphPathWriter$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphPathWriter$stableprop|#static{}li_songe_morph_compose_MorphPathWriter$stableprop[0]
+final val li.songe.morph.compose/li_songe_morph_compose_MorphShape$stableprop // li.songe.morph.compose/li_songe_morph_compose_MorphShape$stableprop|#static{}li_songe_morph_compose_MorphShape$stableprop[0]
+
+final fun li.songe.morph.compose/AnimatedMorphIcon(androidx.compose.ui.graphics.vector/ImageVector, androidx.compose.ui.graphics.vector/ImageVector, kotlin/Boolean, androidx.compose.ui/Modifier?, androidx.compose.ui.graphics/Color, kotlin/String?, li.songe.morph.compose/MorphOptions?, li.songe.morph.compose/MorphInterpolation?, androidx.compose.animation.core/AnimationSpec<kotlin/Float>?, li.songe.morph.compose/MorphMotionPolicy?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // li.songe.morph.compose/AnimatedMorphIcon|AnimatedMorphIcon(androidx.compose.ui.graphics.vector.ImageVector;androidx.compose.ui.graphics.vector.ImageVector;kotlin.Boolean;androidx.compose.ui.Modifier?;androidx.compose.ui.graphics.Color;kotlin.String?;li.songe.morph.compose.MorphOptions?;li.songe.morph.compose.MorphInterpolation?;androidx.compose.animation.core.AnimationSpec<kotlin.Float>?;li.songe.morph.compose.MorphMotionPolicy?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/MorphIcon(androidx.compose.ui.graphics.vector/ImageVector, androidx.compose.ui.graphics.vector/ImageVector, kotlin/Float, androidx.compose.ui/Modifier?, androidx.compose.ui.graphics/Color, kotlin/String?, li.songe.morph.compose/MorphOptions?, li.songe.morph.compose/MorphInterpolation?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // li.songe.morph.compose/MorphIcon|MorphIcon(androidx.compose.ui.graphics.vector.ImageVector;androidx.compose.ui.graphics.vector.ImageVector;kotlin.Float;androidx.compose.ui.Modifier?;androidx.compose.ui.graphics.Color;kotlin.String?;li.songe.morph.compose.MorphOptions?;li.songe.morph.compose.MorphInterpolation?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/MorphIcon(li.songe.morph.compose/ImageVectorMorphPlan, kotlin/Float, androidx.compose.ui/Modifier?, androidx.compose.ui.graphics/Color, kotlin/String?, li.songe.morph.compose/MorphInterpolation?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // li.songe.morph.compose/MorphIcon|MorphIcon(li.songe.morph.compose.ImageVectorMorphPlan;kotlin.Float;androidx.compose.ui.Modifier?;androidx.compose.ui.graphics.Color;kotlin.String?;li.songe.morph.compose.MorphInterpolation?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/MorphIcon(li.songe.morph.compose/MorphIconState, androidx.compose.ui/Modifier?, androidx.compose.ui.graphics/Color, kotlin/String?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // li.songe.morph.compose/MorphIcon|MorphIcon(li.songe.morph.compose.MorphIconState;androidx.compose.ui.Modifier?;androidx.compose.ui.graphics.Color;kotlin.String?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/buildMorphPlan(androidx.compose.ui.graphics.vector/ImageVector, androidx.compose.ui.graphics.vector/ImageVector, li.songe.morph.compose/MorphOptions = ..., kotlin/Boolean = ...): li.songe.morph.compose/ImageVectorMorphPlan // li.songe.morph.compose/buildMorphPlan|buildMorphPlan(androidx.compose.ui.graphics.vector.ImageVector;androidx.compose.ui.graphics.vector.ImageVector;li.songe.morph.compose.MorphOptions;kotlin.Boolean){}[0]
+final fun li.songe.morph.compose/buildMorphPlan(li.songe.morph.compose/MorphGeometry, li.songe.morph.compose/MorphGeometry, li.songe.morph.compose/MorphOptions = ...): li.songe.morph.compose/MorphGeometryPlan // li.songe.morph.compose/buildMorphPlan|buildMorphPlan(li.songe.morph.compose.MorphGeometry;li.songe.morph.compose.MorphGeometry;li.songe.morph.compose.MorphOptions){}[0]
+final fun li.songe.morph.compose/inspectMorphCompatibility(androidx.compose.ui.graphics.vector/ImageVector, androidx.compose.ui.graphics.vector/ImageVector, li.songe.morph.compose/MorphOptions = ..., kotlin/Boolean = ...): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/inspectMorphCompatibility|inspectMorphCompatibility(androidx.compose.ui.graphics.vector.ImageVector;androidx.compose.ui.graphics.vector.ImageVector;li.songe.morph.compose.MorphOptions;kotlin.Boolean){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_ImageVectorMorphPlan$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_ImageVectorMorphPlan$stableprop_getter|li_songe_morph_compose_ImageVectorMorphPlan$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphCompatibilityReport$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphCompatibilityReport$stableprop_getter|li_songe_morph_compose_MorphCompatibilityReport$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphContourReport$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphContourReport$stableprop_getter|li_songe_morph_compose_MorphContourReport$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphGeometry$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphGeometry$stableprop_getter|li_songe_morph_compose_MorphGeometry$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphGeometryPlan$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphGeometryPlan$stableprop_getter|li_songe_morph_compose_MorphGeometryPlan$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphGeometryState$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphGeometryState$stableprop_getter|li_songe_morph_compose_MorphGeometryState$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphIconState$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphIconState$stableprop_getter|li_songe_morph_compose_MorphIconState$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphOptions$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphOptions$stableprop_getter|li_songe_morph_compose_MorphOptions$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphPathWriter$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphPathWriter$stableprop_getter|li_songe_morph_compose_MorphPathWriter$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/li_songe_morph_compose_MorphShape$stableprop_getter(): kotlin/Int // li.songe.morph.compose/li_songe_morph_compose_MorphShape$stableprop_getter|li_songe_morph_compose_MorphShape$stableprop_getter(){}[0]
+final fun li.songe.morph.compose/morphGeometryOf(androidx.compose.ui.graphics/Path, androidx.compose.ui.geometry/Size, kotlin/Float = ...): li.songe.morph.compose/MorphGeometry // li.songe.morph.compose/morphGeometryOf|morphGeometryOf(androidx.compose.ui.graphics.Path;androidx.compose.ui.geometry.Size;kotlin.Float){}[0]
+final fun li.songe.morph.compose/morphGeometryOf(kotlin.collections/List<androidx.compose.ui.graphics.vector/PathNode>, androidx.compose.ui.geometry/Size): li.songe.morph.compose/MorphGeometry // li.songe.morph.compose/morphGeometryOf|morphGeometryOf(kotlin.collections.List<androidx.compose.ui.graphics.vector.PathNode>;androidx.compose.ui.geometry.Size){}[0]
+final fun li.songe.morph.compose/rememberMorphGeometryState(li.songe.morph.compose/MorphGeometry, li.songe.morph.compose/MorphOptions?, li.songe.morph.compose/MorphInterpolation?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): li.songe.morph.compose/MorphGeometryState // li.songe.morph.compose/rememberMorphGeometryState|rememberMorphGeometryState(li.songe.morph.compose.MorphGeometry;li.songe.morph.compose.MorphOptions?;li.songe.morph.compose.MorphInterpolation?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/rememberMorphIconState(androidx.compose.ui.graphics.vector/ImageVector, li.songe.morph.compose/MorphOptions?, li.songe.morph.compose/MorphInterpolation?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): li.songe.morph.compose/MorphIconState // li.songe.morph.compose/rememberMorphIconState|rememberMorphIconState(androidx.compose.ui.graphics.vector.ImageVector;li.songe.morph.compose.MorphOptions?;li.songe.morph.compose.MorphInterpolation?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/rememberMorphPlan(androidx.compose.ui.graphics.vector/ImageVector, androidx.compose.ui.graphics.vector/ImageVector, li.songe.morph.compose/MorphOptions?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): li.songe.morph.compose/ImageVectorMorphPlan // li.songe.morph.compose/rememberMorphPlan|rememberMorphPlan(androidx.compose.ui.graphics.vector.ImageVector;androidx.compose.ui.graphics.vector.ImageVector;li.songe.morph.compose.MorphOptions?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/rememberMorphPlan(li.songe.morph.compose/MorphGeometry, li.songe.morph.compose/MorphGeometry, li.songe.morph.compose/MorphOptions?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): li.songe.morph.compose/MorphGeometryPlan // li.songe.morph.compose/rememberMorphPlan|rememberMorphPlan(li.songe.morph.compose.MorphGeometry;li.songe.morph.compose.MorphGeometry;li.songe.morph.compose.MorphOptions?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/rememberMorphShape(li.songe.morph.compose/MorphGeometryPlan, kotlin/Float, li.songe.morph.compose/MorphContentScale?, li.songe.morph.compose/MorphInterpolation?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): li.songe.morph.compose/MorphShape // li.songe.morph.compose/rememberMorphShape|rememberMorphShape(li.songe.morph.compose.MorphGeometryPlan;kotlin.Float;li.songe.morph.compose.MorphContentScale?;li.songe.morph.compose.MorphInterpolation?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun li.songe.morph.compose/rememberMorphShape(li.songe.morph.compose/MorphGeometryState, li.songe.morph.compose/MorphContentScale?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): li.songe.morph.compose/MorphShape // li.songe.morph.compose/rememberMorphShape|rememberMorphShape(li.songe.morph.compose.MorphGeometryState;li.songe.morph.compose.MorphContentScale?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
