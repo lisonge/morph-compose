@@ -2,35 +2,23 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/li.songe.morph/morph-compose.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/li.songe.morph/morph-compose)
 
-`morph-compose` is a filled-shape morphing library for Compose Multiplatform. It transforms
-icons and custom paths while preserving rotations, scaling, and multi-contour shapes.
-Use it for animated icons, component outlines, image clips, selection feedback, decorative
-motion, and glyph outlines. The playground's Typography tab includes a searchable system-font
-selector; see [font support and browser requirements](docs/playground.md#typography-fonts).
+English | [简体中文](README.zh.md)
 
-The `morph-compose` artifact supports Android, JVM, and Kotlin/Wasm. It provides controlled and
-animated Compose APIs without requiring a specific icon pack.
+Live demo: [morph-compose.pages.dev](https://morph-compose.pages.dev)
+
+A Compose Multiplatform library for morphing icons and custom paths. Supports Android, JVM, and Kotlin/Wasm.
 
 ## Features
 
-- Polar interpolation with similarity-transform decomposition.
-- Arc-length resampling with weighted corner preservation.
-- Fold-aware contour alignment that penalizes self-intersecting intermediate boundaries when a
-  cleaner correspondence is available.
-- Winding-safe one-to-one contour matching for filled shapes and holes, including topology changes.
-- Per-contour linear fallback for degenerate Polar fits.
-- Non-throwing compatibility reports with per-contour fallback reasons.
-- Interruption-safe state for morphing through arbitrary icon sequences.
-- `Always`, `System`, and `Never` motion policies; system accessibility settings are honored by default.
-- Exact rendering of the source and destination `ImageVector` at progress `0` and `1`.
-- Spring overshoot support; progress values are not restricted to `0..1`.
-- Reusable morph plans and frame buffers for animation-heavy interfaces.
-- Automatic RTL handling through the current Compose layout direction.
-- Optional linear interpolation for comparison and diagnostics.
+- Morph icons and custom paths, including shapes with multiple contours and holes.
+- Animate when the target changes, or control progress yourself.
+- Continue from the current shape when an animation is interrupted.
+- Use animated shapes for backgrounds, borders, and image clipping.
+- Follow system animation settings and handle RTL layouts automatically.
 
-## Dependency
+## Installation
 
-`morph-compose` is published to Maven Central. Add it to a Kotlin Multiplatform project:
+Add the dependency to `commonMain` and replace `<latest>` with the version shown in the badge above:
 
 ```kotlin
 kotlin {
@@ -42,88 +30,11 @@ kotlin {
 }
 ```
 
-`morph-compose` includes its geometry engine and required Compose APIs. The library accepts solid,
-fill-only `ImageVector` paths and does not require a Material icon-pack dependency. The Material
-icons below are used only to keep the examples familiar.
+## Icons
 
-## Controlled morph
-
-Use `MorphIcon` when animation progress is owned by the caller:
+Pass an `ImageVector` to `AnimatedMorphIcon`. When the icon changes, it animates from the current shape to the new one:
 
 ```kotlin
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import li.songe.morph.compose.MorphIcon
-
-@Composable
-fun MenuCloseIcon(progress: Float) {
-    MorphIcon(
-        from = Icons.Filled.Menu,
-        to = Icons.Filled.Close,
-        progress = progress,
-        modifier = Modifier.size(32.dp),
-        tint = MaterialTheme.colors.primary,
-        contentDescription = "Menu",
-    )
-}
-```
-
-## Component shapes and image clips
-
-Create immutable inputs once from Compose `Path` values or `List<PathNode>` commands, with an
-explicit viewport. The same animated shape works with `background`, `border`, and `clip`:
-
-```kotlin
-val circle = remember {
-    morphGeometryOf(Path().apply { addOval(Rect(0f, 0f, 100f, 100f)) }, Size(100f, 100f))
-}
-val square = remember {
-    morphGeometryOf(Path().apply { addRect(Rect(0f, 0f, 100f, 100f)) }, Size(100f, 100f))
-}
-val plan = rememberMorphPlan(circle, square)
-val shape = rememberMorphShape(plan, progress)
-Box(Modifier.size(160.dp).background(Color.Blue, shape))
-// Image(..., modifier = Modifier.size(160.dp).clip(shape))
-```
-
-These APIs are in `li.songe.morph.compose`; the geometry types come from
-`androidx.compose.ui.geometry` and `androidx.compose.ui.graphics`.
-
-For multiple destinations, `rememberMorphGeometryState(initialGeometry)` provides `animateTo`,
-`snapTo`, and `seekTo(from, to, progress)`. Pass the controller to `rememberMorphShape(state)`.
-Rapid target changes continue from the currently visible contour, including a scrubbed frame.
-The default `System` motion policy honors the host animation duration scale.
-
-`MorphContentScale.Fit` centers the normalized viewport without distortion. `FillBounds` stretches
-its normalized square along both axes, useful for component backgrounds authored in a square
-viewport. Shape morphing does not change layout, pointer hit regions, or the pixels inside a clip.
-
-For custom Canvas rendering, remember `plan.createPathWriter()` and one destination `Path`, then
-call `writer.writePath(path, progress, size)` during drawing. Each consumer owns its writer and
-path; the plan can be shared. Geometry plans default to 128 samples per contour. Use more samples
-for large or intricate shapes; intermediate frames are polylines, while endpoint curves are retained.
-
-Path input represents filled geometry, with nested contours interpreted as alternating filled
-shapes and holes. Open subpaths are implicitly closed. It does not carry stroke, gradient, text
-layout, or font shaping information. Brushes can be applied independently when drawing the shape.
-
-## Animated morph
-
-Pass the current `ImageVector` to `AnimatedMorphIcon`. Whenever it changes, the component morphs
-from the currently displayed geometry to the new icon:
-
-```kotlin
-import androidx.compose.animation.core.tween
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import li.songe.morph.compose.AnimatedMorphIcon
-
 @Composable
 fun NavigationIcon(icon: ImageVector) {
     AnimatedMorphIcon(
@@ -133,110 +44,84 @@ fun NavigationIcon(icon: ImageVector) {
 }
 ```
 
-Use the Boolean overload when switching between a fixed pair of icons:
+To switch between two icons, pass a Boolean:
 
 ```kotlin
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import li.songe.morph.compose.AnimatedMorphIcon
-
-@Composable
-fun PlayPauseIcon(
-    playing: Boolean,
-    onToggle: () -> Unit,
-) {
-    AnimatedMorphIcon(
-        from = Icons.Filled.PlayArrow,
-        to = Icons.Filled.Pause,
-        targetState = playing,
-        modifier = Modifier.size(32.dp).clickable(onClick = onToggle),
-        contentDescription = if (playing) "Pause" else "Play",
-    )
-}
+AnimatedMorphIcon(
+    from = Icons.Filled.PlayArrow,
+    to = Icons.Filled.Pause,
+    targetState = playing,
+    contentDescription = if (playing) "Pause" else "Play",
+)
 ```
 
-## Reusing a morph plan
-
-Precompute and remember a plan when the same icon pair is rendered by multiple consumers or is
-recomposed frequently:
+To control progress yourself, use `MorphIcon`. `0` shows the source icon and `1` shows the target:
 
 ```kotlin
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import li.songe.morph.compose.MorphIcon
-import li.songe.morph.compose.rememberMorphPlan
-import li.songe.morph.compose.MorphInterpolation
-
-@Composable
-fun CachedMenuCloseIcon(progress: Float) {
-    val plan = rememberMorphPlan(Icons.Filled.Menu, Icons.Filled.Close)
-
-    MorphIcon(
-        plan = plan,
-        progress = progress,
-        interpolation = MorphInterpolation.Polar,
-    )
-}
+MorphIcon(
+    from = Icons.Filled.Menu,
+    to = Icons.Filled.Close,
+    progress = progress,
+    contentDescription = "Menu",
+)
 ```
 
-## Arbitrary icon targets
+The icon APIs are in `li.songe.morph.compose`. These examples use Material icons, but you can use your own `ImageVector`.
+Animations follow the system animation duration scale by default.
 
-Use `MorphIconState` when the caller also needs imperative `animateTo`, `snapTo`, `seekTo`, or
-animation status. If the destination changes while an animation is running, the state freezes the
-current geometry and continues from that frame without jumping back to an endpoint.
+## Custom paths
+
+Use `morphGeometryOf` with a filled Compose `Path` or `List<PathNode>`. Paths can contain multiple contours and holes.
+This example morphs a ring into a solid circle, closing the hole as progress goes from `0` to `1`:
 
 ```kotlin
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.graphics.vector.ImageVector
-import li.songe.morph.compose.MorphIcon
-import li.songe.morph.compose.rememberMorphIconState
+val ring = remember {
+    morphGeometryOf(
+        Path().apply {
+            addOval(Rect(0f, 0f, 100f, 100f))
+            addOval(Rect(30f, 30f, 70f, 70f))
+        },
+        viewportSize = Size(100f, 100f),
+    )
+}
+val disc = remember {
+    morphGeometryOf(Path().apply { addOval(Rect(0f, 0f, 100f, 100f)) }, Size(100f, 100f))
+}
+val plan = rememberMorphPlan(ring, disc)
+val shape = rememberMorphShape(plan, progress)
+Box(Modifier.size(160.dp).background(Color.Blue, shape))
+```
 
+Nested contours are treated as alternating filled regions and holes. The resulting shape works with `background`, `border`, and `clip`.
+
+## Digits
+
+Convert digit outlines to `MorphGeometry` with `morphGeometryOf`. Pass outlines for `0` through `9` in order, using the same viewport and baseline.
+The example below animates when `digit` changes:
+
+```kotlin
 @Composable
-fun NavigationIcon(target: ImageVector) {
-    val state = rememberMorphIconState(Icons.Filled.Menu)
+fun MorphingDigit(digit: Int, digits: List<MorphGeometry>) {
+    require(digit in 0..9 && digits.size == 10)
+    val target = digits[digit]
+    val state = rememberMorphGeometryState(target)
 
-    LaunchedEffect(target) {
-        state.animateTo(target)
+    LaunchedEffect(state, target) {
+        state.animateTo(target, animationSpec = tween(300))
     }
 
-    MorphIcon(state = state, contentDescription = "Navigation action")
+    Box(Modifier.size(64.dp).background(Color.Black, rememberMorphShape(state)))
 }
 ```
 
-Pass `motionPolicy = MorphMotionPolicy.Never` to `animateTo` or `AnimatedMorphIcon` to snap,
-or `Always` to animate independently of the host duration scale. The default `System` policy
-honors the platform preference.
-
-## Compatibility diagnostics
-
-Inspect user-provided icons before presenting an animation editor or importing an icon set:
-
-```kotlin
-val report = inspectMorphCompatibility(fromIcon, toIcon)
-
-if (!report.isSupported) {
-    println(report.issues.joinToString())
-}
-```
-
-`FullPolar` means every contour uses Polar interpolation. `Hybrid` means safe Linear fallback is
-used only for incompatible contours, such as a hole that exists at one endpoint. Unsupported
-features such as stroke-only paths are reported as `Unsupported` instead of being rendered
-incorrectly.
+You supply the outlines; font loading is not part of the library. The playground includes [sample digit paths](morph-playground/src/commonMain/kotlin/li/songe/morph/playground/DigitOutlines.kt).
+For transitions such as `99 → 100`, see the [whole-number example](morph-playground/src/commonMain/kotlin/li/songe/morph/playground/NumberMorph.kt), which aligns digits by place value and fades added or removed digits.
 
 ## Supported input
 
-`morph-compose` supports solid fill paths, nested group transforms, compound contours, holes, and
-different source and destination viewport sizes. It rejects clip paths, trim paths, gradient fills,
-and stroke-only paths instead of rendering them incorrectly.
+Supports solid fill paths, nested transforms, multiple contours, and holes.
+Clip paths, trim paths, gradient fills, and stroke-only paths are not supported.
+Use `inspectMorphCompatibility(from, to)` to check icons before animating them.
+
+See the [API and algorithm documentation](docs/architecture.md#api-layers) for state controllers, plan reuse, and interpolation details.
+The [project docs](docs/README.md) cover the playground and development setup.
