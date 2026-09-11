@@ -122,6 +122,7 @@ public final class li/songe/morph/compose/MorphGeometryState {
 }
 
 public final class li/songe/morph/compose/MorphIconKt {
+	public static final fun AnimatedMorphIcon-8r3B23s (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/Modifier;Ljava/lang/String;JLli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Landroidx/compose/runtime/Composer;II)V
 	public static final fun AnimatedMorphIcon-Hzv_svQ (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;ZLandroidx/compose/ui/Modifier;JLjava/lang/String;Lli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/animation/core/AnimationSpec;Lli/songe/morph/compose/MorphMotionPolicy;Landroidx/compose/runtime/Composer;II)V
 	public static final fun MorphIcon-NpZTi58 (Landroidx/compose/ui/graphics/vector/ImageVector;Landroidx/compose/ui/graphics/vector/ImageVector;FLandroidx/compose/ui/Modifier;JLjava/lang/String;Lli/songe/morph/compose/MorphOptions;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)V
 	public static final fun MorphIcon-cf5BqRc (Lli/songe/morph/compose/MorphIconState;Landroidx/compose/ui/Modifier;JLjava/lang/String;Landroidx/compose/runtime/Composer;II)V

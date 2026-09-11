@@ -113,7 +113,25 @@ layout, or font shaping information. Brushes can be applied independently when d
 
 ## Animated morph
 
-Use `AnimatedMorphIcon` when a Boolean state should drive a spring animation:
+Pass the current `ImageVector` to `AnimatedMorphIcon`. Whenever it changes, the component morphs
+from the currently displayed geometry to the new icon:
+
+```kotlin
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
+import li.songe.morph.compose.AnimatedMorphIcon
+
+@Composable
+fun NavigationIcon(icon: ImageVector) {
+    AnimatedMorphIcon(
+        imageVector = icon,
+        animationSpec = tween(durationMillis = 300),
+    )
+}
+```
+
+Use the Boolean overload when switching between a fixed pair of icons:
 
 ```kotlin
 import androidx.compose.foundation.clickable
@@ -169,9 +187,9 @@ fun CachedMenuCloseIcon(progress: Float) {
 
 ## Arbitrary icon targets
 
-Use `MorphIconState` when a component can move through more than two icons. If the destination
-changes while an animation is running, the state freezes the current geometry and continues from
-that frame without jumping back to an endpoint.
+Use `MorphIconState` when the caller also needs imperative `animateTo`, `snapTo`, `seekTo`, or
+animation status. If the destination changes while an animation is running, the state freezes the
+current geometry and continues from that frame without jumping back to an endpoint.
 
 ```kotlin
 import androidx.compose.material.icons.Icons

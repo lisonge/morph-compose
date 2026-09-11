@@ -154,6 +154,43 @@ public fun MorphIcon(
     )
 }
 
+/** Animates from the currently displayed icon whenever [imageVector] changes. */
+@Composable
+public fun AnimatedMorphIcon(
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null,
+    tint: Color = Color.Black,
+    options: MorphOptions = MorphOptions(),
+    interpolation: MorphInterpolation = MorphInterpolation.Polar,
+    animationSpec: AnimationSpec<Float> =
+        spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessMedium,
+        ),
+    motionPolicy: MorphMotionPolicy = MorphMotionPolicy.System,
+) {
+    val state =
+        rememberMorphIconState(
+            initialIcon = imageVector,
+            options = options,
+            interpolation = interpolation,
+        )
+    LaunchedEffect(state, imageVector, animationSpec, motionPolicy) {
+        state.animateTo(
+            target = imageVector,
+            animationSpec = animationSpec,
+            motionPolicy = motionPolicy,
+        )
+    }
+    MorphIcon(
+        state = state,
+        modifier = modifier,
+        tint = tint,
+        contentDescription = contentDescription,
+    )
+}
+
 /** Animates between [from] and [to] whenever [targetState] changes. */
 @Composable
 public fun AnimatedMorphIcon(
