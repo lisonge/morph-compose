@@ -8,6 +8,8 @@
 
 一个用于图标和自定义路径变形动画的 Compose Multiplatform 库，支持 Android、JVM 和 Kotlin/Wasm。
 
+<img width="1900" height="480" alt="Image" src="https://camo.githubusercontent.com/a80bb59affd89d0bdd7cb8d9572fdb44eaeba1582a9ecb08a1698e21be10a812/68747470733a2f2f652e676b642e6c692f30613266353963372d653664652d343831632d396434332d646239396433643664323234" />
+
 ## 功能
 
 - 支持图标和自定义路径变形，包括多轮廓和带孔洞的形状。

@@ -8,6 +8,8 @@ Live demo: [morph-compose.pages.dev](https://morph-compose.pages.dev)
 
 A Compose Multiplatform library for morphing icons and custom paths. Supports Android, JVM, and Kotlin/Wasm.
 
+<img width="1900" height="480" alt="Image" src="https://camo.githubusercontent.com/a80bb59affd89d0bdd7cb8d9572fdb44eaeba1582a9ecb08a1698e21be10a812/68747470733a2f2f652e676b642e6c692f30613266353963372d653664652d343831632d396434332d646239396433643664323234" />
+
 ## Features
 
 - Morph icons and custom paths, including shapes with multiple contours and holes.
