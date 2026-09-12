@@ -147,3 +147,7 @@ Use `inspectMorphCompatibility(from, to)` to check icons before animating them.
 
 See the [API and algorithm documentation](docs/architecture.md#api-layers) for state controllers, plan reuse, and interpolation details.
 The [project docs](docs/README.md) cover the playground and development setup.
+
+## Inspiration
+
+This project was inspired by [morphicons](https://github.com/guillermolg00/morphicons).

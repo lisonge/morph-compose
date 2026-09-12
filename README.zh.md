@@ -143,3 +143,7 @@ fun MorphingDigit(digit: Int, digits: List<MorphGeometry>) {
 
 状态控制、变形计划复用和插值算法见 [API 与算法文档](docs/architecture.md#api-layers)。
 演示应用和开发配置见[项目文档](docs/README.md)。
+
+## 灵感来源
+
+本项目的灵感来自 [morphicons](https://github.com/guillermolg00/morphicons)。
