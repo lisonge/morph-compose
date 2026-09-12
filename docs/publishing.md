@@ -3,7 +3,7 @@
 `morph-compose` is the only published module. Its Maven coordinates are:
 
 ```text
-li.songe.morph:morph-compose:0.1.0
+li.songe.morph:morph-compose:0.2.0
 ```
 
 The project uses the Vanniktech Maven Publish plugin. The root build configures coordinates,
@@ -37,7 +37,7 @@ present. Normal local builds therefore do not require publishing credentials. Th
 publishes directly to Maven Central and does not call `publishToMavenLocal`.
 
 Before creating a release tag, update the project version in the root `build.gradle.kts` and keep
-the tag aligned with it, for example version `0.1.0` with tag `v0.1.0`.
+the tag aligned with it, for example version `0.2.0` with tag `v0.2.0`.
 
 Public API changes are checked by Kotlin's built-in ABI validator. Review any intended API change,
 then update the committed baseline with:
