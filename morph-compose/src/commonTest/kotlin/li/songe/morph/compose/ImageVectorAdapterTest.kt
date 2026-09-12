@@ -17,6 +17,36 @@ import kotlin.test.assertTrue
 
 class ImageVectorAdapterTest {
     @Test
+    fun rotationPreferenceUsesDisplayedDirectionAfterRtlMirroring() {
+        fun bar(angle: Float) = ImageVector.Builder(
+            name = "bar$angle", defaultWidth = 24.dp, defaultHeight = 24.dp,
+            viewportWidth = 24f, viewportHeight = 24f, autoMirror = true,
+        ).apply {
+            group(rotate = angle, pivotX = 12f, pivotY = 12f) {
+                path(fill = SolidColor(Color.Black)) {
+                    moveTo(4f, 11f)
+                    lineTo(20f, 11f)
+                    lineTo(20f, 13f)
+                    lineTo(4f, 13f)
+                    close()
+                }
+            }
+        }.build()
+        val horizontal = bar(0f)
+        val diagonal = bar(45f)
+        for (rtl in listOf(false, true)) {
+            for (preference in listOf(MorphRotationPreference.PreferClockwise, MorphRotationPreference.PreferCounterClockwise)) {
+                val sign = if (preference == MorphRotationPreference.PreferClockwise) 1 else -1
+                for ((from, to) in listOf(horizontal to diagonal, diagonal to horizontal)) {
+                    val plan = buildMorphPlan(from, to, MorphOptions(rotationPreference = preference), rtl)
+                    assertTrue(sign * plan.rotationRadians(0) > 0.1)
+                    assertEquals(MorphCompatibility.FullPolar, plan.compatibilityReport.compatibility)
+                }
+            }
+        }
+    }
+
+    @Test
     fun buildsPlanFromRelativeAndQuadraticNodes() {
         val source =
             vector("source") {

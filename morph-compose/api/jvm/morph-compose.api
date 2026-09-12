@@ -166,14 +166,16 @@ public final class li/songe/morph/compose/MorphMotionPolicy : java/lang/Enum {
 public final class li/songe/morph/compose/MorphOptions {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (ID)V
-	public synthetic fun <init> (IDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (IDLli/songe/morph/compose/MorphRotationPreference;)V
+	public synthetic fun <init> (IDLli/songe/morph/compose/MorphRotationPreference;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()I
 	public final fun component2 ()D
-	public final fun copy (ID)Lli/songe/morph/compose/MorphOptions;
-	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphOptions;IDILjava/lang/Object;)Lli/songe/morph/compose/MorphOptions;
+	public final fun component3 ()Lli/songe/morph/compose/MorphRotationPreference;
+	public final fun copy (IDLli/songe/morph/compose/MorphRotationPreference;)Lli/songe/morph/compose/MorphOptions;
+	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphOptions;IDLli/songe/morph/compose/MorphRotationPreference;ILjava/lang/Object;)Lli/songe/morph/compose/MorphOptions;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCornerThresholdRadians ()D
+	public final fun getRotationPreference ()Lli/songe/morph/compose/MorphRotationPreference;
 	public final fun getSampleCount ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -183,6 +185,15 @@ public final class li/songe/morph/compose/MorphPathWriter {
 	public static final field $stable I
 	public final fun writePath-QfoU1oo (Landroidx/compose/ui/graphics/Path;FJLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;)V
 	public static synthetic fun writePath-QfoU1oo$default (Lli/songe/morph/compose/MorphPathWriter;Landroidx/compose/ui/graphics/Path;FJLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;ILjava/lang/Object;)V
+}
+
+public final class li/songe/morph/compose/MorphRotationPreference : java/lang/Enum {
+	public static final field Auto Lli/songe/morph/compose/MorphRotationPreference;
+	public static final field PreferClockwise Lli/songe/morph/compose/MorphRotationPreference;
+	public static final field PreferCounterClockwise Lli/songe/morph/compose/MorphRotationPreference;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphRotationPreference;
+	public static fun values ()[Lli/songe/morph/compose/MorphRotationPreference;
 }
 
 public final class li/songe/morph/compose/MorphShape : androidx/compose/ui/graphics/Shape {

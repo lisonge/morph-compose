@@ -69,6 +69,25 @@ MorphIcon(
 图标 API 位于 `li.songe.morph.compose` 包中。示例使用 Material 图标，也可以换成自己的 `ImageVector`。
 动画默认遵循系统的动画时长缩放设置。
 
+需要让往返切换优先沿同一方向旋转时，传入方向偏好：
+
+```kotlin
+AnimatedMorphIcon(
+    from = Icons.AutoMirrored.Filled.ArrowBack,
+    to = Icons.Filled.Close,
+    targetState = closed,
+    options = MorphOptions(
+        rotationPreference = MorphRotationPreference.PreferCounterClockwise,
+    ),
+)
+```
+
+`Auto` 保持原有行为；`PreferClockwise` 和 `PreferCounterClockwise` 在几何质量接近的对应关系中选择旋转方向。
+方向按最终显示坐标定义，包括 RTL 镜像后的坐标。没有合适候选时保留自动结果，不强制绕圈。
+两个方向需要分别生成计划；同一个计划的进度从 `1` 回到 `0` 仍是倒放，`AnimatedMorphIcon` 会自动处理双向规划。
+此配置适合 Polar 插值；Linear 会使用所选对应关系，但不保证旋转方向。它不会把填充轮廓自动拆成笔画，
+因此不保证精确复现手写的三线动画。与已有算法一样，离散帧检查不保证所有中间帧都没有边界自交。
+
 ## 自定义路径
 
 用 `morphGeometryOf` 接入填充的 Compose `Path` 或 `List<PathNode>`，支持多轮廓和孔洞。

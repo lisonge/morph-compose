@@ -76,6 +76,18 @@ final enum class li.songe.morph.compose/MorphMotionPolicy : kotlin/Enum<li.songe
     final fun values(): kotlin/Array<li.songe.morph.compose/MorphMotionPolicy> // li.songe.morph.compose/MorphMotionPolicy.values|values#static(){}[0]
 }
 
+final enum class li.songe.morph.compose/MorphRotationPreference : kotlin/Enum<li.songe.morph.compose/MorphRotationPreference> { // li.songe.morph.compose/MorphRotationPreference|null[0]
+    enum entry Auto // li.songe.morph.compose/MorphRotationPreference.Auto|null[0]
+    enum entry PreferClockwise // li.songe.morph.compose/MorphRotationPreference.PreferClockwise|null[0]
+    enum entry PreferCounterClockwise // li.songe.morph.compose/MorphRotationPreference.PreferCounterClockwise|null[0]
+
+    final val entries // li.songe.morph.compose/MorphRotationPreference.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<li.songe.morph.compose/MorphRotationPreference> // li.songe.morph.compose/MorphRotationPreference.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): li.songe.morph.compose/MorphRotationPreference // li.songe.morph.compose/MorphRotationPreference.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<li.songe.morph.compose/MorphRotationPreference> // li.songe.morph.compose/MorphRotationPreference.values|values#static(){}[0]
+}
+
 final class li.songe.morph.compose/ImageVectorMorphPlan { // li.songe.morph.compose/ImageVectorMorphPlan|null[0]
     final val compatibilityReport // li.songe.morph.compose/ImageVectorMorphPlan.compatibilityReport|{}compatibilityReport[0]
         final fun <get-compatibilityReport>(): li.songe.morph.compose/MorphCompatibilityReport // li.songe.morph.compose/ImageVectorMorphPlan.compatibilityReport.<get-compatibilityReport>|<get-compatibilityReport>(){}[0]
@@ -178,16 +190,19 @@ final class li.songe.morph.compose/MorphIconState { // li.songe.morph.compose/Mo
 }
 
 final class li.songe.morph.compose/MorphOptions { // li.songe.morph.compose/MorphOptions|null[0]
-    constructor <init>(kotlin/Int = ..., kotlin/Double = ...) // li.songe.morph.compose/MorphOptions.<init>|<init>(kotlin.Int;kotlin.Double){}[0]
+    constructor <init>(kotlin/Int = ..., kotlin/Double = ..., li.songe.morph.compose/MorphRotationPreference = ...) // li.songe.morph.compose/MorphOptions.<init>|<init>(kotlin.Int;kotlin.Double;li.songe.morph.compose.MorphRotationPreference){}[0]
 
     final val cornerThresholdRadians // li.songe.morph.compose/MorphOptions.cornerThresholdRadians|{}cornerThresholdRadians[0]
         final fun <get-cornerThresholdRadians>(): kotlin/Double // li.songe.morph.compose/MorphOptions.cornerThresholdRadians.<get-cornerThresholdRadians>|<get-cornerThresholdRadians>(){}[0]
+    final val rotationPreference // li.songe.morph.compose/MorphOptions.rotationPreference|{}rotationPreference[0]
+        final fun <get-rotationPreference>(): li.songe.morph.compose/MorphRotationPreference // li.songe.morph.compose/MorphOptions.rotationPreference.<get-rotationPreference>|<get-rotationPreference>(){}[0]
     final val sampleCount // li.songe.morph.compose/MorphOptions.sampleCount|{}sampleCount[0]
         final fun <get-sampleCount>(): kotlin/Int // li.songe.morph.compose/MorphOptions.sampleCount.<get-sampleCount>|<get-sampleCount>(){}[0]
 
     final fun component1(): kotlin/Int // li.songe.morph.compose/MorphOptions.component1|component1(){}[0]
     final fun component2(): kotlin/Double // li.songe.morph.compose/MorphOptions.component2|component2(){}[0]
-    final fun copy(kotlin/Int = ..., kotlin/Double = ...): li.songe.morph.compose/MorphOptions // li.songe.morph.compose/MorphOptions.copy|copy(kotlin.Int;kotlin.Double){}[0]
+    final fun component3(): li.songe.morph.compose/MorphRotationPreference // li.songe.morph.compose/MorphOptions.component3|component3(){}[0]
+    final fun copy(kotlin/Int = ..., kotlin/Double = ..., li.songe.morph.compose/MorphRotationPreference = ...): li.songe.morph.compose/MorphOptions // li.songe.morph.compose/MorphOptions.copy|copy(kotlin.Int;kotlin.Double;li.songe.morph.compose.MorphRotationPreference){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // li.songe.morph.compose/MorphOptions.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // li.songe.morph.compose/MorphOptions.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // li.songe.morph.compose/MorphOptions.toString|toString(){}[0]

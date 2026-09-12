@@ -23,6 +23,7 @@ The playground provides:
 - Last, play/pause, and Next controls;
 - a progress scrubber;
 - optional polar/linear comparison;
+- Auto, Clockwise, and Counterclockwise rotation preferences (changing preference pauses and resets the current pair);
 - a live Morph Doctor summary for Polar, hybrid, and unsupported pairs;
 - a light theme by default and a theme icon button fixed to the left of the scrollable top-level tabs.
 
@@ -128,6 +129,16 @@ Clear the selection and animation state:
 ```powershell
 Invoke-RestMethod 'http://127.0.0.1:17321/control?selected='
 ```
+
+Compare both directions of Arrow back / Close with a counterclockwise preference:
+
+```powershell
+Invoke-RestMethod 'http://127.0.0.1:17321/control?selected=15,1&from=15&to=1&rotation=ccw&progress=0.5'
+Invoke-RestMethod 'http://127.0.0.1:17321/control?from=1&to=15&rotation=ccw&progress=0.5'
+```
+
+`rotation` accepts `auto`, `cw`, or `ccw`. The health/control snapshots include `rotationPreference`.
+The preview, Linear comparison, and Morph Doctor all use the selected options.
 
 Control playback:
 

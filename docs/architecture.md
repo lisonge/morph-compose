@@ -56,6 +56,27 @@ Kotlin code and all of its source and configuration files are type-checked TypeS
 7. Use block transport when the complete icon is close to a rigid similarity transform.
 8. Reuse `MorphFrame` and Compose `Path` instances while drawing animation frames.
 
+### Rotation preferences
+
+`MorphOptions.rotationPreference` defaults to `Auto`. The two directional preferences retain the
+existing minimum quality score (Procrustes residual plus weighted fold count) and its `1e-3` tie
+window. Within that window, direction ranks before the existing corner/edge/rotation tie-break.
+Candidates cannot increase the baseline fold count at the 25%, 50%, and 75% checks. These are sampled
+checks, not a guarantee against short-lived intersections between checkpoints. The algorithm does not
+infer stroke structure from filled outlines, and their intermediate silhouettes may still bulge.
+
+Positive angles are clockwise in the final screen coordinate system; RTL normalization happens before
+planning. Exact non-rotating similarities keep their original correspondence, so unchanged icons and
+pure translations/scales do not acquire a gratuitous spin. Global block transport is skipped when it
+would worsen a contour's direction preference. No angle is extended by a full turn. Linear comparison
+uses the same correspondence but does not inherit a promise of rotational motion. Direction options
+are part of the existing Compose plan/state remember keys, and interrupted plans reuse them with the
+exact sampled source snapshot.
+
+Adding the field changes the JVM/Android constructor and generated `copy` ABI of the `MorphOptions`
+data class. Kotlin source callers using defaults remain compatible; precompiled consumers must be
+rebuilt with this library version. JVM, Android, and KLib ABI baselines record the new signatures.
+
 ## API layers
 
 Curve normalization, resampling, contour correspondence, and interpolation are implementation

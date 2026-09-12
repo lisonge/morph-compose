@@ -6,6 +6,7 @@ import kotlin.math.PI
 public data class MorphOptions(
     public val sampleCount: Int = 64,
     public val cornerThresholdRadians: Double = PI / 8.0,
+    public val rotationPreference: MorphRotationPreference = MorphRotationPreference.Auto,
 ) {
     init {
         require(sampleCount >= 2) { "sampleCount must be at least 2" }
@@ -13,6 +14,18 @@ public data class MorphOptions(
             "cornerThresholdRadians must be finite and non-negative"
         }
     }
+}
+
+/**
+ * Chooses between similarly clean contour correspondences. Directions refer to the displayed
+ * coordinate system (including RTL mirroring). This is a preference, not a forced spin: a poorer
+ * fit is rejected and exact translation/scaling does not acquire an unnecessary rotation.
+ * Linear interpolation uses the selected correspondence but does not promise a rotation direction.
+ */
+public enum class MorphRotationPreference {
+    Auto,
+    PreferClockwise,
+    PreferCounterClockwise,
 }
 
 /** Selects the production polar morph or a raw coordinate comparison. */

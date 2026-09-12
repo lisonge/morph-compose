@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import li.songe.morph.compose.MorphOptions
+import li.songe.morph.compose.MorphRotationPreference
 
 internal data class PlaygroundSnapshot(
     val selectedIndices: List<Int>,
@@ -16,6 +18,7 @@ internal data class PlaygroundSnapshot(
     val isPlaying: Boolean,
     val compareLinear: Boolean,
     val isDarkTheme: Boolean,
+    val rotationPreference: MorphRotationPreference = MorphRotationPreference.Auto,
     val route: String = "icons",
     val demoTarget: Int = 1,
     val demoProgress: Float = 0.5f,
@@ -47,6 +50,17 @@ internal class PlaygroundState(
     var isPlaying by mutableStateOf(false)
         private set
     var compareLinear by mutableStateOf(false)
+    var rotationPreference by mutableStateOf(MorphRotationPreference.Auto)
+        private set
+    val morphOptions: MorphOptions
+        get() = MorphOptions(rotationPreference = rotationPreference)
+
+    fun changeRotationPreference(preference: MorphRotationPreference) {
+        if (preference == rotationPreference) return
+        rotationPreference = preference
+        activeSelectionPosition = mutableSelectedIndices.indexOf(fromIndex)
+        resetAnimation()
+    }
     var isDarkTheme by mutableStateOf(false)
     var animationRequestId by mutableIntStateOf(0)
         private set
@@ -194,6 +208,7 @@ internal class PlaygroundState(
             isPlaying = isPlaying,
             compareLinear = compareLinear,
             isDarkTheme = isDarkTheme,
+            rotationPreference = rotationPreference,
             route = selectedTab.id,
             demoTarget = demo(selectedTab).targetIndex,
             demoProgress = demo(selectedTab).progress,

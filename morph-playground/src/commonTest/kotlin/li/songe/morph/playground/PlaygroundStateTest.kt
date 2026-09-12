@@ -5,8 +5,42 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import li.songe.morph.compose.MorphRotationPreference
 
 class PlaygroundStateTest {
+    @Test
+    fun changingRotationAfterCompletionKeepsPlaybackAtTheDisplayedSource() {
+        val state = PlaygroundState(listOf(15, 1, 2))
+        state.requestNext()
+        assertTrue(state.completeAnimation(state.animationRequestId))
+        assertEquals(1, state.activeIconIndex)
+        state.changeRotationPreference(MorphRotationPreference.PreferClockwise)
+        assertEquals(0f, state.progress)
+        assertEquals(15, state.fromIndex)
+        assertEquals(state.fromIndex, state.activeIconIndex)
+        state.requestNext()
+        assertEquals(15, state.fromIndex)
+        assertEquals(1, state.toIndex)
+    }
+
+    @Test
+    fun changingRotationResetsThePreviewAndInvalidatesPlayback() {
+        val state = PlaygroundState(listOf(15, 1))
+        state.requestNext()
+        val requestId = state.animationRequestId
+        state.updateAnimationProgress(requestId, 0.4f)
+        state.changeRotationPreference(MorphRotationPreference.PreferCounterClockwise)
+        assertEquals(0f, state.progress)
+        assertFalse(state.isPlaying)
+        assertFalse(state.isSingleStep)
+        assertFalse(state.completeAnimation(requestId))
+        assertEquals(MorphRotationPreference.PreferCounterClockwise, state.morphOptions.rotationPreference)
+        assertEquals(state.rotationPreference, state.snapshot().rotationPreference)
+        state.scrubTo(0.5f)
+        state.changeRotationPreference(state.rotationPreference)
+        assertEquals(0.5f, state.progress)
+    }
+
     @Test
     fun snapshotReflectsSelectionAndPlaybackControls() {
         val state = PlaygroundState(listOf(2, 7, 9))

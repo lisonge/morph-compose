@@ -67,6 +67,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import li.songe.morph.compose.MorphIcon
 import li.songe.morph.compose.MorphCompatibility
+import li.songe.morph.compose.MorphOptions
+import li.songe.morph.compose.MorphRotationPreference
 import li.songe.morph.compose.MorphInterpolation
 import li.songe.morph.compose.inspectMorphCompatibility
 import kotlin.math.roundToInt
@@ -92,6 +94,7 @@ internal fun MorphAppPreview(state: PlaygroundState) {
                     to = to,
                     progress = state.progress,
                     compareLinear = state.compareLinear,
+                    options = state.morphOptions,
                     pairDescription = "${from.name} to ${to.name}",
                     onClick = {},
                 )
@@ -223,6 +226,7 @@ private fun MorphStage(state: PlaygroundState) {
             to = to,
             progress = state.progress,
             compareLinear = state.compareLinear,
+            options = state.morphOptions,
             pairDescription = "${from.name} to ${to.name}",
             onClick = state::requestNext,
         )
@@ -315,6 +319,7 @@ private fun AnimationStage(
     to: IconEntry,
     progress: Float,
     compareLinear: Boolean,
+    options: MorphOptions,
     pairDescription: String,
     onClick: () -> Unit,
 ) {
@@ -342,6 +347,7 @@ private fun AnimationStage(
                     from = from,
                     to = to,
                     progress = progress,
+                    options = options,
                     pairDescription = pairDescription,
                     modifier = Modifier.weight(1.0f),
                 )
@@ -350,6 +356,7 @@ private fun AnimationStage(
                     from = from,
                     to = to,
                     progress = progress,
+                    options = options,
                     pairDescription = "$pairDescription linear comparison",
                     interpolation = MorphInterpolation.Linear,
                     modifier = Modifier.weight(1.0f),
@@ -366,6 +373,7 @@ private fun AnimationStage(
                     from = from,
                     to = to,
                     progress = progress,
+                    options = options,
                     pairDescription = pairDescription,
                     modifier = Modifier.weight(1.0f),
                 )
@@ -375,6 +383,7 @@ private fun AnimationStage(
                         from = from,
                         to = to,
                         progress = progress,
+                        options = options,
                         pairDescription = "$pairDescription linear comparison",
                         interpolation = MorphInterpolation.Linear,
                         modifier = Modifier.weight(1.0f),
@@ -392,6 +401,7 @@ private fun StagePreview(
     to: IconEntry,
     progress: Float,
     pairDescription: String,
+    options: MorphOptions,
     modifier: Modifier = Modifier,
     interpolation: MorphInterpolation = MorphInterpolation.Polar,
 ) {
@@ -402,6 +412,7 @@ private fun StagePreview(
             from = from.imageVector,
             to = to.imageVector,
             progress = progress,
+            options = options,
             modifier = Modifier.size(iconSize),
             tint = PlaygroundColors.Ink,
             interpolation = interpolation,
@@ -463,7 +474,31 @@ private fun AdaptiveControlPanel(state: PlaygroundState) {
                 Spacer(Modifier.height(10.dp))
                 ScrubberContent(state)
                 Spacer(Modifier.height(4.dp))
+                RotationPreferenceControl(state)
+                Spacer(Modifier.height(8.dp))
                 MorphDoctorSummary(state)
+            }
+        }
+    }
+}
+
+@Composable
+private fun RotationPreferenceControl(state: PlaygroundState) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        SectionLabel("ROTATION PREFERENCE")
+        Row(
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            for (preference in MorphRotationPreference.entries) {
+                val label = when (preference) {
+                    MorphRotationPreference.Auto -> "Auto"
+                    MorphRotationPreference.PreferClockwise -> "Clockwise"
+                    MorphRotationPreference.PreferCounterClockwise -> "Counterclockwise"
+                }
+                ChoiceChip(label, state.rotationPreference == preference) {
+                    state.changeRotationPreference(preference)
+                }
             }
         }
     }
@@ -475,7 +510,8 @@ private fun MorphDoctorSummary(state: PlaygroundState) {
         if (state.canAnimate) {
             val from = iconEntries[state.fromIndex].imageVector
             val to = iconEntries[state.toIndex].imageVector
-            remember(from, to) { inspectMorphCompatibility(from, to) }
+            val options = state.morphOptions
+            remember(from, to, options) { inspectMorphCompatibility(from, to, options) }
         } else {
             null
         }

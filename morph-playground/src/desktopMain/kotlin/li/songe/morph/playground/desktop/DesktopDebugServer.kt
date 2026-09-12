@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import li.songe.morph.playground.MorphApp
 import li.songe.morph.playground.MorphAppPreview
+import li.songe.morph.compose.MorphRotationPreference
 import li.songe.morph.playground.PlaygroundSnapshot
 import li.songe.morph.playground.PlaygroundState
 import li.songe.morph.playground.PlaygroundTab
@@ -158,6 +159,16 @@ internal class DesktopDebugServer private constructor(
                                                 "to must be in 0..${iconCount - 1}"
                                             }
                                             state.selectPair(from, to)
+                                        }
+                                        parameters["rotation"]?.let { value ->
+                                            state.changeRotationPreference(
+                                                when (value) {
+                                                    "auto" -> MorphRotationPreference.Auto
+                                                    "cw" -> MorphRotationPreference.PreferClockwise
+                                                    "ccw" -> MorphRotationPreference.PreferCounterClockwise
+                                                    else -> throw IllegalArgumentException("rotation must be auto, cw, or ccw")
+                                                },
+                                            )
                                         }
                                         parameters["progress"]?.toFloat()?.let {
                                             state.scrubTo(it)
@@ -306,6 +317,7 @@ private fun captureWindow(
 private fun PlaygroundSnapshot.toJson(): String =
     "{\"selected\":[${selectedIndices.joinToString()}],\"active\":$activeSelectionPosition," +
         "\"pair\":${legacyPairIndex()},\"from\":$fromIndex,\"to\":$toIndex,\"progress\":$progress," +
+        "\"rotationPreference\":${rotationPreference.name.jsonString()}," +
         "\"playing\":$isPlaying,\"target\":$isPlaying,\"linear\":$compareLinear,\"dark\":$isDarkTheme," +
         "\"module\":${route.jsonString()},\"demoTarget\":$demoTarget,\"demoProgress\":$demoProgress," +
         "\"demoManual\":$demoManual,\"demoPlaying\":$demoPlaying}"

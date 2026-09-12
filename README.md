@@ -69,6 +69,28 @@ MorphIcon(
 The icon APIs are in `li.songe.morph.compose`. These examples use Material icons, but you can use your own `ImageVector`.
 Animations follow the system animation duration scale by default.
 
+To prefer the same rotation direction on both legs of a transition, supply a rotation preference:
+
+```kotlin
+AnimatedMorphIcon(
+    from = Icons.AutoMirrored.Filled.ArrowBack,
+    to = Icons.Filled.Close,
+    targetState = closed,
+    options = MorphOptions(
+        rotationPreference = MorphRotationPreference.PreferCounterClockwise,
+    ),
+)
+```
+
+`Auto` preserves the existing behavior. `PreferClockwise` and `PreferCounterClockwise` choose among
+similarly clean correspondences in displayed coordinates, including RTL mirroring. If no suitable
+candidate exists, the automatic result is retained without adding a full turn. Build each direction
+separately: running one plan from progress `1` to `0` still reverses that plan. `AnimatedMorphIcon`
+already handles this. The preference targets Polar interpolation; Linear shares the correspondence
+but does not guarantee a rotation direction. Filled outlines are not automatically decomposed into
+strokes, so this does not reproduce a hand-authored three-line animation exactly. As with the existing
+algorithm, sampled quality checks do not guarantee intersection-free geometry at every intermediate frame.
+
 ## Custom paths
 
 Use `morphGeometryOf` with a filled Compose `Path` or `List<PathNode>`. Paths can contain multiple contours and holes.

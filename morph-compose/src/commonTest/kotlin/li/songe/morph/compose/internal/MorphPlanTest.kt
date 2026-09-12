@@ -2,6 +2,7 @@ package li.songe.morph.compose.internal
 
 import li.songe.morph.compose.MorphInterpolation
 import li.songe.morph.compose.MorphOptions
+import li.songe.morph.compose.MorphRotationPreference
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -127,33 +128,7 @@ class MorphPlanTest {
 
     @Test
     fun arrowBackAndCloseDoNotFoldTheirBoundary() {
-        val arrowBack =
-            polygon(
-                20.0 to 11.0,
-                7.83 to 11.0,
-                13.42 to 5.41,
-                12.0 to 4.0,
-                4.0 to 12.0,
-                12.0 to 20.0,
-                13.41 to 18.59,
-                7.83 to 13.0,
-                20.0 to 13.0,
-            )
-        val close =
-            polygon(
-                19.0 to 6.41,
-                17.59 to 5.0,
-                12.0 to 10.59,
-                6.41 to 5.0,
-                5.0 to 6.41,
-                10.59 to 12.0,
-                5.0 to 17.59,
-                6.41 to 19.0,
-                12.0 to 13.41,
-                17.59 to 19.0,
-                19.0 to 17.59,
-                13.41 to 12.0,
-            )
+        val (arrowBack, close) = arrowBackClosePair()
         for ((from, to) in listOf(arrowBack to close, close to arrowBack)) {
             val plan = buildMorphPlan(listOf(from), listOf(to), MorphOptions(sampleCount = 64))
             for (interpolation in MorphInterpolation.entries) {
@@ -168,6 +143,116 @@ class MorphPlanTest {
                                 "${if (from === arrowBack) "Arrow back -> Close" else "Close -> Arrow back"}",
                     )
                 }
+            }
+        }
+    }
+
+    @Test
+    fun preferredRotationChangesBackCloseGeometryInBothDirections() {
+        val (back, close) = arrowBackClosePair()
+        for (preference in listOf(MorphRotationPreference.PreferClockwise, MorphRotationPreference.PreferCounterClockwise)) {
+            val options = MorphOptions(rotationPreference = preference)
+            val forward = buildMorphPlan(listOf(back), listOf(close), options)
+            val backward = buildMorphPlan(listOf(close), listOf(back), options)
+            val sign = if (preference == MorphRotationPreference.PreferClockwise) 1 else -1
+            for (plan in listOf(forward, backward)) {
+                assertTrue(sign * plan.rotationRadians(0) > 0.01, "$preference angle=${plan.rotationRadians(0)} residual=${plan.residual(0)}")
+                val frame = plan.createFrame()
+                for (interpolation in MorphInterpolation.entries) {
+                    for (progress in listOf(0.25, 0.5, 0.75)) {
+                        plan.interpolate(progress, frame, interpolation)
+                        assertEquals(0, properIntersectionCount(frame.points.single(), closed = true), "$preference $interpolation at $progress")
+                    }
+                }
+            }
+            val a = forward.createFrame()
+            val b = backward.createFrame()
+            forward.interpolate(0.5, a)
+            backward.interpolate(0.5, b)
+            // Compare the point sets, ignoring contour starting indices and traversal orientation.
+            val maxNearestDistance = (0 until a.sampleCount).maxOf { i ->
+                (0 until b.sampleCount).minOf { j ->
+                    kotlin.math.hypot(a.x(0, i) - b.x(0, j), a.y(0, i) - b.y(0, j))
+                }
+            }
+            assertTrue(maxNearestDistance > 0.02, "The two paths still trace the same geometry: $maxNearestDistance")
+            for ((plan, from, to) in listOf(Triple(forward, back, close), Triple(backward, close, back))) {
+                val auto = buildMorphPlan(listOf(from), listOf(to))
+                assertTrue(plan.residual(0) <= auto.residual(0) + 0.001)
+                for (progress in listOf(0.0, 1.0)) {
+                    val expected = auto.createFrame()
+                    auto.interpolate(progress, expected)
+                    plan.interpolate(progress, a)
+                    assertSamePointSets(expected, a)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun directionPreferenceDoesNotSpinAnUnchangedOrTranslatedShape() {
+        val shape = polygon(0.0 to 0.0, 2.0 to 0.0, 2.0 to 2.0, 0.0 to 2.0)
+        val translated = polygon(1.0 to 1.0, 3.0 to 1.0, 3.0 to 3.0, 1.0 to 3.0)
+        for (preference in MorphRotationPreference.entries) {
+            for (target in listOf(shape, translated)) {
+                val plan = buildMorphPlan(listOf(shape), listOf(target), MorphOptions(rotationPreference = preference))
+                assertTrue(abs(plan.rotationRadians(0)) < 1e-6)
+                val auto = buildMorphPlan(listOf(shape), listOf(target))
+                val expected = auto.createFrame()
+                auto.interpolate(0.5, expected)
+                val actual = plan.createFrame()
+                plan.interpolate(0.5, actual)
+                assertSamePointSets(expected, actual)
+            }
+        }
+    }
+
+    @Test
+    fun directionPreferenceFallsBackForAnAsymmetricShape() {
+        val shape = polygon(0.1 to 0.2, 0.9 to 0.3, 0.4 to 0.8)
+        val rotated = rotatePath(shape, -0.2)
+        val plan = buildMorphPlan(
+            listOf(shape), listOf(rotated),
+            MorphOptions(rotationPreference = MorphRotationPreference.PreferClockwise),
+        )
+        assertTrue(abs(plan.rotationRadians(0) + 0.2) < 1e-6)
+        assertTrue(plan.residual(0) < 1e-6)
+    }
+
+    @Test
+    fun globalAlignmentDoesNotOverrideTheSelectedDirection() {
+        // Tiny lines on widely separated centers make the global fit nearly rigid even when
+        // the local endpoint correspondences select the opposite half turn.
+        val source = listOf(line(0.2999, 0.5, 0.3001, 0.5), line(0.6999, 0.5, 0.7001, 0.5))
+        val target = source.map { rotatePath(it, -0.2) }
+        val auto = buildMorphPlan(source, target)
+        assertTrue(auto.items.all { it.blockTransport != null && it.theta < 0.0 })
+        val directed = buildMorphPlan(
+            source, target, MorphOptions(rotationPreference = MorphRotationPreference.PreferClockwise),
+        )
+        assertTrue(directed.items.all { it.theta > 0.0 && it.blockTransport == null })
+        for (progress in listOf(0.0, 1.0)) {
+            val expected = auto.createFrame()
+            val actual = directed.createFrame()
+            auto.interpolate(progress, expected)
+            directed.interpolate(progress, actual)
+            assertSamePointSets(expected, actual)
+        }
+    }
+
+    @Test
+    fun directionPreferenceRetainsGeometryOnInterruption() {
+        val (back, close) = arrowBackClosePair()
+        for (preference in MorphRotationPreference.entries) {
+            val options = MorphOptions(rotationPreference = preference)
+            val plan = buildMorphPlan(listOf(back), listOf(close), options)
+            for (progress in listOf(0.1, 0.37, 0.9)) {
+                val before = plan.createFrame()
+                plan.interpolate(progress, before)
+                val redirected = buildMorphPlanFromSampledSource(plan.snapshotContours(progress, MorphInterpolation.Polar), listOf(back), options)
+                val after = redirected.createFrame()
+                redirected.interpolate(0.0, after)
+                assertSamePointSets(before, after)
             }
         }
     }
@@ -319,6 +404,17 @@ private fun line(x0: Double, y0: Double, x1: Double, y1: Double): CubicPath =
         closed = false,
     )
 
+private fun rotatePath(path: CubicPath, angle: Double): CubicPath {
+    val points = path.copyPackedPoints()
+    for (i in points.indices step 2) {
+        val x = points[i] - 0.5
+        val y = points[i + 1] - 0.5
+        points[i] = 0.5 + x * cos(angle) - y * sin(angle)
+        points[i + 1] = 0.5 + x * sin(angle) + y * cos(angle)
+    }
+    return cubicPathOf(points, path.closed, path.role)
+}
+
 private fun polygon(vararg vertices: Pair<Double, Double>): CubicPath {
     require(vertices.size >= 3)
     val points = mutableListOf(vertices.first().first, vertices.first().second)
@@ -333,4 +429,48 @@ private fun polygon(vararg vertices: Pair<Double, Double>): CubicPath {
         points += to.second
     }
     return cubicPathOf(points.toDoubleArray(), closed = true)
+}
+
+private fun arrowBackClosePair(): Pair<CubicPath, CubicPath> {
+    val arrowBack =
+        polygon(
+            20.0 to 11.0,
+            7.83 to 11.0,
+            13.42 to 5.41,
+            12.0 to 4.0,
+            4.0 to 12.0,
+            12.0 to 20.0,
+            13.41 to 18.59,
+            7.83 to 13.0,
+            20.0 to 13.0,
+        )
+    val close =
+        polygon(
+            19.0 to 6.41,
+            17.59 to 5.0,
+            12.0 to 10.59,
+            6.41 to 5.0,
+            5.0 to 6.41,
+            10.59 to 12.0,
+            5.0 to 17.59,
+            6.41 to 19.0,
+            12.0 to 13.41,
+            17.59 to 19.0,
+            19.0 to 17.59,
+            13.41 to 12.0,
+        )
+    return cubicPathOf(arrowBack.points.map { it / 24.0 }.toDoubleArray(), true) to
+        cubicPathOf(close.points.map { it / 24.0 }.toDoubleArray(), true)
+}
+
+private fun assertSamePointSets(expected: MorphFrame, actual: MorphFrame) {
+    assertEquals(expected.contourCount, actual.contourCount)
+    for (contour in 0 until expected.contourCount) {
+        for (i in 0 until expected.sampleCount) {
+            val distance = (0 until actual.sampleCount).minOf { j ->
+                kotlin.math.hypot(expected.x(contour, i) - actual.x(contour, j), expected.y(contour, i) - actual.y(contour, j))
+            }
+            assertTrue(distance < 1e-8, "Point moved by $distance")
+        }
+    }
 }

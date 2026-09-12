@@ -2,6 +2,7 @@ package li.songe.morph.compose.internal
 
 import li.songe.morph.compose.MorphFallbackReason
 import li.songe.morph.compose.MorphOptions
+import li.songe.morph.compose.MorphRotationPreference
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -22,6 +23,7 @@ private const val GlobalResidualThreshold = 5e-3
 private const val ExactPermutationLimit = 8
 private const val ExactInjectionLimit = 100_000.0
 private const val MinimumPolarScale = 1e-6
+private const val RotationEpsilon = 1e-6
 
 private val alignmentCheckProgress = doubleArrayOf(0.25, 0.5, 0.75)
 
@@ -51,6 +53,24 @@ private data class ContourPair(
     val polarInterpolation: Boolean,
     val fallbackReason: MorphFallbackReason? = null,
 )
+
+private data class AlignmentCandidate(
+    val direction: Int,
+    val offset: Int,
+    val similarity: Similarity,
+    val qualityScore: Double,
+    val tieBreakScore: Double,
+    val foldCount: Int,
+)
+
+// Screen coordinates have a downward y axis, so positive angles rotate clockwise.
+private fun MorphRotationPreference.rank(theta: Double): Int =
+    when {
+        this == MorphRotationPreference.Auto -> 0
+        abs(theta) <= RotationEpsilon -> 1
+        (theta > 0.0) == (this == MorphRotationPreference.PreferClockwise) -> 0
+        else -> 2
+    }
 
 private fun centroid(points: DoubleArray): Center {
     var x = 0.0
@@ -263,7 +283,11 @@ private fun procrustes(
     return Similarity(theta, scale, residual)
 }
 
-private fun alignPair(source: SampledContour, target: SampledContour): Alignment {
+private fun alignPair(
+    source: SampledContour,
+    target: SampledContour,
+    rotationPreference: MorphRotationPreference,
+): Alignment {
     val sourceCenter = centroid(source.points)
     val targetCenter = centroid(target.points)
     val varySource = source.closed && !target.closed
@@ -284,6 +308,10 @@ private fun alignPair(source: SampledContour, target: SampledContour): Alignment
     var best = base
     var bestFeatureWeights = baseFeatureWeights
     var bestSimilarity = Similarity(theta = 0.0, scale = 1.0, residual = 0.0)
+    var bestFoldCount = 0
+    val candidates =
+        if (rotationPreference == MorphRotationPreference.Auto) null
+        else mutableListOf<AlignmentCandidate>()
 
     for (direction in 0 until directions) {
         val walked = if (direction == 1) reversePoints(base) else base
@@ -322,6 +350,11 @@ private fun alignPair(source: SampledContour, target: SampledContour): Alignment
                         similarity.theta,
                     ) +
                     RotationWeight * abs(similarity.theta) / PI
+            candidates?.add(
+                AlignmentCandidate(
+                    direction, offset, similarity, qualityScore, tieBreakScore, foldCount,
+                ),
+            )
             lowestQualityScore = minOf(lowestQualityScore, qualityScore)
             val selectedCandidateIsOutsideTie =
                 selectedQualityScore > lowestQualityScore + AlignmentQualityTieTolerance
@@ -336,7 +369,33 @@ private fun alignPair(source: SampledContour, target: SampledContour): Alignment
                 bestSimilarity = similarity
                 bestTieBreakScore = tieBreakScore
                 selectedQualityScore = qualityScore
+                bestFoldCount = foldCount
             }
+        }
+    }
+    // Keep Auto's result for an exact non-rotating similarity, including an icon morphing to itself.
+    // Select only after the global minimum is known, so enumeration order cannot admit a poorer fit.
+    if (candidates != null &&
+        !(abs(bestSimilarity.theta) <= RotationEpsilon && bestSimilarity.residual <= RotationEpsilon)
+    ) {
+        val preferred = candidates
+            .filter {
+                it.qualityScore <= lowestQualityScore + AlignmentQualityTieTolerance &&
+                    it.foldCount <= bestFoldCount
+            }
+            .minWithOrNull(
+                compareBy<AlignmentCandidate> { rotationPreference.rank(it.similarity.theta) }
+                    .thenBy { it.tieBreakScore },
+            )
+        if (preferred != null) {
+            // Retain candidate metadata only; keeping each rotated array would use quadratic memory.
+            val walked = if (preferred.direction == 1) reversePoints(base) else base
+            val walkedFeatures =
+                if (preferred.direction == 1) reverseValues(baseFeatureWeights) else baseFeatureWeights
+            best = if (preferred.offset == 0) walked else rotatePoints(walked, preferred.offset)
+            bestFeatureWeights =
+                if (preferred.offset == 0) walkedFeatures else rotateValues(walkedFeatures, preferred.offset)
+            bestSimilarity = preferred.similarity
         }
     }
     return if (varySource) {
@@ -585,7 +644,11 @@ private fun matchContours(
     return pairs
 }
 
-private fun applyGlobalAlignment(items: List<PlanItem>, sampleCount: Int) {
+private fun applyGlobalAlignment(
+    items: List<PlanItem>,
+    sampleCount: Int,
+    rotationPreference: MorphRotationPreference,
+) {
     val totalPoints = items.size * sampleCount
     val allSource = DoubleArray(totalPoints * 2)
     val allTarget = DoubleArray(totalPoints * 2)
@@ -596,6 +659,8 @@ private fun applyGlobalAlignment(items: List<PlanItem>, sampleCount: Int) {
     val globalSourceCenter = centroid(allSource)
     val global = procrustes(allSource, allTarget, globalSourceCenter, centroid(allTarget))
     if (global.residual >= GlobalResidualThreshold) return
+    // Global block transport must not undo a contour's chosen direction.
+    if (items.any { rotationPreference.rank(global.theta) > rotationPreference.rank(it.theta) }) return
 
     val inverseCosine = cos(-global.theta)
     val inverseSine = sin(-global.theta)
@@ -677,7 +742,7 @@ internal fun buildSampledMorphPlan(
         pairs.map { pair ->
             val sourceContour = pair.source
             val targetContour = pair.target
-            val alignment = alignPair(sourceContour, targetContour)
+            val alignment = alignPair(sourceContour, targetContour, options.rotationPreference)
             val polarInterpolation =
                 pair.polarInterpolation && alignment.scale > MinimumPolarScale
             val fallbackReason =
@@ -725,7 +790,7 @@ internal fun buildSampledMorphPlan(
         }
     val polarItems = items.filter(PlanItem::polarInterpolation)
     if (polarItems.size > 1) {
-        applyGlobalAlignment(polarItems, options.sampleCount)
+        applyGlobalAlignment(polarItems, options.sampleCount, options.rotationPreference)
     }
     return MorphPlan(items, options.sampleCount)
 }
