@@ -17,7 +17,7 @@ The playground provides:
 - per-module controls retained when switching tabs (state is not persisted across app restarts
   or browser reloads);
 
-- a fixed catalog of 100 Material icons;
+- a fixed catalog of 500 Material icons;
 - ordered multi-selection supporting zero, one, or many icons;
 - cyclic morph playback through the selected sequence;
 - Last, play/pause, and Next controls;
