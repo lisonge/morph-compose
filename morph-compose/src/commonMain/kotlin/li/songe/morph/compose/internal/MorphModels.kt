@@ -41,6 +41,8 @@ internal data class SampledContour(
     val closed: Boolean,
     val role: MorphContourRole,
     val featureWeights: DoubleArray = DoubleArray(points.size / 2),
+    val curveSource: CurveSource? = null,
+    val curveDetails: CurveDetails? = null,
 ) {
     init {
         require(points.size % 2 == 0) { "Sampled contour points must contain x/y pairs" }
@@ -76,6 +78,8 @@ internal data class PlanItem(
     val polarInterpolation: Boolean,
     val fallbackReason: MorphFallbackReason?,
     var blockTransport: BlockTransport?,
+    var curveDetails: CurveDetails? = null,
+    var stationaryCurve: CurveSource? = null,
 )
 
 /** A cacheable mapping between two sets of cubic contours. */
@@ -102,6 +106,7 @@ internal class MorphPlan(
             points = Array(items.size) { DoubleArray(sampleCount * 2) },
             closed = BooleanArray(items.size) { items[it].closed },
             roles = Array(items.size) { items[it].role },
+            curves = Array(items.size) { items[it].curveDetails?.let { detail -> DoubleArray(detail.offsets.size) } },
         )
 
     /** Writes one animation frame without allocating new point arrays. */
@@ -119,6 +124,9 @@ internal class MorphPlan(
             MorphInterpolation.Polar -> interpolatePolar(this, progress, frame.points)
             MorphInterpolation.Linear -> interpolateLinear(this, progress, frame.points)
         }
+        items.forEachIndexed { index, item ->
+            item.writeCurves(progress, interpolation, frame.points[index], frame.curves[index])
+        }
     }
 }
 
@@ -127,6 +135,7 @@ internal class MorphFrame(
     internal val points: Array<DoubleArray>,
     private val closed: BooleanArray,
     private val roles: Array<MorphContourRole>,
+    internal val curves: Array<DoubleArray?> = arrayOfNulls(points.size),
 ) {
     internal val contourCount: Int
         get() = points.size
@@ -157,6 +166,8 @@ internal fun MorphPlan.snapshotContours(
             points = frame.points[contour].copyOf(),
             closed = frame.isClosed(contour),
             role = frame.role(contour),
+            curveSource = item.stationaryCurve,
+            curveDetails = item.curveDetails?.rebase(frame.points[contour], checkNotNull(frame.curves[contour])),
             featureWeights =
                 DoubleArray(sampleCount) { point ->
                     item.sourceFeatureWeights[point] +

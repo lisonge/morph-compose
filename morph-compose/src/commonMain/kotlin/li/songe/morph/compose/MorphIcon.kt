@@ -93,19 +93,7 @@ public fun MorphIcon(
                 path.fillType = PathFillType.NonZero
                 val extent = min(size.width, size.height)
                 val origin = Offset((size.width - extent) / 2.0f, (size.height - extent) / 2.0f)
-                for (contour in 0 until frame.contourCount) {
-                    path.moveTo(
-                        origin.x + frame.x(contour, 0).toFloat() * extent,
-                        origin.y + frame.y(contour, 0).toFloat() * extent,
-                    )
-                    for (point in 1 until frame.sampleCount) {
-                        path.lineTo(
-                            origin.x + frame.x(contour, point).toFloat() * extent,
-                            origin.y + frame.y(contour, point).toFloat() * extent,
-                        )
-                    }
-                    if (frame.isClosed(contour)) path.close()
-                }
+                path.appendMorphFrame(frame, extent, extent, origin.x, origin.y)
                 clipRect {
                     drawPath(path = path, color = effectiveTint)
                 }

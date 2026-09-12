@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import li.songe.morph.compose.internal.MorphFrame
 
 /** How the normalized square containing the input viewports maps to a component's bounds. */
 public enum class MorphContentScale {
@@ -120,11 +121,26 @@ internal class MorphPathRenderer(private val plan: ImageVectorMorphPlan) {
             }
         } else {
             plan.corePlan.interpolate(progress.toDouble(), frame, interpolation)
-            for (contour in 0 until frame.contourCount) {
-                path.moveTo(x(frame.x(contour, 0)), y(frame.y(contour, 0)))
-                for (point in 1 until frame.sampleCount) path.lineTo(x(frame.x(contour, point)), y(frame.y(contour, point)))
-                if (frame.isClosed(contour)) path.close()
-            }
+            path.appendMorphFrame(frame, sx, sy, ox, oy)
         }
+    }
+}
+
+/** Keep shapes, masks and icons on the same compound-path drawing path, including holes. */
+internal fun Path.appendMorphFrame(frame: MorphFrame, sx: Float, sy: Float, ox: Float, oy: Float) {
+    fun x(value: Double): Float = ox + value.toFloat() * sx
+    fun y(value: Double): Float = oy + value.toFloat() * sy
+    for (contour in 0 until frame.contourCount) {
+        val curves = frame.curves[contour]
+        if (curves != null && curves.isNotEmpty()) {
+            moveTo(x(curves[0]), y(curves[1]))
+            for (i in 2 until curves.size step 6) {
+                cubicTo(x(curves[i]), y(curves[i + 1]), x(curves[i + 2]), y(curves[i + 3]), x(curves[i + 4]), y(curves[i + 5]))
+            }
+        } else {
+            moveTo(x(frame.x(contour, 0)), y(frame.y(contour, 0)))
+            for (point in 1 until frame.sampleCount) lineTo(x(frame.x(contour, point)), y(frame.y(contour, point)))
+        }
+        if (frame.isClosed(contour)) close()
     }
 }

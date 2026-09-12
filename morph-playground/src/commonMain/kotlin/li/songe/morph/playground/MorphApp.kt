@@ -724,7 +724,7 @@ private fun SelectedIconList(state: PlaygroundState) {
     )
     Spacer(Modifier.height(8.dp))
     Row(
-        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+        modifier = Modifier.fillMaxWidth().height(80.dp).horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         state.selectedIndices.forEachIndexed { position, iconIndex ->
@@ -758,6 +758,7 @@ private fun SelectedIcon(
         modifier =
             Modifier
                 .width(70.dp)
+                .fillMaxHeight()
                 .clip(RoundedCornerShape(11.dp))
                 .background(PlaygroundColors.Panel)
                 .border(if (isCurrent || isTarget) 2.dp else 1.dp, borderColor, RoundedCornerShape(11.dp))

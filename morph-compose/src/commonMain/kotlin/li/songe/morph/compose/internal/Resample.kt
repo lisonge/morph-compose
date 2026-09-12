@@ -16,6 +16,7 @@ private data class CornerFeature(
 private data class ResampledPath(
     val points: DoubleArray,
     val featureWeights: DoubleArray,
+    val curveSource: CurveSource? = null,
 )
 
 private val gaussNodes =
@@ -177,6 +178,7 @@ private fun resamplePathWithFeatures(
     val segmentCount = path.segmentCount
     val output = DoubleArray(sampleCount * 2)
     val featureWeights = DoubleArray(sampleCount)
+    val positions = DoubleArray(sampleCount)
 
     fun fillDegenerate(): ResampledPath {
         for (index in 0 until sampleCount) {
@@ -250,6 +252,7 @@ private fun resamplePathWithFeatures(
         val vertexIndex = 6 * (start % segmentCount)
         output[writeIndex * 2] = points[vertexIndex]
         output[writeIndex * 2 + 1] = points[vertexIndex + 1]
+        positions[writeIndex] = start.toDouble()
         featureWeights[writeIndex] = cornerWeights[start % segmentCount] ?: 0.0
         writeIndex++
         var segment = start
@@ -269,6 +272,7 @@ private fun resamplePathWithFeatures(
                     0.0
                 }
             writePoint(points, wrappedSegment, t, output, writeIndex * 2)
+            positions[writeIndex] = segment + t
             writeIndex++
         }
     }
@@ -276,8 +280,9 @@ private fun resamplePathWithFeatures(
         val vertexIndex = 6 * segmentCount
         output[writeIndex * 2] = points[vertexIndex]
         output[writeIndex * 2 + 1] = points[vertexIndex + 1]
+        positions[writeIndex] = segmentCount.toDouble()
     }
-    return ResampledPath(output, featureWeights)
+    return ResampledPath(output, featureWeights, CurveSource(path, positions))
 }
 
 internal fun resamplePaths(paths: List<CubicPath>, options: MorphOptions): List<SampledContour> =
@@ -289,5 +294,6 @@ internal fun resamplePaths(paths: List<CubicPath>, options: MorphOptions): List<
             closed = path.closed,
             role = path.role,
             featureWeights = sampled.featureWeights,
+            curveSource = sampled.curveSource,
         )
     }

@@ -56,6 +56,16 @@ Kotlin code and all of its source and configuration files are type-checked TypeS
 7. Use block transport when the complete icon is close to a rigid similarity transform.
 8. Reuse `MorphFrame` and Compose `Path` instances while drawing animation frames.
 
+After matching and global alignment, exactly equal cubic contours retain their curves only when
+the selected plan leaves them stationary. This avoids switching a shared curved outline to a
+coarse polygon during animation. Matching, sample counts, and rotation choices remain unchanged.
+Curve segments are subdivided at the existing sample locations and represented as offsets from
+the sampled edges. Interrupted snapshots retain those offsets as well as the sample points;
+if a subsequent transition moves the contour, the offsets follow its Polar/Linear transport and
+fade to zero by the target. Icons, shapes, and masks share the same compound-path renderer so
+preserved holes keep their winding. Curves that merely look similar or use different cubic
+encodings conservatively follow the existing sampled rendering.
+
 ### Rotation preferences
 
 `MorphOptions.rotationPreference` defaults to `Auto`. The two directional preferences retain the
@@ -90,7 +100,7 @@ the package level without requiring another published artifact.
 controlled API: the caller provides the progress value.
 
 `MorphIconState` drives arbitrary icon sequences. On interruption it snapshots the current sampled
-geometry and replans from that exact frame without another resampling pass. `AnimatedMorphIcon`
+geometry, including any retained curve detail, and replans from that frame without another resampling pass. `AnimatedMorphIcon`
 uses this controller for its Boolean convenience API. Both stateful entry points accept any
 Compose `AnimationSpec<Float>` and default to the system motion-duration scale.
 

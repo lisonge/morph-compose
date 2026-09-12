@@ -792,5 +792,6 @@ internal fun buildSampledMorphPlan(
     if (polarItems.size > 1) {
         applyGlobalAlignment(polarItems, options.sampleCount, options.rotationPreference)
     }
+    items.forEachIndexed { index, item -> item.retainCurves(pairs[index].source, pairs[index].target) }
     return MorphPlan(items, options.sampleCount)
 }
