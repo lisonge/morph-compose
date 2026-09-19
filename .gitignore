@@ -11,3 +11,8 @@ kotlin-js-store
 node_modules/
 dist/
 **/dist/
+
+# Visual references are versioned as links and hashes, not PNG files.
+visual-baselines/**/*.png
+
+.cache/

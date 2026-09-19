@@ -7,13 +7,55 @@ public data class MorphOptions(
     public val sampleCount: Int = 64,
     public val cornerThresholdRadians: Double = PI / 8.0,
     public val rotationPreference: MorphRotationPreference = MorphRotationPreference.Auto,
+    public val transitionMode: MorphTransitionMode = MorphTransitionMode.Auto,
+    public val strokeCountStrategy: MorphStrokeCountStrategy = MorphStrokeCountStrategy.SplitMerge,
+    public val outlineTolerance: Double = 0.0001,
+    public val contourStrategy: MorphContourStrategy = MorphContourStrategy.SharedBoundary,
 ) {
     init {
         require(sampleCount >= 2) { "sampleCount must be at least 2" }
+        require(outlineTolerance.isFinite() && outlineTolerance > 0.0 && outlineTolerance <= 0.01) {
+            "outlineTolerance must be in (0, 0.01] normalized viewport units"
+        }
         require(cornerThresholdRadians.isFinite() && cornerThresholdRadians >= 0.0) {
             "cornerThresholdRadians must be finite and non-negative"
         }
     }
+}
+
+/** Filled-contour policy. Independent of stroke/outline representation selection. */
+public enum class MorphContourStrategy {
+    /** Ordinary contour matching and similarity interpolation; no boundary or topology heuristics. */
+    Standard,
+    /** Constrain verified shared boundary spans; unmatched holes still shrink/grow. */
+    SharedBoundary,
+    /** Opt-in: also try joining unmatched holes to a changing parent through a zero-width seam. */
+    ExperimentalHoleOpening,
+}
+
+/** The strategy actually selected for one output contour, after eligibility checks. */
+public enum class MorphAppliedStrategy {
+    Centerline,
+    Outline,
+    SharedBoundary,
+    ExperimentalHoleOpening,
+    Collapse,
+}
+
+/** Selects a common representation before contour matching. */
+public enum class MorphTransitionMode {
+    /** Use centerlines only when both inputs contain exclusively strokes; otherwise use outlines. */
+    Auto,
+    /** Expand strokes and merge their overlapping ink before matching filled contours. */
+    Outline,
+    /** Require stroke-only inputs; reject filled input rather than silently removing its geometry. */
+    Centerline,
+}
+
+/** How unequal stroke counts behave in centerline mode. Filled contours always preserve winding. */
+public enum class MorphStrokeCountStrategy {
+    SplitMerge,
+    Collapse,
 }
 
 /**
@@ -62,6 +104,13 @@ public data class MorphContourReport(
     public val interpolation: MorphInterpolation,
     public val fallbackReason: MorphFallbackReason? = null,
     public val residual: Double,
+    public val strategy: MorphAppliedStrategy = MorphAppliedStrategy.Outline,
+    public val sourceContours: List<Int> = emptyList(),
+    public val targetContours: List<Int> = emptyList(),
+    public val sharedAnchorCount: Int = 0,
+    public val localMotionCount: Int = 0,
+    public val holeOpeningCount: Int = 0,
+    public val decision: String = "",
 )
 
 /** A non-throwing compatibility verdict for an ImageVector pair. */

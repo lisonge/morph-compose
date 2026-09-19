@@ -1,5 +1,7 @@
 package li.songe.morph.playground
 
+import li.songe.morph.compose.MorphContourStrategy
+
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
@@ -24,9 +26,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,6 +38,7 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Surface
@@ -69,6 +74,8 @@ import li.songe.morph.compose.MorphIcon
 import li.songe.morph.compose.MorphCompatibility
 import li.songe.morph.compose.MorphOptions
 import li.songe.morph.compose.MorphRotationPreference
+import li.songe.morph.compose.MorphTransitionMode
+import li.songe.morph.compose.MorphStrokeCountStrategy
 import li.songe.morph.compose.MorphInterpolation
 import li.songe.morph.compose.inspectMorphCompatibility
 import kotlin.math.roundToInt
@@ -408,7 +415,19 @@ private fun StagePreview(
     BoxWithConstraints(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val iconSize = minOf(176.dp, maxWidth - 20.dp, maxHeight - 34.dp).coerceAtLeast(48.dp)
         StageGrid()
-        MorphIcon(
+        val unsupported = remember(from, to, options) {
+            options.transitionMode == MorphTransitionMode.Centerline &&
+                inspectMorphCompatibility(from.imageVector, to.imageVector, options).compatibility == MorphCompatibility.Unsupported
+        }
+        if (unsupported) {
+            Text(
+                "Centerline requires two stroke icons.\nChoose Auto or Filled outlines for this pair.",
+                modifier = Modifier.padding(16.dp),
+                color = PlaygroundColors.Muted,
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+            )
+        } else MorphIcon(
             from = from.imageVector,
             to = to.imageVector,
             progress = progress,
@@ -476,7 +495,42 @@ private fun AdaptiveControlPanel(state: PlaygroundState) {
                 Spacer(Modifier.height(4.dp))
                 RotationPreferenceControl(state)
                 Spacer(Modifier.height(8.dp))
+                TransitionModeControl(state)
+                Spacer(Modifier.height(8.dp))
                 MorphDoctorSummary(state)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TransitionModeControl(state: PlaygroundState) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        SectionLabel("TRANSITION MODE")
+        Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            for (mode in MorphTransitionMode.entries) {
+                val label = when (mode) {
+                    MorphTransitionMode.Auto -> "Auto"
+                    MorphTransitionMode.Outline -> "Filled outlines"
+                    MorphTransitionMode.Centerline -> "Centerline"
+                }
+                ChoiceChip(label, state.transitionMode == mode) { state.changeTransitionMode(mode) }
+            }
+        }
+        SectionLabel("UNEQUAL STROKE COUNTS")
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            ChoiceChip("Split / merge", state.strokeCountStrategy == MorphStrokeCountStrategy.SplitMerge) { state.changeStrokeCountStrategy(MorphStrokeCountStrategy.SplitMerge) }
+            ChoiceChip("Shrink / grow", state.strokeCountStrategy == MorphStrokeCountStrategy.Collapse) { state.changeStrokeCountStrategy(MorphStrokeCountStrategy.Collapse) }
+        }
+        SectionLabel("CONTOUR STRATEGY")
+        Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            for (strategy in MorphContourStrategy.entries) {
+                val label = when (strategy) {
+                    MorphContourStrategy.Standard -> "Standard baseline"
+                    MorphContourStrategy.SharedBoundary -> "Shared boundary"
+                    MorphContourStrategy.ExperimentalHoleOpening -> "Hole opening (experimental)"
+                }
+                ChoiceChip(label, state.contourStrategy == strategy) { state.changeContourStrategy(strategy) }
             }
         }
     }
@@ -506,6 +560,7 @@ private fun RotationPreferenceControl(state: PlaygroundState) {
 
 @Composable
 private fun MorphDoctorSummary(state: PlaygroundState) {
+    val expanded = state.showPlanDetails
     val report =
         if (state.canAnimate) {
             val from = iconEntries[state.fromIndex].imageVector
@@ -527,33 +582,48 @@ private fun MorphDoctorSummary(state: PlaygroundState) {
             MorphCompatibility.Unsupported -> "UNSUPPORTED · ${report.issues.firstOrNull().orEmpty()}"
             null -> "SELECT AT LEAST TWO ICONS TO INSPECT"
         }
-    Row(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(PlaygroundColors.PanelRaised)
-                .border(1.dp, PlaygroundColors.Line, RoundedCornerShape(8.dp))
-                .padding(horizontal = 10.dp, vertical = 7.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        SectionLabel("MORPH DOCTOR")
-        Text(
-            text = summary,
-            modifier = Modifier.weight(1.0f),
-            color =
-                if (report?.compatibility == MorphCompatibility.Hybrid) {
-                    PlaygroundColors.Amber
-                } else {
-                    PlaygroundColors.Muted
-                },
-            fontFamily = FontFamily.Monospace,
-            fontSize = 9.sp,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.End,
-        )
+    Column {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { state.showPlanDetails = !expanded }
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(PlaygroundColors.PanelRaised)
+                    .border(1.dp, PlaygroundColors.Line, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 10.dp, vertical = 7.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionLabel(if (expanded) "PLAN DETAILS −" else "PLAN DETAILS +")
+            Text(
+                text = summary,
+                modifier = Modifier.weight(1.0f),
+                color =
+                    if (report?.compatibility == MorphCompatibility.Hybrid) {
+                        PlaygroundColors.Amber
+                    } else {
+                        PlaygroundColors.Muted
+                    },
+                fontFamily = FontFamily.Monospace,
+                fontSize = 9.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End,
+            )
+        }
+        if (expanded && report != null) SelectionContainer {
+            Column(modifier = Modifier.fillMaxWidth().padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Policy: ${state.contourStrategy} · ${state.transitionMode}", fontSize = 11.sp, color = PlaygroundColors.Ink)
+                for (contour in report.contours) {
+                    Text("#${contour.index}: source ${contour.sourceContours} → target ${contour.targetContours}\n" +
+                        "${contour.strategy} · ${contour.interpolation} · anchors ${contour.sharedAnchorCount} · " +
+                        "moving spans ${contour.localMotionCount} · seams ${contour.holeOpeningCount}\n" +
+                        contour.decision + (contour.fallbackReason?.let { "\nFallback: $it" } ?: ""),
+                        fontSize = 11.sp, fontFamily = FontFamily.Monospace, color = PlaygroundColors.Ink)
+                }
+            }
+        }
     }
 }
 
@@ -577,14 +647,16 @@ private fun PairSummary(
     Column(modifier = modifier) {
         SectionLabel(if (state.canAnimate) "PAIR · SELECTED SEQUENCE" else "SELECTION")
         Spacer(Modifier.height(6.dp))
-        Text(
-            text = title,
-            color = PlaygroundColors.Ink,
-            fontFamily = FontFamily.Monospace,
-            fontSize = 14.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        SelectionContainer {
+            Text(
+                text = title,
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                color = PlaygroundColors.Ink,
+                fontFamily = FontFamily.Monospace,
+                fontSize = 14.sp,
+                maxLines = 1,
+            )
+        }
         Spacer(Modifier.height(4.dp))
         Text(
             text = detail,
@@ -799,9 +871,27 @@ private fun IconLibrary(
     state: PlaygroundState,
     height: Dp,
 ) {
+    val visibleIndices = remember(state.iconQuery) {
+        val terms = state.iconQuery.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
+        iconEntries.indices.filter { index -> terms.all { iconEntries[index].name.contains(it, ignoreCase = true) } }
+    }
     SectionHeader(
         title = "MATERIAL ICONS",
-        detail = "$iconCount ImageVectors · click to toggle selection",
+        detail = "${visibleIndices.size} / $iconCount ImageVectors · click to toggle selection",
+    )
+    Spacer(Modifier.height(8.dp))
+    OutlinedTextField(
+        value = state.iconQuery,
+        onValueChange = { state.iconQuery = it },
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text("Search icons by name") },
+        singleLine = true,
+        trailingIcon = {
+            if (state.iconQuery.isNotEmpty()) {
+                Text("Clear", modifier = Modifier.clickable { state.iconQuery = "" }.padding(10.dp),
+                    color = PlaygroundColors.Muted, fontSize = 12.sp)
+            }
+        },
     )
     Spacer(Modifier.height(8.dp))
     LazyVerticalGrid(
@@ -817,7 +907,13 @@ private fun IconLibrary(
         horizontalArrangement = Arrangement.spacedBy(7.dp),
         verticalArrangement = Arrangement.spacedBy(7.dp),
     ) {
-        items(iconEntries.size) { index ->
+        if (visibleIndices.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text("No matching icons", modifier = Modifier.fillMaxWidth().padding(20.dp),
+                    color = PlaygroundColors.Muted, textAlign = TextAlign.Center)
+            }
+        }
+        items(visibleIndices, key = { it }) { index ->
             IconCell(
                 icon = iconEntries[index],
                 selectionOrder = state.selectedOrder(index),

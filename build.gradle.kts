@@ -28,7 +28,14 @@ private val publishedModuleNames = setOf(
 
 allprojects {
     group = "li.songe.morph"
-    version = "0.2.0"
+    version = "0.3.0"
+}
+
+tasks.register("verifyMorph") {
+    group = "verification"
+    description = "Geometry contracts, Desktop regressions, visual references, API and target compilation."
+    dependsOn(":morph-compose:jvmTest", ":morph-playground:desktopTest", ":morph-playground:visualRegression",
+        ":morph-compose:checkKotlinAbi", ":morph-compose:compileAndroidMain", ":morph-playground:compileKotlinWasmJs")
 }
 
 tasks.register("verifyReleaseVersion") {

@@ -1,8 +1,10 @@
 package li.songe.morph.compose.internal
 
 import li.songe.morph.compose.MorphFallbackReason
+import li.songe.morph.compose.MorphAppliedStrategy
 import li.songe.morph.compose.MorphOptions
 import li.songe.morph.compose.MorphRotationPreference
+import li.songe.morph.compose.MorphStrokeCountStrategy
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -47,11 +49,14 @@ private data class Alignment(
     val residual: Double,
 )
 
-private data class ContourPair(
+internal data class ContourPair(
     val source: SampledContour,
     val target: SampledContour,
     val polarInterpolation: Boolean,
     val fallbackReason: MorphFallbackReason? = null,
+    val anchored: Boolean = false,
+    val movingSpans: List<IntRange> = emptyList(),
+    val decision: ContourDecision = ContourDecision(),
 )
 
 private data class AlignmentCandidate(
@@ -290,6 +295,12 @@ private fun alignPair(
 ): Alignment {
     val sourceCenter = centroid(source.points)
     val targetCenter = centroid(target.points)
+    // Identity is a contract, not a candidate to trade against fold/feature scores. A contour
+    // can already self-intersect; minimizing those folds must not animate it into another shape.
+    if (source.points.contentEquals(target.points) && source.featureWeights.contentEquals(target.featureWeights)) return Alignment(
+        sourceCenter, targetCenter, source.points, source.featureWeights,
+        target.points, target.featureWeights, 0.0, 1.0, 0.0,
+    )
     val varySource = source.closed && !target.closed
     val base = if (varySource) source.points else target.points
     val baseFeatureWeights =
@@ -439,7 +450,10 @@ private fun costMatrix(source: List<SampledContour>, target: List<SampledContour
     }
 }
 
-private fun bestPermutation(costs: Array<DoubleArray>): IntArray {
+private fun bestPermutation(
+    costs: Array<DoubleArray>,
+    tieCosts: Array<DoubleArray>? = null,
+): IntArray {
     val size = costs.size
     if (size > ExactPermutationLimit) {
         val candidates = mutableListOf<Triple<Double, Int, Int>>()
@@ -481,6 +495,30 @@ private fun bestPermutation(costs: Array<DoubleArray>): IntArray {
     }
 
     permute(0, 0.0)
+    if (tieCosts != null) {
+        // Establish the true distance/length optimum first. Only numerical ties may change
+        // pairing; otherwise direction preferences could move unrelated strokes across the icon.
+        val limit = bestCost + 1e-9
+        var bestTieCost = Double.POSITIVE_INFINITY
+        fun breakTie(index: Int, cost: Double, tieCost: Double) {
+            if (cost > limit || tieCost >= bestTieCost) return
+            if (index == size) {
+                bestTieCost = tieCost
+                best = current.copyOf()
+                return
+            }
+            for (candidate in index until size) {
+                val swap = current[index]
+                current[index] = current[candidate]
+                current[candidate] = swap
+                breakTie(index + 1, cost + costs[index][current[index]],
+                    tieCost + tieCosts[index][current[index]])
+                current[candidate] = current[index]
+                current[index] = swap
+            }
+        }
+        breakTie(0, 0.0, 0.0)
+    }
     return best
 }
 
@@ -535,6 +573,38 @@ private fun bestInjection(costs: Array<DoubleArray>): IntArray {
     return best
 }
 
+private fun bestSurjection(costs: Array<DoubleArray>): IntArray {
+    val large = costs.size
+    val small = costs.first().size
+    if (small.toDouble().let { exp(large * ln(it)) } > ExactInjectionLimit) {
+        // Reserve an injective cover, then attach remaining strokes to their cheapest match.
+        val cover = bestInjection(Array(small) { j -> DoubleArray(large) { i -> costs[i][j] } })
+        return IntArray(large) { i -> costs[i].indices.minBy { costs[i][it] } }.also { result ->
+            cover.forEachIndexed { j, i -> result[i] = j }
+        }
+    }
+    val current = IntArray(large)
+    val counts = IntArray(small)
+    var best = current.copyOf()
+    var bestCost = Double.POSITIVE_INFINITY
+    fun assign(index: Int, cost: Double, covered: Int) {
+        if (cost >= bestCost || small - covered > large - index) return
+        if (index == large) {
+            bestCost = cost
+            best = current.copyOf()
+            return
+        }
+        for (j in 0 until small) {
+            current[index] = j
+            counts[j]++
+            assign(index + 1, cost + costs[index][j], covered + if (counts[j] == 1) 1 else 0)
+            counts[j]--
+        }
+    }
+    assign(0, 0.0, 0)
+    return best
+}
+
 private fun collapsedContour(contour: SampledContour): SampledContour {
     val center = centroid(contour.points)
     return SampledContour(
@@ -544,6 +614,7 @@ private fun collapsedContour(contour: SampledContour): SampledContour {
             },
         closed = contour.closed,
         role = contour.role,
+        stroke = contour.stroke?.copy(width = 0.0),
         featureWeights = contour.featureWeights.copyOf(),
     )
 }
@@ -551,6 +622,8 @@ private fun collapsedContour(contour: SampledContour): SampledContour {
 private fun matchContours(
     source: List<SampledContour>,
     target: List<SampledContour>,
+    rotationPreference: MorphRotationPreference,
+    strokeCountStrategy: MorphStrokeCountStrategy,
 ): List<ContourPair> {
     val pairs = mutableListOf<ContourPair>()
     for (role in MorphContourRole.entries) {
@@ -578,7 +651,16 @@ private fun matchContours(
                         )
                 }
             sourceByRole.size == targetByRole.size -> {
-                val permutation = bestPermutation(costMatrix(sourceByRole, targetByRole))
+                val tieCosts = if (role == MorphContourRole.Stroke && sourceByRole.size <= ExactPermutationLimit) {
+                    Array(sourceByRole.size) { i ->
+                        DoubleArray(targetByRole.size) { j ->
+                            val alignment = alignPair(sourceByRole[i], targetByRole[j], rotationPreference)
+                            rotationPreference.rank(alignment.theta) + alignment.residual +
+                                RotationWeight * abs(alignment.theta) / PI
+                        }
+                    }
+                } else null
+                val permutation = bestPermutation(costMatrix(sourceByRole, targetByRole), tieCosts)
                 sourceByRole.indices.forEach { index ->
                     pairs +=
                         ContourPair(
@@ -586,6 +668,20 @@ private fun matchContours(
                             targetByRole[permutation[index]],
                             polarInterpolation = true,
                         )
+                }
+            }
+            role == MorphContourRole.Stroke && strokeCountStrategy == MorphStrokeCountStrategy.SplitMerge -> {
+                // Cover every smaller-side stroke, then split it as needed. Filled contours must
+                // continue using injection/collapse because duplication changes their winding.
+                val sourceIsSmaller = sourceByRole.size < targetByRole.size
+                val small = if (sourceIsSmaller) sourceByRole else targetByRole
+                val large = if (sourceIsSmaller) targetByRole else sourceByRole
+                val costs = costMatrix(large, small)
+                val assignment = bestSurjection(costs)
+                large.indices.forEach { index ->
+                    val a = small[assignment[index]]
+                    val b = large[index]
+                    pairs += if (sourceIsSmaller) ContourPair(a, b, true) else ContourPair(b, a, true)
                 }
             }
             sourceByRole.size < targetByRole.size -> {
@@ -736,13 +832,20 @@ internal fun buildSampledMorphPlan(
     target: List<SampledContour>,
     options: MorphOptions,
 ): MorphPlan {
-    val pairs = matchContours(source, target)
+    val correspondence = matchContours(source, target, options.rotationPreference, options.strokeCountStrategy)
+    val pairs = selectContourStrategies(correspondence, source, target, options)
 
     val items =
         pairs.map { pair ->
             val sourceContour = pair.source
             val targetContour = pair.target
-            val alignment = alignPair(sourceContour, targetContour, options.rotationPreference)
+            val alignment = if (pair.anchored) {
+                val sourceCenter = centroid(sourceContour.points)
+                val targetCenter = centroid(targetContour.points)
+                Alignment(sourceCenter, targetCenter, sourceContour.points, sourceContour.featureWeights,
+                    targetContour.points, targetContour.featureWeights, 0.0, 1.0,
+                    procrustes(sourceContour.points, targetContour.points, sourceCenter, targetCenter).residual)
+            } else alignPair(sourceContour, targetContour, options.rotationPreference)
             val polarInterpolation =
                 pair.polarInterpolation && alignment.scale > MinimumPolarScale
             val fallbackReason =
@@ -786,12 +889,44 @@ internal fun buildSampledMorphPlan(
                 polarInterpolation = polarInterpolation,
                 fallbackReason = fallbackReason,
                 blockTransport = null,
+                sourceStroke = sourceContour.stroke,
+                targetStroke = targetContour.stroke,
+                decision = if (fallbackReason == MorphFallbackReason.DegenerateSimilarity) pair.decision.copy(
+                    strategy = MorphAppliedStrategy.Collapse, reason = "Degenerate similarity; linear interpolation.",
+                ) else pair.decision,
+                boundaryMotions = pair.movingSpans.mapNotNull { range ->
+                    fun extract(points: DoubleArray) = DoubleArray(range.count() * 2) { i ->
+                        points[((range.first + i / 2) % options.sampleCount) * 2 + i % 2]
+                    }
+                    val a = extract(alignment.source)
+                    val b = extract(alignment.target)
+                    val ac = centroid(a)
+                    val bc = centroid(b)
+                    val fit = procrustes(a, b, ac, bc)
+                    if (fit.scale <= MinimumPolarScale) null else
+                        BoundaryMotion(range, ac.x, ac.y, bc.x, bc.y, fit.theta, ln(fit.scale))
+                },
             )
         }
-    val polarItems = items.filter(PlanItem::polarInterpolation)
+    val polarItems = items.filterIndexed { index, item -> item.polarInterpolation && !pairs[index].anchored }
     if (polarItems.size > 1) {
         applyGlobalAlignment(polarItems, options.sampleCount, options.rotationPreference)
     }
-    items.forEachIndexed { index, item -> item.retainCurves(pairs[index].source, pairs[index].target) }
+    items.forEachIndexed { index, item ->
+        item.retainCurves(pairs[index].source, pairs[index].target)
+        item.boundaryMotions.forEach { it.prepare(item) }
+    }
     return MorphPlan(items, options.sampleCount)
+}
+
+internal fun sharedBoundaryFitScore(anchored: AnchoredContours, sampleCount: Int): Double {
+    return anchored.movingSpans.sumOf { range ->
+        fun extract(points: DoubleArray) = DoubleArray(range.count() * 2) { i ->
+            points[((range.first + i / 2) % sampleCount) * 2 + i % 2]
+        }
+        val a = extract(anchored.source.points)
+        val b = extract(anchored.target.points)
+        val fit = procrustes(a, b, centroid(a), centroid(b))
+        fit.residual + 0.05 * abs(ln(maxOf(fit.scale, MinimumPolarScale)))
+    }
 }

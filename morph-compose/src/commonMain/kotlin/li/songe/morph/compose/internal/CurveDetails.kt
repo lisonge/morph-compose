@@ -104,8 +104,93 @@ internal fun PlanItem.retainCurves(source: SampledContour, target: SampledContou
         this.source.indices.all { abs(this.source[it] - targetOriented[it]) <= 1e-12 } &&
         blockTransport.let { it == null || (abs(it.driftX) <= 1e-12 && abs(it.driftY) <= 1e-12) }
     if (stationary) stationaryCurve = original
-    val details = source.curveDetails ?: if (stationary) original.details(source.points) else null
-    curveDetails = details?.orient(source.points, this.source)
+    val details = source.curveDetails ?: original?.details(source.points)
+    val from = details?.orient(source.points, this.source)
+    if (stationary) {
+        curveDetails = from
+        return
+    }
+    val to = (target.curveDetails ?: target.curveSource?.details(target.points))
+        ?.orient(target.points, targetOriented)
+    if (from == null && to == null) return
+    // Both ends must use the same cubic segmentation; otherwise switching to the target's
+    // original curves at rest exposes the error between those curves and their sampled chords.
+    val refined = refineCurves(from, to, this.source.size / 2, closed)
+    curveDetails = refined.first
+    targetCurveDetails = refined.second
+}
+
+private data class EdgePiece(val start: Double, val end: Double, val offsets: DoubleArray)
+
+/** Reorder control offsets into aligned sample-edge order, including reversed traversal. */
+private fun CurveDetails.edgePieces(count: Int): Array<MutableList<EdgePiece>> {
+    val edges = Array(count) { mutableListOf<EdgePiece>() }
+    for (i in 0 until offsets.size - 2 step 6) {
+        val control = i / 2 + 1
+        val a = left[control]
+        val b = right[control]
+        var start = (2 * weights[control] - weights[control + 1]).coerceIn(0.0, 1.0)
+        var end = (2 * weights[control + 1] - weights[control]).coerceIn(0.0, 1.0)
+        val piece = offsets.copyOfRange(i, i + 8)
+        val edge: Int
+        if (b == (a + 1) % count) {
+            edge = a
+        } else {
+            check(a == (b + 1) % count) { "Curve controls must belong to adjacent samples" }
+            edge = b
+            val oldStart = start
+            start = 1.0 - end
+            end = 1.0 - oldStart
+            for (p in 0..1) for (axis in 0..1) {
+                val value = piece[p * 2 + axis]
+                piece[p * 2 + axis] = piece[(3 - p) * 2 + axis]
+                piece[(3 - p) * 2 + axis] = value
+            }
+        }
+        if (end > start) edges[edge] += EdgePiece(start, end, piece)
+    }
+    return edges
+}
+
+/** Union the two sets of segment boundaries, subdividing cubics exactly at new boundaries. */
+private fun refineCurves(from: CurveDetails?, to: CurveDetails?, count: Int, closed: Boolean): Pair<CurveDetails, CurveDetails> {
+    val a = from?.edgePieces(count)
+    val b = to?.edgePieces(count)
+    val left = mutableListOf<Int>()
+    val right = mutableListOf<Int>()
+    val weights = mutableListOf<Double>()
+    val sourceOffsets = mutableListOf<Double>()
+    val targetOffsets = mutableListOf<Double>()
+    fun restrict(pieces: List<EdgePiece>, start: Double, end: Double): DoubleArray {
+        val middle = (start + end) / 2
+        val piece = pieces.firstOrNull { middle >= it.start && middle <= it.end } ?: return DoubleArray(8)
+        return subCubic(piece.offsets, 0, ((start - piece.start) / (piece.end - piece.start)).coerceIn(0.0, 1.0),
+            ((end - piece.start) / (piece.end - piece.start)).coerceIn(0.0, 1.0))
+    }
+    for (edge in 0 until if (closed) count else count - 1) {
+        val ap = a?.get(edge).orEmpty()
+        val bp = b?.get(edge).orEmpty()
+        val cuts = (listOf(0.0, 1.0) + (ap + bp).flatMap { listOf(it.start, it.end) }).sorted()
+            .fold(mutableListOf<Double>()) { result, value ->
+                if (result.isEmpty() || value - result.last() > 1e-12) result += value
+                result
+            }
+        for ((start, end) in cuts.zipWithNext()) {
+            val source = restrict(ap, start, end)
+            val target = restrict(bp, start, end)
+            for (p in (if (left.isEmpty()) 0 else 1)..3) {
+                left += edge
+                right += (edge + 1) % count
+                weights += start + (end - start) * p / 3
+                sourceOffsets += source[p * 2]
+                sourceOffsets += source[p * 2 + 1]
+                targetOffsets += target[p * 2]
+                targetOffsets += target[p * 2 + 1]
+            }
+        }
+    }
+    fun detail(offsets: List<Double>) = CurveDetails(left.toIntArray(), right.toIntArray(), weights.toDoubleArray(), offsets.toDoubleArray())
+    return detail(sourceOffsets) to detail(targetOffsets)
 }
 
 internal fun PlanItem.writeCurves(
@@ -116,14 +201,20 @@ internal fun PlanItem.writeCurves(
 ) {
     val detail = curveDetails ?: return
     val curves = checkNotNull(output)
-    // Retained static curves never lose detail, including spring overshoot. Interrupted curves
-    // transport with the existing contour and smoothly shed detail as they reach its target.
+    // Transport source and target offsets in their respective similarity frames. Clamped detail
+    // weights keep overshoot continuous on both sides of the exact endpoint geometry.
     val weight = if (stationaryCurve != null) 1.0 else 1.0 - progress.coerceIn(0.0, 1.0)
     val polar = interpolation == MorphInterpolation.Polar && polarInterpolation
     val angle = if (polar) theta * progress else 0.0
     val scale = if (polar) exp(logScale * progress) else 1.0
     val cosine = cos(angle) * scale * weight
     val sine = sin(angle) * scale * weight
+    val target = targetCurveDetails
+    val targetWeight = progress.coerceIn(0.0, 1.0)
+    val targetAngle = if (polar) theta * (progress - 1.0) else 0.0
+    val targetScale = if (polar) exp(logScale * (progress - 1.0)) else 1.0
+    val targetCosine = cos(targetAngle) * targetScale * targetWeight
+    val targetSine = sin(targetAngle) * targetScale * targetWeight
     for (point in detail.left.indices) {
         val a = detail.left[point] * 2
         val b = detail.right[point] * 2
@@ -133,6 +224,12 @@ internal fun PlanItem.writeCurves(
         val dy = detail.offsets[i + 1]
         curves[i] = samples[a] + (samples[b] - samples[a]) * fraction + dx * cosine - dy * sine
         curves[i + 1] = samples[a + 1] + (samples[b + 1] - samples[a + 1]) * fraction + dx * sine + dy * cosine
+        if (target != null) {
+            val tx = target.offsets[i]
+            val ty = target.offsets[i + 1]
+            curves[i] += tx * targetCosine - ty * targetSine
+            curves[i + 1] += tx * targetSine + ty * targetCosine
+        }
     }
 }
 

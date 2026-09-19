@@ -127,10 +127,13 @@ internal class MorphPathRenderer(private val plan: ImageVectorMorphPlan) {
 }
 
 /** Keep shapes, masks and icons on the same compound-path drawing path, including holes. */
-internal fun Path.appendMorphFrame(frame: MorphFrame, sx: Float, sy: Float, ox: Float, oy: Float) {
+internal fun Path.appendMorphFrame(frame: MorphFrame, sx: Float, sy: Float, ox: Float, oy: Float,
+    includeContour: (Int) -> Boolean = { true },
+) {
     fun x(value: Double): Float = ox + value.toFloat() * sx
     fun y(value: Double): Float = oy + value.toFloat() * sy
     for (contour in 0 until frame.contourCount) {
+        if (!includeContour(contour)) continue
         val curves = frame.curves[contour]
         if (curves != null && curves.isNotEmpty()) {
             moveTo(x(curves[0]), y(curves[1]))

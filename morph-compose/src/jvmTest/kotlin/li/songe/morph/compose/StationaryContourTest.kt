@@ -80,6 +80,61 @@ class StationaryContourTest {
         for (y in 120 until 400) for (x in 0 until 400) assertEquals(expected.getRGB(x, y), actual.getRGB(x, y))
     }
 
+    @Test fun interruptedMovingCurvesKeepTheirOutlineWhenTargetSegmentationChanges() {
+        val oval = morphGeometryOf(Path().apply { addOval(Rect(8f, 18f, 88f, 92f)) }, size).vector
+        val rounded = morphGeometryOf(Path().apply {
+            moveTo(10f, 15f)
+            cubicTo(75f, 0f, 100f, 35f, 85f, 75f)
+            cubicTo(65f, 100f, 20f, 70f, 10f, 15f)
+            close()
+        }, size).vector
+        val triangle = morphGeometryOf(Path().apply {
+            moveTo(10f, 80f); lineTo(50f, 10f); lineTo(90f, 80f); close()
+        }, size).vector
+        for (mode in MorphInterpolation.entries) {
+            var plan = buildMorphPlan(triangle, oval, options)
+            for (target in listOf(rounded, triangle, oval)) {
+                val before = mask(render(plan, 0.43f, mode))
+                val core = buildMorphPlanFromSampledSource(
+                    plan.corePlan.snapshotContours(0.43f.toDouble(), mode), target.toCubicPaths(false), options,
+                )
+                plan = ImageVectorMorphPlan(core, null, target, plan.defaultWidth, plan.defaultHeight)
+                val after = mask(render(plan, 0f, mode))
+                for (y in 0 until 400) for (x in 0 until 400) {
+                    assertEquals(before.getRGB(x, y), after.getRGB(x, y), "Interrupted outline changed at $x,$y ($mode)")
+                }
+            }
+        }
+    }
+
+    @Test fun interruptedLocalBoundaryMotionStartsAtTheRenderedFrame() {
+        fun shape(left: Float) = morphGeometryOf(Path().apply {
+            moveTo(10f, 40f)
+            lineTo(left, 40f)
+            lineTo(left, 10f)
+            lineTo(left + 20f, 10f)
+            lineTo(left + 20f, 40f)
+            lineTo(90f, 40f)
+            lineTo(90f, 90f)
+            lineTo(10f, 90f)
+            close()
+        }, size).vector
+        val a = shape(25f)
+        val b = shape(55f)
+        for (mode in MorphInterpolation.entries) {
+            val original = buildMorphPlan(a, b, options)
+            assertTrue(original.corePlan.items.any { it.boundaryMotions.isNotEmpty() })
+            val expected = mask(render(original, 0.43f, mode))
+            val core = buildMorphPlanFromSampledSource(
+                original.corePlan.snapshotContours(0.43f.toDouble(), mode), a.toCubicPaths(false), options)
+            val interrupted = ImageVectorMorphPlan(core, null, a, original.defaultWidth, original.defaultHeight)
+            val actual = mask(render(interrupted, 0f, mode))
+            for (y in 0 until 400) for (x in 0 until 400) {
+                assertEquals(expected.getRGB(x, y), actual.getRGB(x, y), "Local motion jumped at $x,$y ($mode)")
+            }
+        }
+    }
+
     private fun mask(path: Path): BufferedImage {
         val shape = Path2D.Float(Path2D.WIND_NON_ZERO)
         for (segment in path.iterator().asSequence()) {

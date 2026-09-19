@@ -143,9 +143,29 @@ For transitions such as `99 → 100`, see the [whole-number example](morph-playg
 
 ## Supported input
 
-Supports solid fill paths, nested transforms, multiple contours, and holes.
-Clip paths, trim paths, gradient fills, and stroke-only paths are not supported.
+Supports solid fill-only and solid stroke-only paths, nested transforms, multiple contours, and holes.
+Clip paths, trim paths, gradients, combined fill and stroke on one path, and non-uniform stroke transforms are not supported.
+
+For line icons, use an `ImageVector` with `fill = null`, `stroke = SolidColor(...)`, and separate
+`moveTo` commands for independent strokes. Morphing matches and transforms centerlines while
+retaining stroke width; unequal stroke counts split or merge. The playground's Search, Close, Menu, Add,
+Remove, Check, and four direction arrows use this representation. Existing Material filled icons
+still morph their boundaries; stroke structure is not inferred. Auto uses centerlines only when both
+inputs are stroke-only. Otherwise strokes expand into filled outlines and overlapping ink is merged,
+so mixed pairs such as Close ↔ Play morph together. `MorphGeometry` and clipping remain
+filled geometry APIs.
+
+`MorphOptions.transitionMode` selects `Auto`, forced `Outline`, or strict `Centerline` (rejects filled
+input). `strokeCountStrategy` chooses `SplitMerge` or `Collapse` for unequal centerline counts.
+`outlineTolerance` defaults to `0.0001` normalized viewport units and controls stroke expansion
+precision; smaller values cost more planning work. Existing sampling and rotation options apply after
+conversion. Interruptions use the same representation policy, converting the currently rendered ink
+within that tolerance when leaving centerline mode. Filled contour matching continues to preserve
+winding and holes. Authored trim timelines remain outside the automatic solver.
 Use `inspectMorphCompatibility(from, to)` to check icons before animating them.
+`contourStrategy` selects the ordinary `Standard` baseline, default `SharedBoundary`, or explicit
+`ExperimentalHoleOpening`. Reports include actual strategies, contour correspondence and fallback
+decisions. Run `./gradlew verifyMorph` for the quality gate; see the [quality workflow](docs/quality.md).
 
 See the [API and algorithm documentation](docs/architecture.md#api-layers) for state controllers, plan reuse, and interpolation details.
 The [project docs](docs/README.md) cover the playground and development setup.

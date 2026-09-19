@@ -8,6 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import li.songe.morph.compose.MorphOptions
 import li.songe.morph.compose.MorphRotationPreference
+import li.songe.morph.compose.MorphTransitionMode
+import li.songe.morph.compose.MorphStrokeCountStrategy
+import li.songe.morph.compose.MorphContourStrategy
 
 internal data class PlaygroundSnapshot(
     val selectedIndices: List<Int>,
@@ -50,10 +53,39 @@ internal class PlaygroundState(
     var isPlaying by mutableStateOf(false)
         private set
     var compareLinear by mutableStateOf(false)
+    var iconQuery by mutableStateOf("")
+    var showPlanDetails by mutableStateOf(false)
     var rotationPreference by mutableStateOf(MorphRotationPreference.Auto)
         private set
     val morphOptions: MorphOptions
-        get() = MorphOptions(rotationPreference = rotationPreference)
+        get() = MorphOptions(rotationPreference = rotationPreference, transitionMode = transitionMode,
+            strokeCountStrategy = strokeCountStrategy, contourStrategy = contourStrategy)
+
+    var contourStrategy by mutableStateOf(MorphContourStrategy.SharedBoundary)
+        private set
+
+    fun changeContourStrategy(strategy: MorphContourStrategy) {
+        if (contourStrategy == strategy) return
+        contourStrategy = strategy
+        resetAnimation()
+    }
+
+    var transitionMode by mutableStateOf(MorphTransitionMode.Auto)
+        private set
+    var strokeCountStrategy by mutableStateOf(MorphStrokeCountStrategy.SplitMerge)
+        private set
+
+    fun changeTransitionMode(mode: MorphTransitionMode) {
+        if (transitionMode == mode) return
+        transitionMode = mode
+        resetAnimation()
+    }
+
+    fun changeStrokeCountStrategy(strategy: MorphStrokeCountStrategy) {
+        if (strokeCountStrategy == strategy) return
+        strokeCountStrategy = strategy
+        resetAnimation()
+    }
 
     fun changeRotationPreference(preference: MorphRotationPreference) {
         if (preference == rotationPreference) return

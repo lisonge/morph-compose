@@ -5,10 +5,17 @@
   "scripts": {
     "build": "pnpm -r --sort build",
     "dev": "pnpm --filter morph-playground build && pnpm --filter morph-website dev",
-    "preview": "pnpm --filter morph-website preview"
+    "preview": "pnpm --filter morph-website preview",
+    "dev:quality": "pnpm --filter morph-website dev --mode quality",
+    "quality:report": "node scripts/quality-report.ts",
+    "build:deploy": "pnpm quality:report && pnpm build",
+    "deploy:website": "pnpm build:deploy && pnpm dlx --allow-build=sharp --allow-build=workerd --allow-build=esbuild wrangler@4 pages deploy morph-website/dist --project-name=morph-compose",
+    "quality:publish": "node scripts/quality-report.ts publish",
+    "quality:promote": "node scripts/promote-visual-baseline.ts"
   },
   "dependencies": {
     "@vueuse/core": "^14.4.0",
+    "marked": "^18.0.13",
     "vue": "^3.5.42"
   },
   "devDependencies": {

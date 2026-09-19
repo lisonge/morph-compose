@@ -1,0 +1,2 @@
+2026-09-19T18:44:41.9618220+08:00 | 120 cases | Initial change-detection reference for all three policies; not aesthetic approval. Endpoint checks passed; known intermediate-shape limitations remain visible.
+2026-09-19T20:59:56.7535994+08:00 | 120 个案例 | 仅将原有图片基线迁移为公开链接和摘要；120 个案例内容保持一致，匿名下载与完整质量检查通过。

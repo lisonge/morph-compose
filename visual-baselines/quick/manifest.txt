@@ -1,0 +1,121 @@
+morph-visual-v1; pixels=96; samples=64; progress=[0.0, 0.25, 0.5, 0.75, 1.0]; suite=quick
+0_1_Standard_Auto_Polar	Menu → Close | Standard | Auto | Polar
+0_1_Standard_Auto_Linear	Menu → Close | Standard | Auto | Linear
+0_1_SharedBoundary_Auto_Polar	Menu → Close | SharedBoundary | Auto | Polar
+0_1_SharedBoundary_Auto_Linear	Menu → Close | SharedBoundary | Auto | Linear
+0_1_ExperimentalHoleOpening_Auto_Polar	Menu → Close | ExperimentalHoleOpening | Auto | Polar
+0_1_ExperimentalHoleOpening_Auto_Linear	Menu → Close | ExperimentalHoleOpening | Auto | Linear
+1_0_Standard_Auto_Polar	Close → Menu | Standard | Auto | Polar
+1_0_Standard_Auto_Linear	Close → Menu | Standard | Auto | Linear
+1_0_SharedBoundary_Auto_Polar	Close → Menu | SharedBoundary | Auto | Polar
+1_0_SharedBoundary_Auto_Linear	Close → Menu | SharedBoundary | Auto | Linear
+1_0_ExperimentalHoleOpening_Auto_Polar	Close → Menu | ExperimentalHoleOpening | Auto | Polar
+1_0_ExperimentalHoleOpening_Auto_Linear	Close → Menu | ExperimentalHoleOpening | Auto | Linear
+9_1_Standard_Auto_Polar	Search → Close | Standard | Auto | Polar
+9_1_Standard_Auto_Linear	Search → Close | Standard | Auto | Linear
+9_1_SharedBoundary_Auto_Polar	Search → Close | SharedBoundary | Auto | Polar
+9_1_SharedBoundary_Auto_Linear	Search → Close | SharedBoundary | Auto | Linear
+9_1_ExperimentalHoleOpening_Auto_Polar	Search → Close | ExperimentalHoleOpening | Auto | Polar
+9_1_ExperimentalHoleOpening_Auto_Linear	Search → Close | ExperimentalHoleOpening | Auto | Linear
+1_9_Standard_Auto_Polar	Close → Search | Standard | Auto | Polar
+1_9_Standard_Auto_Linear	Close → Search | Standard | Auto | Linear
+1_9_SharedBoundary_Auto_Polar	Close → Search | SharedBoundary | Auto | Polar
+1_9_SharedBoundary_Auto_Linear	Close → Search | SharedBoundary | Auto | Linear
+1_9_ExperimentalHoleOpening_Auto_Polar	Close → Search | ExperimentalHoleOpening | Auto | Polar
+1_9_ExperimentalHoleOpening_Auto_Linear	Close → Search | ExperimentalHoleOpening | Auto | Linear
+1_2_Standard_Auto_Polar	Close → Play | Standard | Auto | Polar
+1_2_Standard_Auto_Linear	Close → Play | Standard | Auto | Linear
+1_2_SharedBoundary_Auto_Polar	Close → Play | SharedBoundary | Auto | Polar
+1_2_SharedBoundary_Auto_Linear	Close → Play | SharedBoundary | Auto | Linear
+1_2_ExperimentalHoleOpening_Auto_Polar	Close → Play | ExperimentalHoleOpening | Auto | Polar
+1_2_ExperimentalHoleOpening_Auto_Linear	Close → Play | ExperimentalHoleOpening | Auto | Linear
+2_1_Standard_Auto_Polar	Play → Close | Standard | Auto | Polar
+2_1_Standard_Auto_Linear	Play → Close | Standard | Auto | Linear
+2_1_SharedBoundary_Auto_Polar	Play → Close | SharedBoundary | Auto | Polar
+2_1_SharedBoundary_Auto_Linear	Play → Close | SharedBoundary | Auto | Linear
+2_1_ExperimentalHoleOpening_Auto_Polar	Play → Close | ExperimentalHoleOpening | Auto | Polar
+2_1_ExperimentalHoleOpening_Auto_Linear	Play → Close | ExperimentalHoleOpening | Auto | Linear
+8_10_Standard_Auto_Polar	Home → Settings | Standard | Auto | Polar
+8_10_Standard_Auto_Linear	Home → Settings | Standard | Auto | Linear
+8_10_SharedBoundary_Auto_Polar	Home → Settings | SharedBoundary | Auto | Polar
+8_10_SharedBoundary_Auto_Linear	Home → Settings | SharedBoundary | Auto | Linear
+8_10_ExperimentalHoleOpening_Auto_Polar	Home → Settings | ExperimentalHoleOpening | Auto | Polar
+8_10_ExperimentalHoleOpening_Auto_Linear	Home → Settings | ExperimentalHoleOpening | Auto | Linear
+10_8_Standard_Auto_Polar	Settings → Home | Standard | Auto | Polar
+10_8_Standard_Auto_Linear	Settings → Home | Standard | Auto | Linear
+10_8_SharedBoundary_Auto_Polar	Settings → Home | SharedBoundary | Auto | Polar
+10_8_SharedBoundary_Auto_Linear	Settings → Home | SharedBoundary | Auto | Linear
+10_8_ExperimentalHoleOpening_Auto_Polar	Settings → Home | ExperimentalHoleOpening | Auto | Polar
+10_8_ExperimentalHoleOpening_Auto_Linear	Settings → Home | ExperimentalHoleOpening | Auto | Linear
+503_501_Standard_Auto_Polar	Lock (Material Outlined) → Lock open | Standard | Auto | Polar
+503_501_Standard_Auto_Linear	Lock (Material Outlined) → Lock open | Standard | Auto | Linear
+503_501_SharedBoundary_Auto_Polar	Lock (Material Outlined) → Lock open | SharedBoundary | Auto | Polar
+503_501_SharedBoundary_Auto_Linear	Lock (Material Outlined) → Lock open | SharedBoundary | Auto | Linear
+503_501_ExperimentalHoleOpening_Auto_Polar	Lock (Material Outlined) → Lock open | ExperimentalHoleOpening | Auto | Polar
+503_501_ExperimentalHoleOpening_Auto_Linear	Lock (Material Outlined) → Lock open | ExperimentalHoleOpening | Auto | Linear
+501_503_Standard_Auto_Polar	Lock open → Lock (Material Outlined) | Standard | Auto | Polar
+501_503_Standard_Auto_Linear	Lock open → Lock (Material Outlined) | Standard | Auto | Linear
+501_503_SharedBoundary_Auto_Polar	Lock open → Lock (Material Outlined) | SharedBoundary | Auto | Polar
+501_503_SharedBoundary_Auto_Linear	Lock open → Lock (Material Outlined) | SharedBoundary | Auto | Linear
+501_503_ExperimentalHoleOpening_Auto_Polar	Lock open → Lock (Material Outlined) | ExperimentalHoleOpening | Auto | Polar
+501_503_ExperimentalHoleOpening_Auto_Linear	Lock open → Lock (Material Outlined) | ExperimentalHoleOpening | Auto | Linear
+501_27_Standard_Auto_Polar	Lock open → Lock open right | Standard | Auto | Polar
+501_27_Standard_Auto_Linear	Lock open → Lock open right | Standard | Auto | Linear
+501_27_SharedBoundary_Auto_Polar	Lock open → Lock open right | SharedBoundary | Auto | Polar
+501_27_SharedBoundary_Auto_Linear	Lock open → Lock open right | SharedBoundary | Auto | Linear
+501_27_ExperimentalHoleOpening_Auto_Polar	Lock open → Lock open right | ExperimentalHoleOpening | Auto | Polar
+501_27_ExperimentalHoleOpening_Auto_Linear	Lock open → Lock open right | ExperimentalHoleOpening | Auto | Linear
+27_501_Standard_Auto_Polar	Lock open right → Lock open | Standard | Auto | Polar
+27_501_Standard_Auto_Linear	Lock open right → Lock open | Standard | Auto | Linear
+27_501_SharedBoundary_Auto_Polar	Lock open right → Lock open | SharedBoundary | Auto | Polar
+27_501_SharedBoundary_Auto_Linear	Lock open right → Lock open | SharedBoundary | Auto | Linear
+27_501_ExperimentalHoleOpening_Auto_Polar	Lock open right → Lock open | ExperimentalHoleOpening | Auto | Polar
+27_501_ExperimentalHoleOpening_Auto_Linear	Lock open right → Lock open | ExperimentalHoleOpening | Auto | Linear
+503_27_Standard_Auto_Polar	Lock (Material Outlined) → Lock open right | Standard | Auto | Polar
+503_27_Standard_Auto_Linear	Lock (Material Outlined) → Lock open right | Standard | Auto | Linear
+503_27_SharedBoundary_Auto_Polar	Lock (Material Outlined) → Lock open right | SharedBoundary | Auto | Polar
+503_27_SharedBoundary_Auto_Linear	Lock (Material Outlined) → Lock open right | SharedBoundary | Auto | Linear
+503_27_ExperimentalHoleOpening_Auto_Polar	Lock (Material Outlined) → Lock open right | ExperimentalHoleOpening | Auto | Polar
+503_27_ExperimentalHoleOpening_Auto_Linear	Lock (Material Outlined) → Lock open right | ExperimentalHoleOpening | Auto | Linear
+27_503_Standard_Auto_Polar	Lock open right → Lock (Material Outlined) | Standard | Auto | Polar
+27_503_Standard_Auto_Linear	Lock open right → Lock (Material Outlined) | Standard | Auto | Linear
+27_503_SharedBoundary_Auto_Polar	Lock open right → Lock (Material Outlined) | SharedBoundary | Auto | Polar
+27_503_SharedBoundary_Auto_Linear	Lock open right → Lock (Material Outlined) | SharedBoundary | Auto | Linear
+27_503_ExperimentalHoleOpening_Auto_Polar	Lock open right → Lock (Material Outlined) | ExperimentalHoleOpening | Auto | Polar
+27_503_ExperimentalHoleOpening_Auto_Linear	Lock open right → Lock (Material Outlined) | ExperimentalHoleOpening | Auto | Linear
+6_14_Standard_Auto_Polar	Add → Check | Standard | Auto | Polar
+6_14_Standard_Auto_Linear	Add → Check | Standard | Auto | Linear
+6_14_SharedBoundary_Auto_Polar	Add → Check | SharedBoundary | Auto | Polar
+6_14_SharedBoundary_Auto_Linear	Add → Check | SharedBoundary | Auto | Linear
+6_14_ExperimentalHoleOpening_Auto_Polar	Add → Check | ExperimentalHoleOpening | Auto | Polar
+6_14_ExperimentalHoleOpening_Auto_Linear	Add → Check | ExperimentalHoleOpening | Auto | Linear
+14_6_Standard_Auto_Polar	Check → Add | Standard | Auto | Polar
+14_6_Standard_Auto_Linear	Check → Add | Standard | Auto | Linear
+14_6_SharedBoundary_Auto_Polar	Check → Add | SharedBoundary | Auto | Polar
+14_6_SharedBoundary_Auto_Linear	Check → Add | SharedBoundary | Auto | Linear
+14_6_ExperimentalHoleOpening_Auto_Polar	Check → Add | ExperimentalHoleOpening | Auto | Polar
+14_6_ExperimentalHoleOpening_Auto_Linear	Check → Add | ExperimentalHoleOpening | Auto | Linear
+15_16_Standard_Auto_Polar	Arrow back → Arrow forward | Standard | Auto | Polar
+15_16_Standard_Auto_Linear	Arrow back → Arrow forward | Standard | Auto | Linear
+15_16_SharedBoundary_Auto_Polar	Arrow back → Arrow forward | SharedBoundary | Auto | Polar
+15_16_SharedBoundary_Auto_Linear	Arrow back → Arrow forward | SharedBoundary | Auto | Linear
+15_16_ExperimentalHoleOpening_Auto_Polar	Arrow back → Arrow forward | ExperimentalHoleOpening | Auto | Polar
+15_16_ExperimentalHoleOpening_Auto_Linear	Arrow back → Arrow forward | ExperimentalHoleOpening | Auto | Linear
+16_15_Standard_Auto_Polar	Arrow forward → Arrow back | Standard | Auto | Polar
+16_15_Standard_Auto_Linear	Arrow forward → Arrow back | Standard | Auto | Linear
+16_15_SharedBoundary_Auto_Polar	Arrow forward → Arrow back | SharedBoundary | Auto | Polar
+16_15_SharedBoundary_Auto_Linear	Arrow forward → Arrow back | SharedBoundary | Auto | Linear
+16_15_ExperimentalHoleOpening_Auto_Polar	Arrow forward → Arrow back | ExperimentalHoleOpening | Auto | Polar
+16_15_ExperimentalHoleOpening_Auto_Linear	Arrow forward → Arrow back | ExperimentalHoleOpening | Auto | Linear
+5_8_Standard_Auto_Polar	Favorite → Home | Standard | Auto | Polar
+5_8_Standard_Auto_Linear	Favorite → Home | Standard | Auto | Linear
+5_8_SharedBoundary_Auto_Polar	Favorite → Home | SharedBoundary | Auto | Polar
+5_8_SharedBoundary_Auto_Linear	Favorite → Home | SharedBoundary | Auto | Linear
+5_8_ExperimentalHoleOpening_Auto_Polar	Favorite → Home | ExperimentalHoleOpening | Auto | Polar
+5_8_ExperimentalHoleOpening_Auto_Linear	Favorite → Home | ExperimentalHoleOpening | Auto | Linear
+8_5_Standard_Auto_Polar	Home → Favorite | Standard | Auto | Polar
+8_5_Standard_Auto_Linear	Home → Favorite | Standard | Auto | Linear
+8_5_SharedBoundary_Auto_Polar	Home → Favorite | SharedBoundary | Auto | Polar
+8_5_SharedBoundary_Auto_Linear	Home → Favorite | SharedBoundary | Auto | Linear
+8_5_ExperimentalHoleOpening_Auto_Polar	Home → Favorite | ExperimentalHoleOpening | Auto | Polar
+8_5_ExperimentalHoleOpening_Auto_Linear	Home → Favorite | ExperimentalHoleOpening | Auto | Linear

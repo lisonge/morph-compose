@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.vector.VectorPath
 import li.songe.morph.compose.internal.CubicPath
 import li.songe.morph.compose.internal.MorphContourRole
 import li.songe.morph.compose.internal.MorphPlan
+import li.songe.morph.compose.internal.StrokeStyle
 import li.songe.morph.compose.internal.buildMorphPlan as buildCoreMorphPlan
 import li.songe.morph.compose.internal.cubicPathOf
 import kotlin.math.PI
@@ -69,7 +70,7 @@ private fun VectorGroup.localTransform(): AffineTransform =
         scale(scaleX.toDouble(), scaleY.toDouble()) *
         translation(-pivotX.toDouble(), -pivotY.toDouble())
 
-private data class RawCubic(val points: DoubleArray)
+private data class RawCubic(val points: DoubleArray, val closed: Boolean)
 
 private class CubicBuilder(
     startX: Double,
@@ -239,7 +240,7 @@ private class CubicBuilder(
 
     fun finish(close: Boolean): RawCubic? {
         if (close) line(startX, startY)
-        return if (points.size >= 8) RawCubic(points.toDoubleArray()) else null
+        return if (points.size >= 8) RawCubic(points.toDoubleArray(), close) else null
     }
 }
 
@@ -247,8 +248,11 @@ private fun VectorPath.toCubics(
     transform: AffineTransform,
     inputLabel: String,
 ): List<RawCubic> {
-    require(fill is SolidColor && stroke == null) {
-        "$inputLabel uses a stroke or non-solid fill; only solid, fill-only paths are supported"
+    require((fill is SolidColor && stroke == null) || (fill == null && stroke is SolidColor)) {
+        "$inputLabel requires a solid fill-only or stroke-only path"
+    }
+    require(stroke == null || (strokeLineWidth.isFinite() && strokeLineWidth > 0f)) {
+        "$inputLabel requires a positive finite stroke width"
     }
     require(
         abs(trimPathStart) < 1e-6f &&
@@ -273,8 +277,8 @@ private fun VectorPath.toCubics(
             subpathStartY = currentY
         }
 
-    fun finish() {
-        builder?.finish(close = true)?.let(output::add)
+    fun finish(close: Boolean = fill != null) {
+        builder?.finish(close = close)?.let(output::add)
         builder = null
     }
 
@@ -472,7 +476,7 @@ private fun VectorPath.toCubics(
                 previousKind = ' '
             }
             PathNode.Close -> {
-                finish()
+                finish(close = true)
                 currentX = subpathStartX
                 currentY = subpathStartY
                 previousKind = ' '
@@ -624,7 +628,22 @@ private fun reverse(points: DoubleArray): DoubleArray {
     return output
 }
 
-private fun normalizeTopology(contours: List<RawCubic>): List<CubicPath> {
+private fun normalizeTopology(rawContours: List<RawCubic>): List<CubicPath> {
+    // A filled point or collinear out-and-back chain has no ink. Do not let it become a
+    // synthetic hole in another contour. Test control points, not signed area: a genuine
+    // self-intersecting shape can have zero signed area while still containing filled lobes.
+    val contours = rawContours.filter { contour ->
+        val p = contour.points
+        val farthest = (2 until p.size step 2).maxBy { i ->
+            (p[i] - p[0]) * (p[i] - p[0]) + (p[i + 1] - p[1]) * (p[i + 1] - p[1])
+        }
+        val dx = p[farthest] - p[0]
+        val dy = p[farthest + 1] - p[1]
+        val length = kotlin.math.hypot(dx, dy)
+        length > 0.0 && (2 until p.size step 2).any { i ->
+            abs(dx * (p[i + 1] - p[1]) - dy * (p[i] - p[0])) > length * length * 1e-12
+        }
+    }
     val flattened = contours.map { flattenForTopology(it.points) }
     return contours.mapIndexed { index, contour ->
         val x = contour.points[0]
@@ -668,10 +687,21 @@ internal fun ImageVector.toCubicPaths(isRtl: Boolean): List<CubicPath> {
                 is VectorPath -> {
                     val pathLabel = child.name.ifBlank { "#$pathIndex" }
                     pathIndex += 1
-                    contours +=
-                        normalizeTopology(
-                            child.toCubics(transform, "$vectorLabel path '$pathLabel'"),
-                        )
+                    val label = "$vectorLabel path '$pathLabel'"
+                    val raw = child.toCubics(transform, label)
+                    if (child.stroke != null) {
+                        val sx = kotlin.math.hypot(transform.a, transform.b)
+                        val sy = kotlin.math.hypot(transform.c, transform.d)
+                        require(sx > Epsilon && abs(sx - sy) <= 1e-6 * sx &&
+                            abs(transform.a * transform.c + transform.b * transform.d) <= 1e-6 * sx * sy) {
+                            "$label uses a non-uniform stroke transform, which is not supported"
+                        }
+                        val style = StrokeStyle(child.strokeLineWidth * sx, child.strokeLineCap,
+                            child.strokeLineJoin, child.strokeLineMiter)
+                        contours += raw.map { cubicPathOf(it.points, it.closed, MorphContourRole.Stroke, style) }
+                    } else {
+                        contours += normalizeTopology(raw)
+                    }
                 }
             }
         }
@@ -711,12 +741,16 @@ public fun buildMorphPlan(
     isRtl: Boolean = false,
 ): ImageVectorMorphPlan =
     ImageVectorMorphPlan(
-        corePlan = buildCoreMorphPlan(from.toCubicPaths(isRtl), to.toCubicPaths(isRtl), options),
+        corePlan = buildVectorCorePlan(from.toCubicPaths(isRtl), to.toCubicPaths(isRtl), options),
         from = from,
         to = to,
         defaultWidth = maxOf(from.defaultWidth, to.defaultWidth),
         defaultHeight = maxOf(from.defaultHeight, to.defaultHeight),
     )
+
+internal fun buildVectorCorePlan(from: List<CubicPath>, to: List<CubicPath>, options: MorphOptions): MorphPlan =
+    if (useOutlines(from, to, options)) buildCoreMorphPlan(from.expandStrokes(options), to.expandStrokes(options), options)
+    else buildCoreMorphPlan(from, to, options)
 
 /** Inspects a vector pair without throwing for unsupported input. */
 public fun inspectMorphCompatibility(
@@ -745,6 +779,13 @@ private fun MorphPlan.toCompatibilityReport(): MorphCompatibilityReport {
                 interpolation = if (usesPolar(index)) MorphInterpolation.Polar else MorphInterpolation.Linear,
                 fallbackReason = fallbackReason,
                 residual = residual(index),
+                strategy = items[index].decision.strategy,
+                sourceContours = items[index].decision.sourceContours,
+                targetContours = items[index].decision.targetContours,
+                sharedAnchorCount = items[index].decision.sharedAnchorCount,
+                localMotionCount = items[index].boundaryMotions.size,
+                holeOpeningCount = items[index].decision.holeOpeningCount,
+                decision = items[index].decision.reason,
             )
         }
     val compatibility =

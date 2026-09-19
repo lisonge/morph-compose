@@ -1,18 +1,24 @@
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.kotlin.multiplatform.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.compose)
+}
+
+val skipAndroid = providers.environmentVariable("MORPH_SKIP_ANDROID").isPresent
+if (!skipAndroid) {
+    pluginManager.apply("com.android.kotlin.multiplatform.library")
 }
 
 kotlin {
     @OptIn(ExperimentalAbiValidation::class)
     abiValidation()
 
-    android {
+    targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
         namespace = "li.songe.morph.compose"
         withHostTest {}
     }

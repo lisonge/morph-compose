@@ -52,7 +52,7 @@ private fun speed(points: DoubleArray, segment: Int, t: Double): Double {
     return hypot(dx, dy)
 }
 
-private fun segmentLength(
+internal fun segmentLength(
     points: DoubleArray,
     segment: Int,
     endT: Double = 1.0,
@@ -69,7 +69,7 @@ private fun segmentLength(
     return sum * half
 }
 
-private fun writePoint(
+internal fun writePoint(
     points: DoubleArray,
     segment: Int,
     t: Double,
@@ -141,7 +141,7 @@ private fun detectCornerFeatures(path: CubicPath, threshold: Double): List<Corne
 internal fun detectCorners(path: CubicPath, threshold: Double): IntArray =
     detectCornerFeatures(path, threshold).map(CornerFeature::segment).toIntArray()
 
-private fun invertLength(
+internal fun invertLength(
     points: DoubleArray,
     segment: Int,
     targetLength: Double,
@@ -293,6 +293,7 @@ internal fun resamplePaths(paths: List<CubicPath>, options: MorphOptions): List<
             points = sampled.points,
             closed = path.closed,
             role = path.role,
+            stroke = path.stroke,
             featureWeights = sampled.featureWeights,
             curveSource = sampled.curveSource,
         )

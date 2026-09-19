@@ -56,15 +56,43 @@ Kotlin code and all of its source and configuration files are type-checked TypeS
 7. Use block transport when the complete icon is close to a rigid similarity transform.
 8. Reuse `MorphFrame` and Compose `Path` instances while drawing animation frames.
 
-After matching and global alignment, exactly equal cubic contours retain their curves only when
-the selected plan leaves them stationary. This avoids switching a shared curved outline to a
-coarse polygon during animation. Matching, sample counts, and rotation choices remain unchanged.
-Curve segments are subdivided at the existing sample locations and represented as offsets from
-the sampled edges. Interrupted snapshots retain those offsets as well as the sample points;
-if a subsequent transition moves the contour, the offsets follow its Polar/Linear transport and
-fade to zero by the target. Icons, shapes, and masks share the same compound-path renderer so
-preserved holes keep their winding. Curves that merely look similar or use different cubic
-encodings conservatively follow the existing sampled rendering.
+Filled contour pairs with ordered, same-position cubic vertices are also checked for shared
+boundary spans when `contourStrategy` enables them. `Standard` bypasses both boundary constraints
+and hole opening; default `SharedBoundary` enables only the former. `ExperimentalHoleOpening`
+must be explicitly selected to enable seam construction. `ContourStrategies.kt` owns this policy
+stage, and each contour report retains its input indices and actual selection/fallback reason.
+
+When a meaningful portion of an eligible pair's boundary agrees, samples are allocated jointly
+between those vertices instead of independently over each entire perimeter. These contours are
+excluded from global rotation/scale transport. Shared spans interpolate their original curve
+details directly, preserving real differences between icon packs rather than snapping them away.
+Changing spans retain local Polar motion with endpoint corrections and bounds from both endpoint
+curve chains, so they cannot drag the shared region along. Linear mode uses the same anchored
+correspondence without the local rotation. Ambiguous/reordered vertices, unsupported segmentation,
+and sampled interruption sources without an original curve use the existing solver; this is not
+a general semantic decomposition of arbitrary icons. Interrupted frames still retain the exact
+rendered curve offsets for continuity.
+
+Before topology classification, collinear filled retraces and points are discarded. This check
+uses cubic control points rather than signed area, so zero-signed-area self-intersecting shapes
+and visible stroked lines are not accidentally removed. Shared anchors must border a verified
+common span; isolated coordinate coincidences in the moving region do not constrain motion.
+When an unmatched hole can join the changing boundary of an unambiguous parent with a shared
+region, a doubled, zero-width seam joins the hole to that parent's cubic chain. Equally short
+valid seams are compared by the resulting local fit rather than path enumeration order. The seam leaves
+the endpoint fill unchanged and lets the opening morph with the outer boundary rather than shrink
+independently. Unchanged parents and ambiguous/nonlocal holes retain the collapse fallback.
+
+After matching and global alignment, source and target cubic details are represented as offsets
+from the sampled edges. Their segment boundaries are merged per aligned edge and cubics are
+subdivided exactly, giving both endpoints the same control-point layout without changing the
+sampled correspondence, rotation, or block transport. Source offsets fade out and target offsets
+fade in, each transported in its own Polar/Linear coordinate frame. The limiting geometry is the
+original endpoint curve, so switching to an exact icon at rest does not flash its rounded edges.
+Clamped detail weights also preserve continuity through spring overshoot. Exactly stationary
+contours keep their existing curves throughout. Interrupted snapshots retain the rendered offsets
+and can be refined again for a new target without losing their current outline. Icons, shapes,
+and masks share the compound-path renderer, including hole winding.
 
 ### Rotation preferences
 
@@ -74,6 +102,37 @@ window. Within that window, direction ranks before the existing corner/edge/rota
 Candidates cannot increase the baseline fold count at the 25%, 50%, and 75% checks. These are sampled
 checks, not a guarantee against short-lived intersections between checkpoints. The algorithm does not
 infer stroke structure from filled outlines, and their intermediate silhouettes may still bulge.
+
+### Stroke centerlines
+
+Public vector plans first resolve `MorphOptions.transitionMode`. Auto chooses centerlines only for
+two stroke-only inputs; all other combinations expand stroke ink into filled outlines. Outline forces
+that conversion and Centerline rejects non-stroke input. Common-code expansion flattens centerlines
+using `outlineTolerance`, applies caps/joins/miter limits, and unions the ink with Compose PathOps
+before classifying holes. This prevents overlapping Close strokes from becoming duplicate shapes.
+The same policy handles interruption snapshots: keep existing outline samples, or reconstruct the
+rendered stroked cubics and expand/resample them when switching representation. Expansion is an
+approximation bounded by the configured flattening tolerance, rather than inferred stroke skeletons.
+
+Solid stroke-only `VectorPath` inputs retain their open/closed centerlines, normalized width, cap,
+join, and miter limit. Stroke contours are matched separately from filled shapes and holes. When
+stroke counts differ, the default SplitMerge strategy uses a minimum-cost surjection to duplicate smaller-side centerlines so each stroke
+splits or merges instead of shrinking to a point. Large assignments use an injective cover plus
+nearest matches. Filled paths retain injection/collapse and their original winding behavior.
+`MorphStrokeCountStrategy.Collapse` uses injection/collapse for centerlines too.
+
+For equal stroke counts up to eight, distance/length assignments tied within `1e-9` are resolved
+using the aligned direction preference, residual, and rotation cost. This lets interchangeable
+strokes in symmetric icons switch partners before choosing endpoint traversal, avoiding a 135°
+turn when a different equally close pairing permits 45°. Non-tied spatial assignments stay intact.
+
+`MorphIcon` draws filled contours together and each stroke with its own `Stroke` style. Width
+interpolates independently of the centerline's similarity scale (equal widths remain constant);
+cap/join/miter use the nearer endpoint's style. Use matching cap/join styles for smooth transitions.
+Interrupted snapshots retain the current centerline and width. Missing stroke roles collapse with
+zero width, allowing filled/stroked icons to transition without a full-width dot at the endpoint.
+Stroke group transforms must be similarities: translation, rotation, reflection, and uniform scale.
+General filled geometry and clipping APIs remain fill-only.
 
 Positive angles are clockwise in the final screen coordinate system; RTL normalization happens before
 planning. Exact non-rotating similarities keep their original correspondence, so unchanged icons and
@@ -140,6 +199,7 @@ leading zeros and integer precision without adding numeric parsing to the core e
 The adapter supports:
 
 - solid fill paths;
+- solid stroke-only paths with cap, join, and width;
 - nested group transforms;
 - compound contours inside a single `VectorPath`;
 - automatic winding normalization for holes inside compound paths;
@@ -149,8 +209,9 @@ The adapter intentionally rejects inputs that cannot currently be represented fa
 
 - clip paths;
 - trim paths;
-- gradient fills;
-- stroke-only paths.
+- gradients;
+- combined fill and stroke on a single path;
+- non-uniform transforms of stroke paths.
 
 Unsupported input fails explicitly instead of silently producing incorrect geometry. Separate
 `VectorPath` values remain separate filled shapes.

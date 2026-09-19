@@ -136,6 +136,7 @@ internal class DesktopDebugServer private constructor(
                                             demo.manual = false
                                             demo.playing = it
                                         }
+                                        parameters["iconQuery"]?.let { state.iconQuery = it }
                                         parameters["selected"]?.parseIndices()?.let { indices ->
                                             require(indices.all { it in 0 until iconCount }) {
                                                 "selected indices must be in 0..${iconCount - 1}"
@@ -159,6 +160,22 @@ internal class DesktopDebugServer private constructor(
                                                 "to must be in 0..${iconCount - 1}"
                                             }
                                             state.selectPair(from, to)
+                                        }
+                                        parameters["contourStrategy"]?.let { value ->
+                                            state.changeContourStrategy(li.songe.morph.compose.MorphContourStrategy.entries.first {
+                                                it.name.equals(value, ignoreCase = true)
+                                            })
+                                        }
+                                        parameters["details"]?.let { state.showPlanDetails = it.parseBoolean("details") }
+                                        parameters["transitionMode"]?.let { value ->
+                                            state.changeTransitionMode(
+                                                when (value) {
+                                                    "auto" -> li.songe.morph.compose.MorphTransitionMode.Auto
+                                                    "outline" -> li.songe.morph.compose.MorphTransitionMode.Outline
+                                                    "centerline" -> li.songe.morph.compose.MorphTransitionMode.Centerline
+                                                    else -> throw IllegalArgumentException("transitionMode must be auto, outline, or centerline")
+                                                },
+                                            )
                                         }
                                         parameters["rotation"]?.let { value ->
                                             state.changeRotationPreference(

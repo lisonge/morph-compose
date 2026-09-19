@@ -140,8 +140,28 @@ fun MorphingDigit(digit: Int, digits: List<MorphGeometry>) {
 
 ## 支持的输入
 
-支持纯色填充路径、嵌套变换、多轮廓和孔洞，不支持裁剪路径、路径修剪、渐变填充或仅有描边的路径。
+支持纯色填充路径和纯色描边路径、嵌套变换、多轮廓和孔洞。不支持裁剪路径、路径修剪、渐变、同一路径同时填充和描边，以及描边路径的非等比变换。
+
+线条图标建议使用 `fill = null`、`stroke = SolidColor(...)` 的 `ImageVector`，用 `moveTo` 分隔独立笔画。
+动画对中心线进行匹配和变换，保持描边宽度；笔画数量不同时通过分裂／合并过渡。
+Playground 的 Search、Close、Menu、Add、Remove、Check 和四个方向箭头已使用这种数据。
+默认 `Auto` 在两端均为描边时使用中心线；只要存在填充图形，就把描边展开并合并重叠部分，统一按填充轮廓变形。因此 Close ↔ Play 等跨类型组合也能连续过渡。不会从 Material 填充图标反推笔画。`MorphGeometry` 和形状裁剪仍使用填充几何。
+
+```kotlin
+val options = MorphOptions(
+    transitionMode = MorphTransitionMode.Auto, // Outline 强制填充轮廓；Centerline 要求两端均为描边
+    strokeCountStrategy = MorphStrokeCountStrategy.SplitMerge, // Collapse 改为收缩／展开
+    contourStrategy = MorphContourStrategy.SharedBoundary, // Standard 为普通基线；ExperimentalHoleOpening 显式启用实验孔洞连接
+    outlineTolerance = 0.0001, // 描边展开误差，单位是归一化视口；越小越精细
+    sampleCount = 64,
+    rotationPreference = MorphRotationPreference.Auto,
+)
+```
+
+描边展开保留线宽、端帽和连接方式，并通过路径并集合并交叠区域。动画中断后也按同一策略重新规划；从中心线切换为轮廓时，会在指定误差内转换当前画面。`Centerline` 对填充输入明确报错。笔画数量策略只作用于中心线模式，填充轮廓仍使用保持孔洞和绕向的匹配方式。专门编排的裁剪时序不属于自动策略。
 可以用 `inspectMorphCompatibility(from, to)` 在播放动画前检查图标。
+报告包含实际策略、输入轮廓对应、公共边界约束和回退原因。整体算法改动通过
+`./gradlew.bat verifyMorph` 验证；策略边界、视觉基线与审阅流程见[质量控制](docs/quality.md)。
 
 状态控制、变形计划复用和插值算法见 [API 与算法文档](docs/architecture.md#api-layers)。
 演示应用和开发配置见[项目文档](docs/README.md)。

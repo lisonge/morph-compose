@@ -14,6 +14,17 @@ public final class li/songe/morph/compose/ImageVectorMorphPlan {
 	public final fun rotationRadians (I)D
 }
 
+public final class li/songe/morph/compose/MorphAppliedStrategy : java/lang/Enum {
+	public static final field Centerline Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static final field Collapse Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static final field ExperimentalHoleOpening Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static final field Outline Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static final field SharedBoundary Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static fun values ()[Lli/songe/morph/compose/MorphAppliedStrategy;
+}
+
 public final class li/songe/morph/compose/MorphCompatibility : java/lang/Enum {
 	public static final field FullPolar Lli/songe/morph/compose/MorphCompatibility;
 	public static final field Hybrid Lli/songe/morph/compose/MorphCompatibility;
@@ -60,23 +71,46 @@ public final class li/songe/morph/compose/MorphContourKind : java/lang/Enum {
 
 public final class li/songe/morph/compose/MorphContourReport {
 	public static final field $stable I
-	public fun <init> (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;D)V
-	public synthetic fun <init> (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DLli/songe/morph/compose/MorphAppliedStrategy;Ljava/util/List;Ljava/util/List;IIILjava/lang/String;)V
+	public synthetic fun <init> (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DLli/songe/morph/compose/MorphAppliedStrategy;Ljava/util/List;Ljava/util/List;IIILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()I
+	public final fun component10 ()I
+	public final fun component11 ()I
+	public final fun component12 ()Ljava/lang/String;
 	public final fun component2 ()Lli/songe/morph/compose/MorphContourKind;
 	public final fun component3 ()Lli/songe/morph/compose/MorphInterpolation;
 	public final fun component4 ()Lli/songe/morph/compose/MorphFallbackReason;
 	public final fun component5 ()D
-	public final fun copy (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;D)Lli/songe/morph/compose/MorphContourReport;
-	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphContourReport;ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DILjava/lang/Object;)Lli/songe/morph/compose/MorphContourReport;
+	public final fun component6 ()Lli/songe/morph/compose/MorphAppliedStrategy;
+	public final fun component7 ()Ljava/util/List;
+	public final fun component8 ()Ljava/util/List;
+	public final fun component9 ()I
+	public final fun copy (ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DLli/songe/morph/compose/MorphAppliedStrategy;Ljava/util/List;Ljava/util/List;IIILjava/lang/String;)Lli/songe/morph/compose/MorphContourReport;
+	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphContourReport;ILli/songe/morph/compose/MorphContourKind;Lli/songe/morph/compose/MorphInterpolation;Lli/songe/morph/compose/MorphFallbackReason;DLli/songe/morph/compose/MorphAppliedStrategy;Ljava/util/List;Ljava/util/List;IIILjava/lang/String;ILjava/lang/Object;)Lli/songe/morph/compose/MorphContourReport;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDecision ()Ljava/lang/String;
 	public final fun getFallbackReason ()Lli/songe/morph/compose/MorphFallbackReason;
+	public final fun getHoleOpeningCount ()I
 	public final fun getIndex ()I
 	public final fun getInterpolation ()Lli/songe/morph/compose/MorphInterpolation;
 	public final fun getKind ()Lli/songe/morph/compose/MorphContourKind;
+	public final fun getLocalMotionCount ()I
 	public final fun getResidual ()D
+	public final fun getSharedAnchorCount ()I
+	public final fun getSourceContours ()Ljava/util/List;
+	public final fun getStrategy ()Lli/songe/morph/compose/MorphAppliedStrategy;
+	public final fun getTargetContours ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class li/songe/morph/compose/MorphContourStrategy : java/lang/Enum {
+	public static final field ExperimentalHoleOpening Lli/songe/morph/compose/MorphContourStrategy;
+	public static final field SharedBoundary Lli/songe/morph/compose/MorphContourStrategy;
+	public static final field Standard Lli/songe/morph/compose/MorphContourStrategy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphContourStrategy;
+	public static fun values ()[Lli/songe/morph/compose/MorphContourStrategy;
 }
 
 public final class li/songe/morph/compose/MorphFallbackReason : java/lang/Enum {
@@ -166,17 +200,25 @@ public final class li/songe/morph/compose/MorphMotionPolicy : java/lang/Enum {
 public final class li/songe/morph/compose/MorphOptions {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (IDLli/songe/morph/compose/MorphRotationPreference;)V
-	public synthetic fun <init> (IDLli/songe/morph/compose/MorphRotationPreference;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (IDLli/songe/morph/compose/MorphRotationPreference;Lli/songe/morph/compose/MorphTransitionMode;Lli/songe/morph/compose/MorphStrokeCountStrategy;DLli/songe/morph/compose/MorphContourStrategy;)V
+	public synthetic fun <init> (IDLli/songe/morph/compose/MorphRotationPreference;Lli/songe/morph/compose/MorphTransitionMode;Lli/songe/morph/compose/MorphStrokeCountStrategy;DLli/songe/morph/compose/MorphContourStrategy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()I
 	public final fun component2 ()D
 	public final fun component3 ()Lli/songe/morph/compose/MorphRotationPreference;
-	public final fun copy (IDLli/songe/morph/compose/MorphRotationPreference;)Lli/songe/morph/compose/MorphOptions;
-	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphOptions;IDLli/songe/morph/compose/MorphRotationPreference;ILjava/lang/Object;)Lli/songe/morph/compose/MorphOptions;
+	public final fun component4 ()Lli/songe/morph/compose/MorphTransitionMode;
+	public final fun component5 ()Lli/songe/morph/compose/MorphStrokeCountStrategy;
+	public final fun component6 ()D
+	public final fun component7 ()Lli/songe/morph/compose/MorphContourStrategy;
+	public final fun copy (IDLli/songe/morph/compose/MorphRotationPreference;Lli/songe/morph/compose/MorphTransitionMode;Lli/songe/morph/compose/MorphStrokeCountStrategy;DLli/songe/morph/compose/MorphContourStrategy;)Lli/songe/morph/compose/MorphOptions;
+	public static synthetic fun copy$default (Lli/songe/morph/compose/MorphOptions;IDLli/songe/morph/compose/MorphRotationPreference;Lli/songe/morph/compose/MorphTransitionMode;Lli/songe/morph/compose/MorphStrokeCountStrategy;DLli/songe/morph/compose/MorphContourStrategy;ILjava/lang/Object;)Lli/songe/morph/compose/MorphOptions;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContourStrategy ()Lli/songe/morph/compose/MorphContourStrategy;
 	public final fun getCornerThresholdRadians ()D
+	public final fun getOutlineTolerance ()D
 	public final fun getRotationPreference ()Lli/songe/morph/compose/MorphRotationPreference;
 	public final fun getSampleCount ()I
+	public final fun getStrokeCountStrategy ()Lli/songe/morph/compose/MorphStrokeCountStrategy;
+	public final fun getTransitionMode ()Lli/songe/morph/compose/MorphTransitionMode;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -206,5 +248,22 @@ public final class li/songe/morph/compose/MorphShape : androidx/compose/ui/graph
 public final class li/songe/morph/compose/MorphShapeKt {
 	public static final fun rememberMorphShape (Lli/songe/morph/compose/MorphGeometryPlan;FLli/songe/morph/compose/MorphContentScale;Lli/songe/morph/compose/MorphInterpolation;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphShape;
 	public static final fun rememberMorphShape (Lli/songe/morph/compose/MorphGeometryState;Lli/songe/morph/compose/MorphContentScale;Landroidx/compose/runtime/Composer;II)Lli/songe/morph/compose/MorphShape;
+}
+
+public final class li/songe/morph/compose/MorphStrokeCountStrategy : java/lang/Enum {
+	public static final field Collapse Lli/songe/morph/compose/MorphStrokeCountStrategy;
+	public static final field SplitMerge Lli/songe/morph/compose/MorphStrokeCountStrategy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphStrokeCountStrategy;
+	public static fun values ()[Lli/songe/morph/compose/MorphStrokeCountStrategy;
+}
+
+public final class li/songe/morph/compose/MorphTransitionMode : java/lang/Enum {
+	public static final field Auto Lli/songe/morph/compose/MorphTransitionMode;
+	public static final field Centerline Lli/songe/morph/compose/MorphTransitionMode;
+	public static final field Outline Lli/songe/morph/compose/MorphTransitionMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphTransitionMode;
+	public static fun values ()[Lli/songe/morph/compose/MorphTransitionMode;
 }
 

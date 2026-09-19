@@ -1,0 +1,2 @@
+OS=Windows 11
+Java=21.0.2

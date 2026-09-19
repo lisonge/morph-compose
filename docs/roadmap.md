@@ -29,5 +29,5 @@ scope native to Compose `ImageVector` rather than copying SVG/browser-specific A
 
 - A timeline editor for multi-icon sequences and per-step animation specs.
 - Shareable playground state encoded in a compact URL or file format.
-- Stroke-aware morphing as a separate rendering mode; fill-only vectors remain the supported core
-  contract until stroke caps, joins, and trim semantics can be represented faithfully.
+- Extend stroke centerline support to non-uniform transforms and trim semantics; basic solid
+  stroke paths, caps, joins, and interrupted stroke morphing are supported.

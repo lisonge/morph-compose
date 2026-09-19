@@ -1,11 +1,10 @@
 package li.songe.morph.playground
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.automirrored.filled.AirplaneTicket
 import androidx.compose.material.icons.automirrored.filled.AltRoute
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.automirrored.filled.AssignmentReturn
@@ -43,7 +42,6 @@ import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Adb
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddAlarm
 import androidx.compose.material.icons.filled.AddAlert
 import androidx.compose.material.icons.filled.AddBox
@@ -87,8 +85,6 @@ import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.ArtTrack
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.AttachFile
@@ -134,12 +130,10 @@ import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.material.icons.filled.CenterFocusStrong
 import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.ChatBubbleOutline
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.ChildCare
 import androidx.compose.material.icons.filled.CircleNotifications
 import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudUpload
@@ -281,9 +275,9 @@ import androidx.compose.material.icons.filled.LocalPhone
 import androidx.compose.material.icons.filled.LocalPrintshop
 import androidx.compose.material.icons.filled.LocationDisabled
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.LockReset
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
-import androidx.compose.material.icons.filled.LockReset
 import androidx.compose.material.icons.filled.Looks4
 import androidx.compose.material.icons.filled.Loop
 import androidx.compose.material.icons.filled.LtePlusMobiledata
@@ -293,7 +287,6 @@ import androidx.compose.material.icons.filled.MarkAsUnread
 import androidx.compose.material.icons.filled.MarkUnreadChatAlt
 import androidx.compose.material.icons.filled.MediaBluetoothOff
 import androidx.compose.material.icons.filled.Medication
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Merge
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicNone
@@ -367,7 +360,6 @@ import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.Rectangle
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.RememberMe
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.RemoveModerator
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Replay10
@@ -385,7 +377,6 @@ import androidx.compose.material.icons.filled.Scanner
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.ScreenLockPortrait
 import androidx.compose.material.icons.filled.SdCard
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SecurityUpdate
 import androidx.compose.material.icons.filled.SelfImprovement
 import androidx.compose.material.icons.filled.SensorDoor
@@ -510,25 +501,25 @@ internal data class IconEntry(
 
 internal val iconEntries =
     listOf(
-        IconEntry("Menu", Icons.Filled.Menu),
-        IconEntry("Close", Icons.Filled.Close),
+        IconEntry("Menu", StrokeIcons.Menu),
+        IconEntry("Close", StrokeIcons.Close),
         IconEntry("Play", Icons.Filled.PlayArrow),
         IconEntry("Pause", Icons.Filled.Pause),
         IconEntry("Favorite border", Icons.Filled.FavoriteBorder),
         IconEntry("Favorite", Icons.Filled.Favorite),
-        IconEntry("Add", Icons.Filled.Add),
-        IconEntry("Remove", Icons.Filled.Remove),
+        IconEntry("Add", StrokeIcons.Add),
+        IconEntry("Remove", StrokeIcons.Remove),
         IconEntry("Home", Icons.Filled.Home),
-        IconEntry("Search", Icons.Filled.Search),
+        IconEntry("Search", StrokeIcons.Search),
         IconEntry("Settings", Icons.Filled.Settings),
         IconEntry("Person", Icons.Filled.Person),
         IconEntry("Star", Icons.Filled.Star),
         IconEntry("Star border", Icons.Filled.StarBorder),
-        IconEntry("Check", Icons.Filled.Check),
-        IconEntry("Arrow back", Icons.AutoMirrored.Filled.ArrowBack),
-        IconEntry("Arrow forward", Icons.AutoMirrored.Filled.ArrowForward),
-        IconEntry("Arrow up", Icons.Filled.ArrowUpward),
-        IconEntry("Arrow down", Icons.Filled.ArrowDownward),
+        IconEntry("Check", StrokeIcons.Check),
+        IconEntry("Arrow back", StrokeIcons.ArrowBack),
+        IconEntry("Arrow forward", StrokeIcons.ArrowForward),
+        IconEntry("Arrow up", StrokeIcons.ArrowUp),
+        IconEntry("Arrow down", StrokeIcons.ArrowDown),
         IconEntry("Refresh", Icons.Filled.Refresh),
         IconEntry("Delete", Icons.Filled.Delete),
         IconEntry("Edit", Icons.Filled.Edit),
@@ -536,8 +527,8 @@ internal val iconEntries =
         IconEntry("Send", Icons.AutoMirrored.Filled.Send),
         IconEntry("Download", Icons.Filled.Download),
         IconEntry("Upload", Icons.Filled.Upload),
-        IconEntry("Lock", Icons.Filled.Lock),
-        IconEntry("Lock open", Icons.Filled.LockOpen),
+        IconEntry("Lock outline", StrokeIcons.Lock),
+        IconEntry("Lock open right", LockOpenRight),
         IconEntry("Visibility", Icons.Filled.Visibility),
         IconEntry("Visibility off", Icons.Filled.VisibilityOff),
         IconEntry("Notifications", Icons.Filled.Notifications),
@@ -1010,8 +1001,12 @@ internal val iconEntries =
         IconEntry("6k", Icons.Filled._6k),
         IconEntry("7mp", Icons.Filled._7mp),
         IconEntry("9mp", Icons.Filled._9mp),
+        IconEntry("Lock", Icons.Filled.Lock),
+        IconEntry("Lock open", Icons.Filled.LockOpen),
+        IconEntry("Unlock outline", StrokeIcons.Unlock),
+        IconEntry("Lock (Material Outlined)", Icons.Outlined.Lock),
     ).also { entries ->
-        check(entries.size == 500) { "The icon registry must expose exactly 500 icons" }
+        check(entries.map { it.name }.distinct().size == entries.size) { "Icon names must be unique" }
     }
 
 internal val iconCount: Int

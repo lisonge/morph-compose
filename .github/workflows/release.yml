@@ -24,12 +24,22 @@ jobs:
       - name: Verify release version
         run: ./gradlew verifyReleaseVersion
 
-      - name: Test
+      - name: Verify tests, API and target compilation
         run: >-
           ./gradlew
           :morph-compose:checkKotlinAbi
           :morph-compose:jvmTest
           :morph-playground:desktopTest
+          :morph-compose:compileAndroidMain
+          :morph-playground:compileKotlinWasmJs
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-test-reports
+          path: |
+            morph-compose/build/reports/tests/
+            morph-playground/build/reports/tests/
 
       - name: Write signing key
         env:

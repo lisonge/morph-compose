@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import li.songe.morph.compose.internal.strokeAt
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -93,9 +95,21 @@ public fun MorphIcon(
                 path.fillType = PathFillType.NonZero
                 val extent = min(size.width, size.height)
                 val origin = Offset((size.width - extent) / 2.0f, (size.height - extent) / 2.0f)
-                path.appendMorphFrame(frame, extent, extent, origin.x, origin.y)
+                path.appendMorphFrame(frame, extent, extent, origin.x, origin.y) {
+                    plan.corePlan.items[it].strokeAt(progress.toDouble()) == null
+                }
                 clipRect {
                     drawPath(path = path, color = effectiveTint)
+                    plan.corePlan.items.forEachIndexed { index, item ->
+                        val stroke = item.strokeAt(progress.toDouble()) ?: return@forEachIndexed
+                        if (stroke.width <= 0.0) return@forEachIndexed
+                        path.rewind()
+                        path.appendMorphFrame(frame, extent, extent, origin.x, origin.y) { it == index }
+                        drawPath(path, effectiveTint, style = Stroke(
+                            width = (stroke.width * extent).toFloat(), cap = stroke.cap,
+                            join = stroke.join, miter = stroke.miter,
+                        ))
+                    }
                 }
             }
         }

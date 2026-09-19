@@ -110,6 +110,10 @@ function formatBytes(byteLength: number): string {
   return `${(byteLength / 1024 / 1024).toFixed(1)} MiB`;
 }
 
+function openQuality(): void {
+  window.location.href = '/quality.html';
+}
+
 function openRepository(): void {
   window.open(
     'https://github.com/lisonge/morph-compose',
@@ -131,6 +135,7 @@ function openRepository(): void {
           </span>
         </div>
 
+        <div class="ml-auto cursor-pointer text-xs text-[var(--brand)]" @click="openQuality">质量中心</div>
         <div
           class="cursor-pointer shrink-0 rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs text-[var(--muted)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
           @click="openRepository"

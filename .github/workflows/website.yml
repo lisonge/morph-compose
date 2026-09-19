@@ -10,6 +10,9 @@ on:
       - 'morph-compose/**'
       - 'morph-playground/**'
       - 'morph-website/**'
+      - 'docs/quality.md'
+      - 'visual-baselines/**'
+      - 'scripts/quality-report.ts'
       - 'gradle/**'
       - 'gradlew'
       - 'build.gradle.kts'
@@ -30,7 +33,9 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    env:
+      MORPH_SKIP_ANDROID: 'true'
     steps:
       - uses: actions/checkout@v7
 
@@ -41,7 +46,30 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - uses: actions/cache@v4
+        with:
+          path: .cache/image
+          key: visual-images-v3-${{ runner.os }}-${{ hashFiles('visual-baselines/**/images.json') }}
+          restore-keys: visual-images-v3-${{ runner.os }}-
+
+      - name: Run JVM unit tests
+        run: ./gradlew.bat :morph-compose:jvmTest :morph-playground:desktopTest --console=plain
+
+      - name: Generate and compare Desktop report
+        run: pnpm quality:report
+
       - run: pnpm build
+        env:
+          MORPH_REQUIRE_REPORT: '1'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: website-visual-report
+          path: |
+            morph-compose/build/reports/tests/
+            morph-playground/build/reports/tests/
+            morph-playground/build/reports/morph-visual/quick/
 
       - name: Deploy website
         env:

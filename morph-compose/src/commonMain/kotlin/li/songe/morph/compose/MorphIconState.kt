@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.withContext
-import li.songe.morph.compose.internal.buildMorphPlanFromSampledSource
 import li.songe.morph.compose.internal.snapshotContours
 
 /**
@@ -142,7 +141,7 @@ public class MorphIconState internal constructor(
         val frozenSource = plan.corePlan.snapshotContours(progress.toDouble(), interpolation)
         return ImageVectorMorphPlan(
             corePlan =
-                buildMorphPlanFromSampledSource(
+                buildInterruptedVectorPlan(
                     frozenSource,
                     target.toCubicPaths(isRtl),
                     options,

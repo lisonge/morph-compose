@@ -16,6 +16,29 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ImageVectorAdapterTest {
+    @Test fun ignoresInvisibleFilledRetracesButKeepsStrokesAndZeroSignedAreaShapes() {
+        val filled = vector("filled retrace") {
+            path(fill = SolidColor(Color.Black)) {
+                moveTo(2f, 2f); lineTo(22f, 2f); lineTo(22f, 22f); lineTo(2f, 22f); close()
+                moveTo(6f, 20f); lineTo(6f, 10f); lineTo(6f, 20f); close()
+            }
+        }
+        assertEquals(1, filled.toCubicPaths(false).size)
+        val stroked = vector("stroked retrace") {
+            path(fill = null, stroke = SolidColor(Color.Black), strokeLineWidth = 2f) {
+                moveTo(6f, 20f); lineTo(6f, 10f); lineTo(6f, 20f); close()
+            }
+        }
+        assertEquals(1, stroked.toCubicPaths(false).size)
+        assertEquals(MorphContourRole.Stroke, stroked.toCubicPaths(false).single().role)
+        val bowtie = vector("bowtie") {
+            path(fill = SolidColor(Color.Black)) {
+                moveTo(2f, 2f); lineTo(22f, 22f); lineTo(22f, 2f); lineTo(2f, 22f); close()
+            }
+        }
+        assertEquals(1, bowtie.toCubicPaths(false).size)
+    }
+
     @Test
     fun rotationPreferenceUsesDisplayedDirectionAfterRtlMirroring() {
         fun bar(angle: Float) = ImageVector.Builder(
@@ -155,7 +178,7 @@ class ImageVectorAdapterTest {
     }
 
     @Test
-    fun rejectsStrokeOnlyVectorsClearly() {
+    fun preservesStrokeCenterlineAndStyle() {
         val stroke =
             vector("stroke") {
                 path(
@@ -169,11 +192,17 @@ class ImageVectorAdapterTest {
                 }
             }
 
-        assertFailsWith<IllegalArgumentException> { buildMorphPlan(stroke, stroke) }
+        val plan = buildMorphPlan(stroke, stroke)
+        val item = plan.corePlan.items.single()
+        assertEquals(MorphContourRole.Stroke, item.role)
+        assertTrue(!item.closed)
+        assertEquals(2.0 / 24.0, item.sourceStroke!!.width, 1e-9)
+        assertEquals(StrokeCap.Round, item.sourceStroke.cap)
         val report = inspectMorphCompatibility(stroke, stroke)
-        assertEquals(MorphCompatibility.Unsupported, report.compatibility)
-        assertTrue(report.issues.single().contains("fill-only"))
-        assertTrue(report.issues.single().contains("ImageVector 'stroke'"))
+        assertEquals(MorphCompatibility.FullPolar, report.compatibility)
+        val frame = plan.corePlan.createFrame()
+        plan.corePlan.interpolate(0.5, frame)
+        for (i in 0 until frame.sampleCount) assertEquals(0.5, frame.y(0, i), 1e-9)
     }
 
     @Test

@@ -59,7 +59,8 @@ class CurveDetailsTest {
             }
             cubicPathOf(points, true)
         }
-        val targets = listOf(rotated, listOf(oval(0.1), oval(1.2)), listOf(oval()), listOf(oval(), oval(1.0), oval(2.0)))
+        // No shared boundary: ordinary rotation, translation and count changes retain their solver.
+        val targets = listOf(rotated, listOf(oval(0.1), oval(1.2)), listOf(oval(0.1)), listOf(oval(0.1), oval(1.2), oval(2.0)))
         for (preference in MorphRotationPreference.entries) for (target in targets) {
             val opts = options.copy(rotationPreference = preference)
             val sampledSource = resamplePaths(source, opts)
@@ -86,16 +87,18 @@ class CurveDetailsTest {
     @Test fun translatedRotatedAndDifferentRoleContoursAreNotFrozen() {
         val source = oval()
         val translated = buildMorphPlan(listOf(source), listOf(oval(0.1)), options)
-        assertNull(translated.items.single().curveDetails)
+        assertNull(translated.items.single().stationaryCurve)
+        assertNotNull(translated.items.single().targetCurveDetails)
         val changedRole = buildMorphPlan(listOf(source), listOf(oval(role = MorphContourRole.Hole)), options)
         assertTrue(changedRole.items.all { it.stationaryCurve == null })
         val points = source.copyPackedPoints()
         for (i in points.indices step 2) { val x = points[i]; points[i] = -points[i + 1]; points[i + 1] = x }
         val rotated = buildMorphPlan(listOf(source), listOf(cubicPathOf(points, true)), options)
-        assertNull(rotated.items.single().curveDetails)
+        assertNull(rotated.items.single().stationaryCurve)
+        assertNotNull(rotated.items.single().targetCurveDetails)
     }
 
-    @Test fun repeatedInterruptionsPreserveCurvesAndEventuallyReachTheSampledTarget() {
+    @Test fun repeatedInterruptionsPreserveCurvesAndEventuallyReachTheCurvedTarget() {
         for (mode in MorphInterpolation.entries) {
             var plan = buildMorphPlan(listOf(oval()), listOf(oval()), options)
             assertNotNull(plan.items.single().stationaryCurve)
@@ -118,15 +121,17 @@ class CurveDetailsTest {
             plan.interpolate(1.0, end, mode)
             val detail = assertNotNull(plan.items.single().curveDetails)
             val rebased = detail.rebase(end.points.single(), assertNotNull(end.curves.single()))
-            assertTrue(rebased.offsets.all { kotlin.math.abs(it) < 1e-10 })
+            val targetDetails = assertNotNull(plan.items.single().targetCurveDetails)
+            for (i in rebased.offsets.indices) assertEquals(targetDetails.offsets[i], rebased.offsets[i], 1e-10)
+            assertTrue(rebased.offsets.any { kotlin.math.abs(it) > 1e-6 })
         }
     }
 
-    @Test fun retainedCurvesDoNotOverrideGlobalTransport() {
+    @Test fun sharedBoundaryIsExcludedFromGlobalTransport() {
         // A tiny change in a second contour produces a near-rigid global fit.
         val plan = buildMorphPlan(listOf(oval(), oval(1.0)), listOf(oval(), oval(1.0001)), options)
-        assertNotNull(plan.items.first().blockTransport)
-        assertTrue(kotlin.math.abs(plan.items.first().logScale) > 1e-12)
-        assertNull(plan.items.first().stationaryCurve)
+        assertNull(plan.items.first().blockTransport)
+        assertEquals(0.0, plan.items.first().logScale)
+        assertNotNull(plan.items.first().stationaryCurve)
     }
 }

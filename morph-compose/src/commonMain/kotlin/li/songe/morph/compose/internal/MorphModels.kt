@@ -2,6 +2,16 @@ package li.songe.morph.compose.internal
 
 import li.songe.morph.compose.MorphFallbackReason
 import li.songe.morph.compose.MorphInterpolation
+import li.songe.morph.compose.MorphAppliedStrategy
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+
+internal data class StrokeStyle(
+    val width: Double,
+    val cap: StrokeCap,
+    val join: StrokeJoin,
+    val miter: Float,
+)
 
 /** Describes how a contour participates in a compound filled path. */
 internal enum class MorphContourRole {
@@ -15,6 +25,7 @@ internal class CubicPath(
     internal val points: DoubleArray,
     internal val closed: Boolean,
     internal val role: MorphContourRole,
+    internal val stroke: StrokeStyle? = null,
 ) {
     internal val segmentCount: Int
         get() = (points.size / 2 - 1) / 3
@@ -28,12 +39,13 @@ internal fun cubicPathOf(
     points: DoubleArray,
     closed: Boolean,
     role: MorphContourRole = if (closed) MorphContourRole.Shape else MorphContourRole.Stroke,
+    stroke: StrokeStyle? = null,
 ): CubicPath {
     require(points.size >= 8 && points.size % 6 == 2) {
         "A cubic path must contain P0 followed by one or more C1/C2/P segments"
     }
     require(points.all(Double::isFinite)) { "Cubic path coordinates must be finite" }
-    return CubicPath(points.copyOf(), closed, role)
+    return CubicPath(points.copyOf(), closed, role, stroke)
 }
 
 internal data class SampledContour(
@@ -43,6 +55,7 @@ internal data class SampledContour(
     val featureWeights: DoubleArray = DoubleArray(points.size / 2),
     val curveSource: CurveSource? = null,
     val curveDetails: CurveDetails? = null,
+    val stroke: StrokeStyle? = null,
 ) {
     init {
         require(points.size % 2 == 0) { "Sampled contour points must contain x/y pairs" }
@@ -79,8 +92,30 @@ internal data class PlanItem(
     val fallbackReason: MorphFallbackReason?,
     var blockTransport: BlockTransport?,
     var curveDetails: CurveDetails? = null,
+    var targetCurveDetails: CurveDetails? = null,
     var stationaryCurve: CurveSource? = null,
+    val sourceStroke: StrokeStyle? = null,
+    val targetStroke: StrokeStyle? = null,
+    val boundaryMotions: List<BoundaryMotion> = emptyList(),
+    val decision: ContourDecision = ContourDecision(),
 )
+
+internal data class ContourDecision(
+    val strategy: MorphAppliedStrategy = MorphAppliedStrategy.Outline,
+    val sourceContours: List<Int> = emptyList(),
+    val targetContours: List<Int> = emptyList(),
+    val sharedAnchorCount: Int = 0,
+    val holeOpeningCount: Int = 0,
+    val reason: String = "",
+)
+
+internal fun PlanItem.strokeAt(progress: Double): StrokeStyle? {
+    val start = sourceStroke ?: return targetStroke
+    val end = targetStroke ?: return start
+    if (start == end) return start
+    val t = progress.coerceIn(0.0, 1.0)
+    return (if (t < 0.5) start else end).copy(width = start.width + (end.width - start.width) * t)
+}
 
 /** A cacheable mapping between two sets of cubic contours. */
 internal class MorphPlan(
@@ -126,6 +161,9 @@ internal class MorphPlan(
         }
         items.forEachIndexed { index, item ->
             item.writeCurves(progress, interpolation, frame.points[index], frame.curves[index])
+            if (interpolation == MorphInterpolation.Polar) item.boundaryMotions.forEach {
+                it.write(item, progress, frame.points[index], frame.curves[index])
+            }
         }
     }
 }
@@ -166,6 +204,7 @@ internal fun MorphPlan.snapshotContours(
             points = frame.points[contour].copyOf(),
             closed = frame.isClosed(contour),
             role = frame.role(contour),
+            stroke = item.strokeAt(progress),
             curveSource = item.stationaryCurve,
             curveDetails = item.curveDetails?.rebase(frame.points[contour], checkNotNull(frame.curves[contour])),
             featureWeights =
