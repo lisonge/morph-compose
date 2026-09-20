@@ -87,6 +87,20 @@ API 检查通过；`verifyMorph --continue` 仍只因原有 60 项 quick 基线�
 
 ## 日常验证
 
+### 2026-09-20 quick 基线独立更新
+
+网站运行 `35504467241` 的失败来自旧基线与当前图标输入不一致：120 个序列中 60 个变化，
+案例清单未变，所有端点误差为 0。提交 `232840f` 将注册表中的手写圆头描边恢复为 Material
+原版填充图标；本机重新生成的 120 张候选静态图片与该次 CI 产物逐一 SHA-256 相同。
+
+本次经用户确认接受 Menu/Close、Search/Close、Close/Play、Add/Check、左右箭头及其反向，
+在三种轮廓策略、两种插值下的 60 项变化，单独更新 quick 参考链接。接受的差异包括平头端部、
+填充轮廓对应带来的中间形状，以及线性箭头变形中点的收缩。原因是参考图应匹配已恢复的原版输入；
+这不是对所有中间形状美观程度的认可，已有交叠、收缩等局限继续保留在报告中。
+其余 60 项保持原样；不修改算法、默认策略、对比容差或部署门禁。此记录仅覆盖 quick，未运行 Auto-wide。
+更新后验证：115 项 JVM/Desktop 测试通过；`pnpm quality:report` 的 120 项全部一致；
+设置 `MORPH_REQUIRE_REPORT=1` 后 `pnpm build` 通过（包含 Wasm 编译，未执行浏览器测试）。
+
 ```powershell
 ./gradlew.bat verifyMorph --console=plain
 ```

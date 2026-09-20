@@ -3,148 +3,148 @@
   "manifestSha256": "046ec00ce172a54aa4a3073891fc95302ed520fbd6bab4ebbe8420b515536341",
   "images": {
     "0_1_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/e15bb064-3cff-4713-923e-2bca5f1bedfb",
-      "sha256": "2ebbae2c391870f9668768eee30386803c98e79d4f83b5ba9839cf7852c4d57d"
+      "url": "https://github.com/user-attachments/assets/0c04fe2b-6a7e-4982-870b-46e08c909a9d",
+      "sha256": "3b669fd4f7d638844c430608e060fd3ae4d842b501994e946c95f388442f48be"
     },
     "0_1_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/62634c79-02ac-4833-855e-fad79bdcc507",
-      "sha256": "cf3f82178ad3926f33772c99e5ca6e962cf6a5537e536fc45c6593b94a103635"
+      "url": "https://github.com/user-attachments/assets/b838d863-c5a9-40d4-b1ac-dcf784a75907",
+      "sha256": "6e9fa676ae820cb69ba760af3b35f5c486cfb22aa4b6239755f72eff6dc814d0"
     },
     "0_1_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/e15bb064-3cff-4713-923e-2bca5f1bedfb",
-      "sha256": "2ebbae2c391870f9668768eee30386803c98e79d4f83b5ba9839cf7852c4d57d"
+      "url": "https://github.com/user-attachments/assets/0c04fe2b-6a7e-4982-870b-46e08c909a9d",
+      "sha256": "3b669fd4f7d638844c430608e060fd3ae4d842b501994e946c95f388442f48be"
     },
     "0_1_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/62634c79-02ac-4833-855e-fad79bdcc507",
-      "sha256": "cf3f82178ad3926f33772c99e5ca6e962cf6a5537e536fc45c6593b94a103635"
+      "url": "https://github.com/user-attachments/assets/b838d863-c5a9-40d4-b1ac-dcf784a75907",
+      "sha256": "6e9fa676ae820cb69ba760af3b35f5c486cfb22aa4b6239755f72eff6dc814d0"
     },
     "0_1_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/e15bb064-3cff-4713-923e-2bca5f1bedfb",
-      "sha256": "2ebbae2c391870f9668768eee30386803c98e79d4f83b5ba9839cf7852c4d57d"
+      "url": "https://github.com/user-attachments/assets/0c04fe2b-6a7e-4982-870b-46e08c909a9d",
+      "sha256": "3b669fd4f7d638844c430608e060fd3ae4d842b501994e946c95f388442f48be"
     },
     "0_1_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/62634c79-02ac-4833-855e-fad79bdcc507",
-      "sha256": "cf3f82178ad3926f33772c99e5ca6e962cf6a5537e536fc45c6593b94a103635"
+      "url": "https://github.com/user-attachments/assets/b838d863-c5a9-40d4-b1ac-dcf784a75907",
+      "sha256": "6e9fa676ae820cb69ba760af3b35f5c486cfb22aa4b6239755f72eff6dc814d0"
     },
     "1_0_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/afb5ce9d-25ae-4b4b-9b4b-54241f49988c",
-      "sha256": "4d48683ac09d4586619eab4a1c902a882766c115658fb130d2774729c575c99c"
+      "url": "https://github.com/user-attachments/assets/1d3942f4-a6d7-41b2-bf73-2591a15ec988",
+      "sha256": "9fd008d82ad40e34f0961a1af491a8726e8d3298fbdd111a40edf78e4aaf601f"
     },
     "1_0_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/0ff47ba6-3638-444f-ac5e-095422fcb8bf",
-      "sha256": "ef77151b58b97a5b06f9782f1890a1bec1da424615ee8b8c5f08411f33559a71"
+      "url": "https://github.com/user-attachments/assets/020f5d2a-f4f0-4959-b099-ed9487c5b68d",
+      "sha256": "912bcf2d9e4580592553fbff7f901e3468eaf03ad0d36d569824534c977a2686"
     },
     "1_0_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/afb5ce9d-25ae-4b4b-9b4b-54241f49988c",
-      "sha256": "4d48683ac09d4586619eab4a1c902a882766c115658fb130d2774729c575c99c"
+      "url": "https://github.com/user-attachments/assets/1d3942f4-a6d7-41b2-bf73-2591a15ec988",
+      "sha256": "9fd008d82ad40e34f0961a1af491a8726e8d3298fbdd111a40edf78e4aaf601f"
     },
     "1_0_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/0ff47ba6-3638-444f-ac5e-095422fcb8bf",
-      "sha256": "ef77151b58b97a5b06f9782f1890a1bec1da424615ee8b8c5f08411f33559a71"
+      "url": "https://github.com/user-attachments/assets/020f5d2a-f4f0-4959-b099-ed9487c5b68d",
+      "sha256": "912bcf2d9e4580592553fbff7f901e3468eaf03ad0d36d569824534c977a2686"
     },
     "1_0_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/afb5ce9d-25ae-4b4b-9b4b-54241f49988c",
-      "sha256": "4d48683ac09d4586619eab4a1c902a882766c115658fb130d2774729c575c99c"
+      "url": "https://github.com/user-attachments/assets/1d3942f4-a6d7-41b2-bf73-2591a15ec988",
+      "sha256": "9fd008d82ad40e34f0961a1af491a8726e8d3298fbdd111a40edf78e4aaf601f"
     },
     "1_0_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/0ff47ba6-3638-444f-ac5e-095422fcb8bf",
-      "sha256": "ef77151b58b97a5b06f9782f1890a1bec1da424615ee8b8c5f08411f33559a71"
+      "url": "https://github.com/user-attachments/assets/020f5d2a-f4f0-4959-b099-ed9487c5b68d",
+      "sha256": "912bcf2d9e4580592553fbff7f901e3468eaf03ad0d36d569824534c977a2686"
     },
     "9_1_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/b4c448d5-e0a8-468b-9c43-47014eb1450a",
-      "sha256": "541cdd73008fe8709193c7d845b7f64655780e75b19b6b28689c722c08b54131"
+      "url": "https://github.com/user-attachments/assets/626dc929-bfab-4bbb-96aa-cf79a12923b4",
+      "sha256": "28b1bbdba2b644ce6b89eb819379f2e2ff4e13fddeead344437b8982b4de90c2"
     },
     "9_1_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/007ac38b-d1c0-4e89-a5df-86e94c79b93f",
-      "sha256": "01a0996b3bbd8ca7acc13451de5536cdc66250d597695742f5b95bf0985dd4de"
+      "url": "https://github.com/user-attachments/assets/b2c22878-9bc0-499f-9cf2-86f9fcf03202",
+      "sha256": "30050f013e411eb4afb79ee8727ae66a623669346f2d4366781679e248400ff0"
     },
     "9_1_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/b4c448d5-e0a8-468b-9c43-47014eb1450a",
-      "sha256": "541cdd73008fe8709193c7d845b7f64655780e75b19b6b28689c722c08b54131"
+      "url": "https://github.com/user-attachments/assets/626dc929-bfab-4bbb-96aa-cf79a12923b4",
+      "sha256": "28b1bbdba2b644ce6b89eb819379f2e2ff4e13fddeead344437b8982b4de90c2"
     },
     "9_1_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/007ac38b-d1c0-4e89-a5df-86e94c79b93f",
-      "sha256": "01a0996b3bbd8ca7acc13451de5536cdc66250d597695742f5b95bf0985dd4de"
+      "url": "https://github.com/user-attachments/assets/b2c22878-9bc0-499f-9cf2-86f9fcf03202",
+      "sha256": "30050f013e411eb4afb79ee8727ae66a623669346f2d4366781679e248400ff0"
     },
     "9_1_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/b4c448d5-e0a8-468b-9c43-47014eb1450a",
-      "sha256": "541cdd73008fe8709193c7d845b7f64655780e75b19b6b28689c722c08b54131"
+      "url": "https://github.com/user-attachments/assets/626dc929-bfab-4bbb-96aa-cf79a12923b4",
+      "sha256": "28b1bbdba2b644ce6b89eb819379f2e2ff4e13fddeead344437b8982b4de90c2"
     },
     "9_1_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/007ac38b-d1c0-4e89-a5df-86e94c79b93f",
-      "sha256": "01a0996b3bbd8ca7acc13451de5536cdc66250d597695742f5b95bf0985dd4de"
+      "url": "https://github.com/user-attachments/assets/b2c22878-9bc0-499f-9cf2-86f9fcf03202",
+      "sha256": "30050f013e411eb4afb79ee8727ae66a623669346f2d4366781679e248400ff0"
     },
     "1_9_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/65465933-f553-412c-8d76-95d4378fd742",
-      "sha256": "706efa75fb90e9e203d3d3f6ba2291acfdcd7e3a6e53e740c7bca7f24d860e40"
+      "url": "https://github.com/user-attachments/assets/aaf7ca9c-ad0e-4a49-aac3-22e6e74be7a9",
+      "sha256": "3c281ff677c1ec0234152f95e36decc34961e059f57dc6d1b79339ca879f7f77"
     },
     "1_9_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/a6860c05-5a8d-4682-8af3-499d24d6495c",
-      "sha256": "c3edc4720f43e9ea63f28df32f68cfa2522c59bfc199594f3020568b627a061f"
+      "url": "https://github.com/user-attachments/assets/8218b8f7-3643-40eb-9e79-9e5a22dca1e5",
+      "sha256": "64fcdc0dd683b6c7ed5d522b3234bd263eaec7292a1e8720e779cb2bc7d88493"
     },
     "1_9_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/65465933-f553-412c-8d76-95d4378fd742",
-      "sha256": "706efa75fb90e9e203d3d3f6ba2291acfdcd7e3a6e53e740c7bca7f24d860e40"
+      "url": "https://github.com/user-attachments/assets/aaf7ca9c-ad0e-4a49-aac3-22e6e74be7a9",
+      "sha256": "3c281ff677c1ec0234152f95e36decc34961e059f57dc6d1b79339ca879f7f77"
     },
     "1_9_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/a6860c05-5a8d-4682-8af3-499d24d6495c",
-      "sha256": "c3edc4720f43e9ea63f28df32f68cfa2522c59bfc199594f3020568b627a061f"
+      "url": "https://github.com/user-attachments/assets/8218b8f7-3643-40eb-9e79-9e5a22dca1e5",
+      "sha256": "64fcdc0dd683b6c7ed5d522b3234bd263eaec7292a1e8720e779cb2bc7d88493"
     },
     "1_9_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/65465933-f553-412c-8d76-95d4378fd742",
-      "sha256": "706efa75fb90e9e203d3d3f6ba2291acfdcd7e3a6e53e740c7bca7f24d860e40"
+      "url": "https://github.com/user-attachments/assets/aaf7ca9c-ad0e-4a49-aac3-22e6e74be7a9",
+      "sha256": "3c281ff677c1ec0234152f95e36decc34961e059f57dc6d1b79339ca879f7f77"
     },
     "1_9_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/a6860c05-5a8d-4682-8af3-499d24d6495c",
-      "sha256": "c3edc4720f43e9ea63f28df32f68cfa2522c59bfc199594f3020568b627a061f"
+      "url": "https://github.com/user-attachments/assets/8218b8f7-3643-40eb-9e79-9e5a22dca1e5",
+      "sha256": "64fcdc0dd683b6c7ed5d522b3234bd263eaec7292a1e8720e779cb2bc7d88493"
     },
     "1_2_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/98feb6c0-987a-4507-b8c7-64ca506fb066",
-      "sha256": "7cbdadda0f0b4b7a64ace59434ca6b0c80a98f83106639536e7df3a43755cb9b"
+      "url": "https://github.com/user-attachments/assets/257fc938-5c1e-45f6-9388-67bc04edf9a4",
+      "sha256": "3d4001b338d414ca4403493d46f754c24d496e2838234d89ca081f41b1af776a"
     },
     "1_2_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/1bd282c8-2718-46c2-97a8-f2adad7e9403",
-      "sha256": "df1e8baaf91e6c5ed702f6d52060a667c8dd54e7f2e404a197083a5174ca6174"
+      "url": "https://github.com/user-attachments/assets/42550f60-d556-454e-98ca-c904ba4ea423",
+      "sha256": "bd3731d62343c7b486639513f96a7258fb1714ec6cbb2aa120556ea6c895c8e2"
     },
     "1_2_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/98feb6c0-987a-4507-b8c7-64ca506fb066",
-      "sha256": "7cbdadda0f0b4b7a64ace59434ca6b0c80a98f83106639536e7df3a43755cb9b"
+      "url": "https://github.com/user-attachments/assets/257fc938-5c1e-45f6-9388-67bc04edf9a4",
+      "sha256": "3d4001b338d414ca4403493d46f754c24d496e2838234d89ca081f41b1af776a"
     },
     "1_2_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/1bd282c8-2718-46c2-97a8-f2adad7e9403",
-      "sha256": "df1e8baaf91e6c5ed702f6d52060a667c8dd54e7f2e404a197083a5174ca6174"
+      "url": "https://github.com/user-attachments/assets/42550f60-d556-454e-98ca-c904ba4ea423",
+      "sha256": "bd3731d62343c7b486639513f96a7258fb1714ec6cbb2aa120556ea6c895c8e2"
     },
     "1_2_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/98feb6c0-987a-4507-b8c7-64ca506fb066",
-      "sha256": "7cbdadda0f0b4b7a64ace59434ca6b0c80a98f83106639536e7df3a43755cb9b"
+      "url": "https://github.com/user-attachments/assets/257fc938-5c1e-45f6-9388-67bc04edf9a4",
+      "sha256": "3d4001b338d414ca4403493d46f754c24d496e2838234d89ca081f41b1af776a"
     },
     "1_2_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/1bd282c8-2718-46c2-97a8-f2adad7e9403",
-      "sha256": "df1e8baaf91e6c5ed702f6d52060a667c8dd54e7f2e404a197083a5174ca6174"
+      "url": "https://github.com/user-attachments/assets/42550f60-d556-454e-98ca-c904ba4ea423",
+      "sha256": "bd3731d62343c7b486639513f96a7258fb1714ec6cbb2aa120556ea6c895c8e2"
     },
     "2_1_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/d7da84fb-84e4-4363-8850-5ebf01521632",
-      "sha256": "d9f81c872f9383117d771241aafa2efc49dea557f1efc31018ef585931b68bfc"
+      "url": "https://github.com/user-attachments/assets/97a7e5c7-2eff-4279-a0a5-c211682b5604",
+      "sha256": "a2c14c1bcd2290e1c155c6b554d737f2125678d145b244a61e23c4862b67a716"
     },
     "2_1_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/3fa6aaf9-d137-49ff-9aef-cb0e86c58d6c",
-      "sha256": "9514f9f071ff32bdc2703bda80c0238162d81ae40361adb7384d17cb0aa99927"
+      "url": "https://github.com/user-attachments/assets/3472c508-e985-4218-9bfd-8182631629fe",
+      "sha256": "e1ccd7e0d55f597c902c64462a18eaa7f324dae646119b22c52744531e14ce65"
     },
     "2_1_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/d7da84fb-84e4-4363-8850-5ebf01521632",
-      "sha256": "d9f81c872f9383117d771241aafa2efc49dea557f1efc31018ef585931b68bfc"
+      "url": "https://github.com/user-attachments/assets/97a7e5c7-2eff-4279-a0a5-c211682b5604",
+      "sha256": "a2c14c1bcd2290e1c155c6b554d737f2125678d145b244a61e23c4862b67a716"
     },
     "2_1_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/3fa6aaf9-d137-49ff-9aef-cb0e86c58d6c",
-      "sha256": "9514f9f071ff32bdc2703bda80c0238162d81ae40361adb7384d17cb0aa99927"
+      "url": "https://github.com/user-attachments/assets/3472c508-e985-4218-9bfd-8182631629fe",
+      "sha256": "e1ccd7e0d55f597c902c64462a18eaa7f324dae646119b22c52744531e14ce65"
     },
     "2_1_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/d7da84fb-84e4-4363-8850-5ebf01521632",
-      "sha256": "d9f81c872f9383117d771241aafa2efc49dea557f1efc31018ef585931b68bfc"
+      "url": "https://github.com/user-attachments/assets/97a7e5c7-2eff-4279-a0a5-c211682b5604",
+      "sha256": "a2c14c1bcd2290e1c155c6b554d737f2125678d145b244a61e23c4862b67a716"
     },
     "2_1_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/3fa6aaf9-d137-49ff-9aef-cb0e86c58d6c",
-      "sha256": "9514f9f071ff32bdc2703bda80c0238162d81ae40361adb7384d17cb0aa99927"
+      "url": "https://github.com/user-attachments/assets/3472c508-e985-4218-9bfd-8182631629fe",
+      "sha256": "e1ccd7e0d55f597c902c64462a18eaa7f324dae646119b22c52744531e14ce65"
     },
     "8_10_Standard_Auto_Polar": {
       "url": "https://github.com/user-attachments/assets/e07362e4-0851-4baa-9493-98faa5413d51",
@@ -339,100 +339,100 @@
       "sha256": "cc9f35457a7e179beec351c0af05d89960f91e31320fc2f826d9d430761973f0"
     },
     "6_14_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/e0cda474-787f-4d54-a62f-e95d42dbc648",
-      "sha256": "9a3ad67909b212f53afb7a1871501dfdbe8d8a191cb18d32d4316f881f340eef"
+      "url": "https://github.com/user-attachments/assets/4336c235-ed66-420a-a61b-3f19396f49a2",
+      "sha256": "40ceac1d9733c8b71730c96b1153ec69e30c62951084a61d4906b63d9f29f801"
     },
     "6_14_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/e4168b43-d322-4e8c-9963-0aeaa96cc3bf",
-      "sha256": "9bb01685583b87cbe1fa2703f2ca5b50bbdd0cc4519df7fd36587ff692066e05"
+      "url": "https://github.com/user-attachments/assets/9ac8eba4-eb96-4875-9458-40bb48f689d2",
+      "sha256": "6e462fca35849ee81743e3aeb89fd9c3b2a563a5c5d0f13fe74d68a553357569"
     },
     "6_14_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/e0cda474-787f-4d54-a62f-e95d42dbc648",
-      "sha256": "9a3ad67909b212f53afb7a1871501dfdbe8d8a191cb18d32d4316f881f340eef"
+      "url": "https://github.com/user-attachments/assets/4336c235-ed66-420a-a61b-3f19396f49a2",
+      "sha256": "40ceac1d9733c8b71730c96b1153ec69e30c62951084a61d4906b63d9f29f801"
     },
     "6_14_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/e4168b43-d322-4e8c-9963-0aeaa96cc3bf",
-      "sha256": "9bb01685583b87cbe1fa2703f2ca5b50bbdd0cc4519df7fd36587ff692066e05"
+      "url": "https://github.com/user-attachments/assets/9ac8eba4-eb96-4875-9458-40bb48f689d2",
+      "sha256": "6e462fca35849ee81743e3aeb89fd9c3b2a563a5c5d0f13fe74d68a553357569"
     },
     "6_14_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/e0cda474-787f-4d54-a62f-e95d42dbc648",
-      "sha256": "9a3ad67909b212f53afb7a1871501dfdbe8d8a191cb18d32d4316f881f340eef"
+      "url": "https://github.com/user-attachments/assets/4336c235-ed66-420a-a61b-3f19396f49a2",
+      "sha256": "40ceac1d9733c8b71730c96b1153ec69e30c62951084a61d4906b63d9f29f801"
     },
     "6_14_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/e4168b43-d322-4e8c-9963-0aeaa96cc3bf",
-      "sha256": "9bb01685583b87cbe1fa2703f2ca5b50bbdd0cc4519df7fd36587ff692066e05"
+      "url": "https://github.com/user-attachments/assets/9ac8eba4-eb96-4875-9458-40bb48f689d2",
+      "sha256": "6e462fca35849ee81743e3aeb89fd9c3b2a563a5c5d0f13fe74d68a553357569"
     },
     "14_6_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/39e2767f-0eb1-4736-8aa1-f992f05a3601",
-      "sha256": "124aded9609b34eebe22955450a63e2f3dcf65f2891f748c22e2785af53a85e0"
+      "url": "https://github.com/user-attachments/assets/14cec94b-8958-497a-8835-aecf5c5e8089",
+      "sha256": "2ffc4a221e4d4c5e2fd7103c993a28d339f0ce9a52c7dab8b76c5e1102b0a112"
     },
     "14_6_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/bbf67dde-5686-43d5-ba7a-4037407cae71",
-      "sha256": "1f03927358ea1f653d83ba79dd9901006a1a7b649aad16a71c7f53293ad8a55e"
+      "url": "https://github.com/user-attachments/assets/157701b2-d773-4965-a0e5-523db589b947",
+      "sha256": "7df4ad08c8398ac7b495388c2ecbdbc1dc44fafca497d0ec128a0c55948500c0"
     },
     "14_6_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/39e2767f-0eb1-4736-8aa1-f992f05a3601",
-      "sha256": "124aded9609b34eebe22955450a63e2f3dcf65f2891f748c22e2785af53a85e0"
+      "url": "https://github.com/user-attachments/assets/14cec94b-8958-497a-8835-aecf5c5e8089",
+      "sha256": "2ffc4a221e4d4c5e2fd7103c993a28d339f0ce9a52c7dab8b76c5e1102b0a112"
     },
     "14_6_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/bbf67dde-5686-43d5-ba7a-4037407cae71",
-      "sha256": "1f03927358ea1f653d83ba79dd9901006a1a7b649aad16a71c7f53293ad8a55e"
+      "url": "https://github.com/user-attachments/assets/157701b2-d773-4965-a0e5-523db589b947",
+      "sha256": "7df4ad08c8398ac7b495388c2ecbdbc1dc44fafca497d0ec128a0c55948500c0"
     },
     "14_6_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/39e2767f-0eb1-4736-8aa1-f992f05a3601",
-      "sha256": "124aded9609b34eebe22955450a63e2f3dcf65f2891f748c22e2785af53a85e0"
+      "url": "https://github.com/user-attachments/assets/14cec94b-8958-497a-8835-aecf5c5e8089",
+      "sha256": "2ffc4a221e4d4c5e2fd7103c993a28d339f0ce9a52c7dab8b76c5e1102b0a112"
     },
     "14_6_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/bbf67dde-5686-43d5-ba7a-4037407cae71",
-      "sha256": "1f03927358ea1f653d83ba79dd9901006a1a7b649aad16a71c7f53293ad8a55e"
+      "url": "https://github.com/user-attachments/assets/157701b2-d773-4965-a0e5-523db589b947",
+      "sha256": "7df4ad08c8398ac7b495388c2ecbdbc1dc44fafca497d0ec128a0c55948500c0"
     },
     "15_16_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/1fd3e602-8808-4927-967a-73b258b79a4d",
-      "sha256": "a497324f623a10ac807798d8432a060c6a073da3d7a6cbdf30fbe361766e74b7"
+      "url": "https://github.com/user-attachments/assets/c92bc061-a7ff-4cb8-a625-0a46dbbadbaf",
+      "sha256": "b8c121c300d0bef9f0de01f90930afbfd540149f89f3929d3dc78783f1a1ca7f"
     },
     "15_16_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/b68ccf44-70e3-4def-9368-2d92a65f78f7",
-      "sha256": "d48d2838f0b8b562672ef3e6dc0b7c5cc93d080e1ff58b31188567dc560d5364"
+      "url": "https://github.com/user-attachments/assets/b6af841a-b4ca-40bc-9abb-d6e7a1eaad75",
+      "sha256": "2585a538e14a7c14178d1eb7b7fee31d9acf49c1b7235a7b006d22097a1c02c9"
     },
     "15_16_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/1fd3e602-8808-4927-967a-73b258b79a4d",
-      "sha256": "a497324f623a10ac807798d8432a060c6a073da3d7a6cbdf30fbe361766e74b7"
+      "url": "https://github.com/user-attachments/assets/c92bc061-a7ff-4cb8-a625-0a46dbbadbaf",
+      "sha256": "b8c121c300d0bef9f0de01f90930afbfd540149f89f3929d3dc78783f1a1ca7f"
     },
     "15_16_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/b68ccf44-70e3-4def-9368-2d92a65f78f7",
-      "sha256": "d48d2838f0b8b562672ef3e6dc0b7c5cc93d080e1ff58b31188567dc560d5364"
+      "url": "https://github.com/user-attachments/assets/b6af841a-b4ca-40bc-9abb-d6e7a1eaad75",
+      "sha256": "2585a538e14a7c14178d1eb7b7fee31d9acf49c1b7235a7b006d22097a1c02c9"
     },
     "15_16_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/1fd3e602-8808-4927-967a-73b258b79a4d",
-      "sha256": "a497324f623a10ac807798d8432a060c6a073da3d7a6cbdf30fbe361766e74b7"
+      "url": "https://github.com/user-attachments/assets/c92bc061-a7ff-4cb8-a625-0a46dbbadbaf",
+      "sha256": "b8c121c300d0bef9f0de01f90930afbfd540149f89f3929d3dc78783f1a1ca7f"
     },
     "15_16_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/b68ccf44-70e3-4def-9368-2d92a65f78f7",
-      "sha256": "d48d2838f0b8b562672ef3e6dc0b7c5cc93d080e1ff58b31188567dc560d5364"
+      "url": "https://github.com/user-attachments/assets/b6af841a-b4ca-40bc-9abb-d6e7a1eaad75",
+      "sha256": "2585a538e14a7c14178d1eb7b7fee31d9acf49c1b7235a7b006d22097a1c02c9"
     },
     "16_15_Standard_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/3c563a57-ad9c-40a8-a6b0-e403c3df373a",
-      "sha256": "e4548d5f3556a54fe3170fa1e74a66b57c8bc0c20d3b545b1947f19cdfb3d563"
+      "url": "https://github.com/user-attachments/assets/58c151e9-da05-4360-a42f-3fb2d8ad7d8c",
+      "sha256": "f929c8e5172dece04e8380316ed4fd492274d7ad6074d28f8aa01e6d07dac476"
     },
     "16_15_Standard_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/cd9cd18a-e6e3-49cb-b78d-173634c1d0e0",
-      "sha256": "aea954e49d2360219eaa8698c6e8246379e0cdd04a18cd604809c0fa3261954f"
+      "url": "https://github.com/user-attachments/assets/07b24cdb-6056-4804-bc3e-277ce5070605",
+      "sha256": "5a8f2700dcbc066d0a25b9d23d431d6da47009e890aa59a8258b2d2493043246"
     },
     "16_15_SharedBoundary_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/3c563a57-ad9c-40a8-a6b0-e403c3df373a",
-      "sha256": "e4548d5f3556a54fe3170fa1e74a66b57c8bc0c20d3b545b1947f19cdfb3d563"
+      "url": "https://github.com/user-attachments/assets/58c151e9-da05-4360-a42f-3fb2d8ad7d8c",
+      "sha256": "f929c8e5172dece04e8380316ed4fd492274d7ad6074d28f8aa01e6d07dac476"
     },
     "16_15_SharedBoundary_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/cd9cd18a-e6e3-49cb-b78d-173634c1d0e0",
-      "sha256": "aea954e49d2360219eaa8698c6e8246379e0cdd04a18cd604809c0fa3261954f"
+      "url": "https://github.com/user-attachments/assets/07b24cdb-6056-4804-bc3e-277ce5070605",
+      "sha256": "5a8f2700dcbc066d0a25b9d23d431d6da47009e890aa59a8258b2d2493043246"
     },
     "16_15_ExperimentalHoleOpening_Auto_Polar": {
-      "url": "https://github.com/user-attachments/assets/3c563a57-ad9c-40a8-a6b0-e403c3df373a",
-      "sha256": "e4548d5f3556a54fe3170fa1e74a66b57c8bc0c20d3b545b1947f19cdfb3d563"
+      "url": "https://github.com/user-attachments/assets/58c151e9-da05-4360-a42f-3fb2d8ad7d8c",
+      "sha256": "f929c8e5172dece04e8380316ed4fd492274d7ad6074d28f8aa01e6d07dac476"
     },
     "16_15_ExperimentalHoleOpening_Auto_Linear": {
-      "url": "https://github.com/user-attachments/assets/cd9cd18a-e6e3-49cb-b78d-173634c1d0e0",
-      "sha256": "aea954e49d2360219eaa8698c6e8246379e0cdd04a18cd604809c0fa3261954f"
+      "url": "https://github.com/user-attachments/assets/07b24cdb-6056-4804-bc3e-277ce5070605",
+      "sha256": "5a8f2700dcbc066d0a25b9d23d431d6da47009e890aa59a8258b2d2493043246"
     },
     "5_8_Standard_Auto_Polar": {
       "url": "https://github.com/user-attachments/assets/ea6fc18d-ea47-4e08-a1ac-8b98c8a68dc1",

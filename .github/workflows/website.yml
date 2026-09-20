@@ -62,7 +62,7 @@ jobs:
         env:
           MORPH_REQUIRE_REPORT: '1'
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: website-visual-report

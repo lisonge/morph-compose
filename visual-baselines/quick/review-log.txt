@@ -1,2 +1,3 @@
 2026-09-19T18:44:41.9618220+08:00 | 120 cases | Initial change-detection reference for all three policies; not aesthetic approval. Endpoint checks passed; known intermediate-shape limitations remain visible.
 2026-09-19T20:59:56.7535994+08:00 | 120 个案例 | 仅将原有图片基线迁移为公开链接和摘要；120 个案例内容保持一致，匿名下载与完整质量检查通过。
+2026-09-20T11:40:25.655Z | 120 个案例 | 用户确认接受原版 Material 填充图标替换圆头描边后的 60 项 quick 差异：Menu/Close、Search/Close、Close/Play、Add/Check、左右箭头及反向，三策略两插值；120 张候选与 CI 35504467241 摘要一致且端点误差为零。包含平头端部、中间轮廓交叠及线性箭头中点收缩；仅更新变化检测参考，不认可所有中间形状，不修改算法和容差，未验证 Auto-wide。详见 docs/quality.md。
