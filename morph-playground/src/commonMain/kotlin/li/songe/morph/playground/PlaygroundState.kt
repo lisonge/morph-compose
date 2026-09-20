@@ -33,6 +33,8 @@ internal class PlaygroundState(
     initialSelection: List<Int> = listOf(0, 1, 2, 3),
 ) {
     var selectedTab by mutableStateOf(PlaygroundTab.Icons)
+    var customBackOrClose by mutableStateOf(true)
+    var customSearchOpen by mutableStateOf(false)
     val typography = TypographyState()
     private val demos = PlaygroundTab.entries.associateWith { FeatureDemoState() }
     fun demo(tab: PlaygroundTab): FeatureDemoState = demos.getValue(tab)

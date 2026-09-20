@@ -32,6 +32,7 @@ import li.songe.morph.compose.AnimatedMorphIcon
 
 internal enum class PlaygroundTab(val id: String, val title: String) {
     Icons("icons", "Icons"),
+    CustomIcons("custom-icons", "Custom icons"),
     Shapes("shapes", "Shapes"),
     Clipping("clipping", "Image clips"),
     Interaction("interaction", "Interaction"),
@@ -81,6 +82,7 @@ internal fun PlaygroundTabs(state: PlaygroundState) {
                     MorphAppContent(state)
                 }
                 PlaygroundTab.Shapes -> ShapeScreen(state.demo(selectedTab))
+                PlaygroundTab.CustomIcons -> CustomIconsScreen(state)
                 PlaygroundTab.Clipping -> ClippingScreen(state.demo(selectedTab))
                 PlaygroundTab.Interaction -> InteractionScreen(state.demo(selectedTab))
                 PlaygroundTab.Loading -> LoadingScreen(state.demo(selectedTab))
