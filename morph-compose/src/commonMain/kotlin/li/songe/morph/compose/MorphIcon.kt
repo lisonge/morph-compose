@@ -11,10 +11,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import li.songe.morph.compose.internal.strokeAt
@@ -99,17 +101,25 @@ public fun MorphIcon(
                     plan.corePlan.items[it].strokeAt(progress.toDouble()) == null
                 }
                 clipRect {
-                    drawPath(path = path, color = effectiveTint)
+                    // Recovered strokes came from one filled shape. Composite their ink once,
+                    // so a translucent tint does not darken at the inferred stroke crossings.
+                    val compositeInk = effectiveTint.alpha < 1f && plan.corePlan.items.any {
+                        it.decision.strategy == MorphAppliedStrategy.InferredCenterline
+                    }
+                    if (compositeInk) drawContext.canvas.saveLayer(Rect(Offset.Zero, size), Paint().apply { alpha = effectiveTint.alpha })
+                    val ink = if (compositeInk) effectiveTint.copy(alpha = 1f) else effectiveTint
+                    drawPath(path = path, color = ink)
                     plan.corePlan.items.forEachIndexed { index, item ->
                         val stroke = item.strokeAt(progress.toDouble()) ?: return@forEachIndexed
                         if (stroke.width <= 0.0) return@forEachIndexed
                         path.rewind()
-                        path.appendMorphFrame(frame, extent, extent, origin.x, origin.y) { it == index }
-                        drawPath(path, effectiveTint, style = Stroke(
+                        path.appendMorphContour(frame, index, extent, extent, origin.x, origin.y)
+                        drawPath(path, ink, style = Stroke(
                             width = (stroke.width * extent).toFloat(), cap = stroke.cap,
                             join = stroke.join, miter = stroke.miter,
                         ))
                     }
+                    if (compositeInk) drawContext.canvas.restore()
                 }
             }
         }

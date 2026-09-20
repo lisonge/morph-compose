@@ -148,12 +148,27 @@ Clip paths, trim paths, gradients, combined fill and stroke on one path, and non
 
 For line icons, use an `ImageVector` with `fill = null`, `stroke = SolidColor(...)`, and separate
 `moveTo` commands for independent strokes. Morphing matches and transforms centerlines while
-retaining stroke width; unequal stroke counts split or merge. The playground's Search, Close, Menu, Add,
-Remove, Check, and four direction arrows use this representation. Existing Material filled icons
+retaining stroke width; unequal stroke counts split or merge. The playground uses original Material icons.
+Material filled icons
 still morph their boundaries; stroke structure is not inferred. Auto uses centerlines only when both
 inputs are stroke-only. Otherwise strokes expand into filled outlines and overlapping ink is merged,
-so mixed pairs such as Close ↔ Play morph together. `MorphGeometry` and clipping remain
+so mixed stroke/fill pairs morph together. `MorphGeometry` and clipping remain
 filled geometry APIs.
+
+`MorphTransitionMode.ExperimentalStrokeInference` is an opt-in `ImageVector`/`MorphIcon` mode.
+It can recover flat-capped straight strokes from a single filled polygon with 2–6 clear terminals,
+including crossings and a bent branch with a stem. Original Material vectors remain the inputs;
+there are no icon-name rules. Candidate ink must retain one contour, have bidirectional polygon
+boundary error at most 0.6% of stroke width and symmetric ink difference at most 0.3%. Added and
+missing regions are measured separately; whole-edge capsule coverage checks the boundary.
+Up to four decompositions per input are compared jointly, using sampled junction gaps, stretch,
+extra self-intersections and alignment residual. Rotation preference breaks quality ties.
+Diagnostics include reconstruction errors, candidate choice and motion scores. Resting endpoints render
+the original vector; intermediate frames use the verified approximate reconstruction with butt
+caps and miter joins. Unsupported or identical input pairs retain Auto behavior. Curves, holes,
+disconnected shapes, ambiguous widths and general skeleton inference are outside this first version.
+This mode does not support `MorphGeometry`/clipping. The playground exposes **Infer strokes (experimental)**;
+Auto remains unchanged. Diagnostics report `InferredCenterline` or an inference fallback.
 
 `MorphOptions.transitionMode` selects `Auto`, forced `Outline`, or strict `Centerline` (rejects filled
 input). `strokeCountStrategy` chooses `SplitMerge` or `Collapse` for unequal centerline counts.
@@ -169,6 +184,47 @@ decisions. Run `./gradlew verifyMorph` for the quality gate; see the [quality wo
 
 See the [API and algorithm documentation](docs/architecture.md#api-layers) for state controllers, plan reuse, and interpolation details.
 The [project docs](docs/README.md) cover the playground and development setup.
+
+## Choosing an effect and rebuilding strokes with AI
+
+Different icon pairs suit different configurations; choose the effect you prefer. An unattractive
+result for one configuration is not necessarily an algorithm defect. First compare contour policies,
+rotation preferences and interpolation modes. For simple line icons, also try Infer strokes,
+for example with the original Close ↔ Arrow back pair.
+
+If none of the configurations produces a satisfactory animation, you can ask AI to rebuild the
+filled icons as explicit strokes. Authored centerlines can help control correspondence and motion,
+but arbitrary filled shapes cannot always be expressed identically with strokes. Review the appearance
+and animations in both directions. Copy and adapt this prompt:
+
+```text
+Reimplement the filled icon below as a stroke-based Compose ImageVector for icon morphing.
+
+Requirements:
+- Preserve the original viewport, dimensions, position, visual weight, end caps and corners as closely as possible.
+- Express each stroke through its centerline; do not simply add an outline stroke to the original filled boundary.
+- Use fill = null and stroke = SolidColor(...), with moveTo separating independent strokes.
+- Prefer a small number of clear paths; avoid unnecessary bends and duplicate paths.
+- Choose strokeLineWidth, strokeLineCap, strokeLineJoin and strokeLineMiter to match the original.
+- If a target icon is supplied, check that it is stroke-only too; rebuild it if needed so both endpoints support centerline morphing.
+- Design sensible stroke correspondence across the pair, without visibly changing the icons just to equalize stroke counts.
+- Do not use clipping, path trimming, gradients, combined fill and stroke on one path, or non-uniform stroke transforms.
+- Output usable Kotlin code and an animation example using MorphIcon and MorphTransitionMode.Centerline.
+- Provide static original/rebuilt comparisons and animations in both directions. Explain approximations; do not claim unverified pixel equivalence.
+- Give rebuilt icons separate names (such as CloseStroke), preserving the originals for comparison and rollback.
+
+Source icon:
+[Paste ImageVector code or SVG]
+
+Target icon (optional):
+[Paste ImageVector code or SVG]
+```
+
+When both inputs are stroke-only, `Auto` uses centerlines; you can also select `Centerline` explicitly.
+If the other input remains filled, `Auto` expands strokes and morphs outlines, while `Centerline`
+rejects the pair. For unequal stroke counts, compare `SplitMerge` and `Collapse`.
+This is an intentional redesign by the user, not an automatic replacement by the library.
+Rebuilt examples should identify their origin and purpose separately from the originals.
 
 ## Inspiration
 

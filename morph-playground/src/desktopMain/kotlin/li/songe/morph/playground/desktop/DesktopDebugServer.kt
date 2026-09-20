@@ -173,7 +173,8 @@ internal class DesktopDebugServer private constructor(
                                                     "auto" -> li.songe.morph.compose.MorphTransitionMode.Auto
                                                     "outline" -> li.songe.morph.compose.MorphTransitionMode.Outline
                                                     "centerline" -> li.songe.morph.compose.MorphTransitionMode.Centerline
-                                                    else -> throw IllegalArgumentException("transitionMode must be auto, outline, or centerline")
+                                                    "infer" -> li.songe.morph.compose.MorphTransitionMode.ExperimentalStrokeInference
+                                                    else -> throw IllegalArgumentException("transitionMode must be auto, outline, centerline, or infer")
                                                 },
                                             )
                                         }

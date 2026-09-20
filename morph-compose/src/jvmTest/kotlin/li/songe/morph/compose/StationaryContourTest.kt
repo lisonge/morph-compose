@@ -54,7 +54,8 @@ class StationaryContourTest {
             val core = buildMorphPlanFromSampledSource(
                 original.corePlan.snapshotContours(0.4f.toDouble(), mode), target.toCubicPaths(false), options,
             )
-            val interrupted = ImageVectorMorphPlan(core, null, target, original.defaultWidth, original.defaultHeight)
+            val interrupted = ImageVectorMorphPlan(core, null, target, original.defaultWidth, original.defaultHeight,
+                sourcePaths = null, targetPaths = target.toCubicPaths(false))
             val actual = render(interrupted, 0f, mode)
             val before = expected.iterator().asSequence().toList()
             val after = actual.iterator().asSequence().toList()
@@ -98,7 +99,8 @@ class StationaryContourTest {
                 val core = buildMorphPlanFromSampledSource(
                     plan.corePlan.snapshotContours(0.43f.toDouble(), mode), target.toCubicPaths(false), options,
                 )
-                plan = ImageVectorMorphPlan(core, null, target, plan.defaultWidth, plan.defaultHeight)
+                plan = ImageVectorMorphPlan(core, null, target, plan.defaultWidth, plan.defaultHeight,
+                    sourcePaths = null, targetPaths = target.toCubicPaths(false))
                 val after = mask(render(plan, 0f, mode))
                 for (y in 0 until 400) for (x in 0 until 400) {
                     assertEquals(before.getRGB(x, y), after.getRGB(x, y), "Interrupted outline changed at $x,$y ($mode)")
@@ -127,7 +129,8 @@ class StationaryContourTest {
             val expected = mask(render(original, 0.43f, mode))
             val core = buildMorphPlanFromSampledSource(
                 original.corePlan.snapshotContours(0.43f.toDouble(), mode), a.toCubicPaths(false), options)
-            val interrupted = ImageVectorMorphPlan(core, null, a, original.defaultWidth, original.defaultHeight)
+            val interrupted = ImageVectorMorphPlan(core, null, a, original.defaultWidth, original.defaultHeight,
+                sourcePaths = null, targetPaths = a.toCubicPaths(false))
             val actual = mask(render(interrupted, 0f, mode))
             for (y in 0 until 400) for (x in 0 until 400) {
                 assertEquals(expected.getRGB(x, y), actual.getRGB(x, y), "Local motion jumped at $x,$y ($mode)")

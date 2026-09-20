@@ -37,6 +37,25 @@ Kotlin code and all of its source and configuration files are type-checked TypeS
 
 ## Processing pipeline
 
+The library remains one Gradle module. Internal file boundaries follow the existing pipeline:
+
+- `ImageVectorParsing.kt` parses commands, group transforms and topology. `ImageVectorAdapter.kt`
+  retains public vector-plan entry points and compatibility reports, preserving their JVM facade.
+- `VectorPlanning.kt` owns representation selection for both original inputs and interruption
+  snapshots, including inference fallback diagnostics. `StrokeOutline.kt` only reconstructs
+  snapshot curves and expands stroke ink.
+- `ContourMatching.kt` owns role-compatible assignment; `ContourAlignment.kt` owns geometric
+  alignment and candidate scoring. `internal/MorphPlan.kt` assembles plans and global transport.
+- Filled geometry retains its validated cubic paths. Vector plans retain normalized original
+  endpoints for path writers, so validation and endpoint rendering do not repeat parsing.
+  This is per-object reuse, not a global cache. Interrupted sources retain sampled snapshots.
+- Icons and compound-path writers share the single-contour append routine. Drawing one stroke
+  does not scan every other contour. Curve offsets and exact endpoint paths remain distinct.
+
+These boundaries do not change matching thresholds, interpolation formulas, strategy defaults,
+or the public API. Geometry/clip wrappers continue to reuse the icon controller rather than
+introducing a second animation state machine.
+
 1. Flatten nested `ImageVector` group transforms and normalize both vectors into a shared
    `xMidYMid meet` coordinate space.
 2. Convert lines, quadratic curves, cubic curves, and elliptical arcs into cubic Bézier curves.
@@ -104,6 +123,40 @@ checks, not a guarantee against short-lived intersections between checkpoints. T
 infer stroke structure from filled outlines, and their intermediate silhouettes may still bulge.
 
 ### Stroke centerlines
+
+The opt-in `ExperimentalStrokeInference` vector mode runs a bounded geometric recognizer before
+representation selection. `StrokeInference.kt` accepts a single straight-edged filled contour with
+2–6 flat terminals and near-uniform width. It enumerates terminal pairings (straight continuations
+before bends), permits one odd terminal to attach at a verified junction, expands each candidate,
+and checks one-contour topology and reconstruction against the input. `InkDifference.kt` measures
+the added and missing regions with PathOps Difference and cubic area integration; their sum must
+be at most 0.3% of input area. Equal-area changes cannot cancel. Bidirectional boundary checks cover
+each entire polygon edge by the union of radius-0.6%-of-width capsules around the opposite edges.
+The capsule intersections are parameter intervals; a covered interval is checked for gaps rather
+than relying on isolated samples. Binary search gives a certified upper bound subject to the
+floating-point PathOps/polygon representation, not a guarantee for arbitrary curves. Small source
+coordinate rounding is still tolerated: this remains approximate recovery, not lossless skeleton
+extraction. Enumeration is limited to six terminals and 32 simplified vertices.
+
+`InferencePlanning.kt` compares up to four validated decompositions per side (at most 16 plans),
+including the straight-first baseline. Each actual plan is evaluated at seven interior progress
+values with at most 33 centerline points per stroke. Extra self-intersections rank first; the score
+then combines alignment residual, relative edge stretch, gaps between strokes that touch at both
+endpoints, and scale change, plus a 0.005 cost per inferred bend to discourage revealing hidden
+elbows for negligible fit improvements. Direction preference breaks ties within 1e-3 of the best score without
+allowing more sampled intersections. Reconstruction error, bend count, rotation and canonical
+geometry order settle further ties. This is a bounded candidate comparison and sampled motion
+heuristic, not globally optimal semantic matching or an all-times nonintersection proof. Decisions
+record candidate counts/indices, gained/lost area ratios, boundary error and selected/baseline scores.
+Interrupted strokes use their existing sampled snapshot while comparing target decompositions.
+
+Both sides must be recoverable or explicit strokes. Identical inputs skip inference. Eligible
+plans reuse stroke correspondence, rotation and width interpolation, retaining butt caps and miter
+joins. Reports use `InferredCenterline`; recovered strokes refer back to their original single
+filled contour (index 0). Ineligible pairs keep Auto's behavior and carry an explanatory decision.
+An interrupted filled snapshot is never reinterpreted; interrupted strokes can target recovered
+strokes or expand through the existing outline fallback. Geometry/clipping APIs reject this mode
+until their fill-only renderer supports the inferred representation. Auto remains unchanged.
 
 Public vector plans first resolve `MorphOptions.transitionMode`. Auto chooses centerlines only for
 two stroke-only inputs; all other combinations expand stroke ink into filled outlines. Outline forces

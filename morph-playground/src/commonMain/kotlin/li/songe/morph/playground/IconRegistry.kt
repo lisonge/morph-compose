@@ -1,6 +1,17 @@
 package li.songe.morph.playground
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.automirrored.filled.AirplaneTicket
 import androidx.compose.material.icons.automirrored.filled.AltRoute
@@ -501,25 +512,25 @@ internal data class IconEntry(
 
 internal val iconEntries =
     listOf(
-        IconEntry("Menu", StrokeIcons.Menu),
-        IconEntry("Close", StrokeIcons.Close),
+        IconEntry("Menu", Icons.Filled.Menu),
+        IconEntry("Close", Icons.Filled.Close),
         IconEntry("Play", Icons.Filled.PlayArrow),
         IconEntry("Pause", Icons.Filled.Pause),
         IconEntry("Favorite border", Icons.Filled.FavoriteBorder),
         IconEntry("Favorite", Icons.Filled.Favorite),
-        IconEntry("Add", StrokeIcons.Add),
-        IconEntry("Remove", StrokeIcons.Remove),
+        IconEntry("Add", Icons.Filled.Add),
+        IconEntry("Remove", Icons.Filled.Remove),
         IconEntry("Home", Icons.Filled.Home),
-        IconEntry("Search", StrokeIcons.Search),
+        IconEntry("Search", Icons.Filled.Search),
         IconEntry("Settings", Icons.Filled.Settings),
         IconEntry("Person", Icons.Filled.Person),
         IconEntry("Star", Icons.Filled.Star),
         IconEntry("Star border", Icons.Filled.StarBorder),
-        IconEntry("Check", StrokeIcons.Check),
-        IconEntry("Arrow back", StrokeIcons.ArrowBack),
-        IconEntry("Arrow forward", StrokeIcons.ArrowForward),
-        IconEntry("Arrow up", StrokeIcons.ArrowUp),
-        IconEntry("Arrow down", StrokeIcons.ArrowDown),
+        IconEntry("Check", Icons.Filled.Check),
+        IconEntry("Arrow back", Icons.AutoMirrored.Filled.ArrowBack),
+        IconEntry("Arrow forward", Icons.AutoMirrored.Filled.ArrowForward),
+        IconEntry("Arrow up", Icons.Filled.ArrowUpward),
+        IconEntry("Arrow down", Icons.Filled.ArrowDownward),
         IconEntry("Refresh", Icons.Filled.Refresh),
         IconEntry("Delete", Icons.Filled.Delete),
         IconEntry("Edit", Icons.Filled.Edit),
@@ -527,7 +538,7 @@ internal val iconEntries =
         IconEntry("Send", Icons.AutoMirrored.Filled.Send),
         IconEntry("Download", Icons.Filled.Download),
         IconEntry("Upload", Icons.Filled.Upload),
-        IconEntry("Lock outline", StrokeIcons.Lock),
+        IconEntry("Lock outline", Icons.Outlined.Lock),
         IconEntry("Lock open right", LockOpenRight),
         IconEntry("Visibility", Icons.Filled.Visibility),
         IconEntry("Visibility off", Icons.Filled.VisibilityOff),
@@ -1003,7 +1014,7 @@ internal val iconEntries =
         IconEntry("9mp", Icons.Filled._9mp),
         IconEntry("Lock", Icons.Filled.Lock),
         IconEntry("Lock open", Icons.Filled.LockOpen),
-        IconEntry("Unlock outline", StrokeIcons.Unlock),
+        IconEntry("Unlock outline", Icons.Outlined.LockOpen),
         IconEntry("Lock (Material Outlined)", Icons.Outlined.Lock),
     ).also { entries ->
         check(entries.map { it.name }.distinct().size == entries.size) { "Icon names must be unique" }

@@ -138,9 +138,6 @@ private fun detectCornerFeatures(path: CubicPath, threshold: Double): List<Corne
     return corners.entries.sortedBy { it.key }.map { CornerFeature(it.key, it.value) }
 }
 
-internal fun detectCorners(path: CubicPath, threshold: Double): IntArray =
-    detectCornerFeatures(path, threshold).map(CornerFeature::segment).toIntArray()
-
 internal fun invertLength(
     points: DoubleArray,
     segment: Int,
@@ -162,12 +159,6 @@ internal fun invertLength(
     }
     return t
 }
-
-internal fun resamplePath(
-    path: CubicPath,
-    sampleCount: Int,
-    cornerThreshold: Double,
-): DoubleArray = resamplePathWithFeatures(path, sampleCount, cornerThreshold).points
 
 private fun resamplePathWithFeatures(
     path: CubicPath,

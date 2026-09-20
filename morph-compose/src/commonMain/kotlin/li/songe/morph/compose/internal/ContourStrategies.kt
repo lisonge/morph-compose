@@ -23,13 +23,11 @@ internal fun selectContourStrategies(
         val disappearing = hole.fallbackReason == MorphFallbackReason.MissingTargetContour
         val appearing = hole.fallbackReason == MorphFallbackReason.MissingSourceContour
         if ((!disappearing && !appearing) || hole.source.role != MorphContourRole.Hole) continue
-        val candidates = matched.indices.filter { parentIndex ->
+        val candidates = matched.indices.mapNotNull { parentIndex ->
             val parent = matched[parentIndex]
-            parent.fallbackReason == null && parent.source.role == MorphContourRole.Shape &&
-                sharedBoundaryPair(parent.source, parent.target)?.movingSpans?.isNotEmpty() == true
-        }.mapNotNull { parentIndex ->
-            val parent = matched[parentIndex]
+            if (parent.fallbackReason != null || parent.source.role != MorphContourRole.Shape) return@mapNotNull null
             val shared = sharedBoundaryPair(parent.source, parent.target) ?: return@mapNotNull null
+            if (shared.movingSpans.isEmpty()) return@mapNotNull null
             val local = if (disappearing) shared.source else shared.target
             val holeContour = if (disappearing) hole.source else hole.target
             // A hole elsewhere in the icon must not be dragged to an unrelated changing edge.
@@ -74,6 +72,7 @@ internal fun selectContourStrategies(
         val reason = when (strategy) {
             MorphAppliedStrategy.Collapse -> "Unmatched contour: ${pair.fallbackReason}; linear shrink/grow."
             MorphAppliedStrategy.Centerline -> "Stroke-only correspondence; filled-contour policy does not apply."
+            MorphAppliedStrategy.InferredCenterline -> error("Stroke inference is selected by the vector adapter")
             MorphAppliedStrategy.ExperimentalHoleOpening -> "Explicit opt-in; local unmatched hole has one eligible parent and a valid seam."
             MorphAppliedStrategy.SharedBoundary -> "Ordered common spans support ${shared?.anchorCount} boundary anchors."
             MorphAppliedStrategy.Outline -> if (options.contourStrategy == MorphContourStrategy.Standard)

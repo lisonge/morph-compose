@@ -40,6 +40,8 @@ public enum class MorphAppliedStrategy {
     SharedBoundary,
     ExperimentalHoleOpening,
     Collapse,
+    /** Explicit polygon-to-stroke recovery passed the reconstruction checks. */
+    InferredCenterline,
 }
 
 /** Selects a common representation before contour matching. */
@@ -50,6 +52,8 @@ public enum class MorphTransitionMode {
     Outline,
     /** Require stroke-only inputs; reject filled input rather than silently removing its geometry. */
     Centerline,
+    /** Opt-in: recover flat-capped straight strokes from verified near-uniform polygonal ink; otherwise use Auto. */
+    ExperimentalStrokeInference,
 }
 
 /** How unequal stroke counts behave in centerline mode. Filled contours always preserve winding. */

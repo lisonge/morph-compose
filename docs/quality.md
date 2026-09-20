@@ -6,8 +6,8 @@
 
 | 阶段 | 入口 | 约束 |
 | --- | --- | --- |
-| 输入规范化 | `ImageVectorAdapter.kt` / `StrokeOutline.kt` | 保留可见填充、描边及端点形状；只删除已证明无填充的退化路径 |
-| 轮廓对应 | `MorphPlan.kt` 的 `matchContours` | 角色相容；填充轮廓不能重复分配；记录输入轮廓编号 |
+| 输入规范化 | `ImageVectorParsing.kt` / `StrokeOutline.kt`，表示选择由 `VectorPlanning.kt` 负责 | 保留可见填充、描边及端点形状；只删除已证明无填充的退化路径 |
+| 轮廓对应 | `ContourMatching.kt` 的 `matchContours` / `ContourAlignment.kt` | 角色相容；填充轮廓不能重复分配；记录输入轮廓编号 |
 | 策略选择 | `ContourStrategies.kt` | 按显式策略执行；满足条件才进入；否则回退并记录原因 |
 | 插值与曲线还原 | `Interpolate.kt` / `CurveDetails.kt` / `SharedBoundary.kt` | 有限坐标、端点连续、中断连续；约束不能暗中改变公共区域 |
 
@@ -20,6 +20,70 @@
 描边中心线策略不受此填充轮廓选项影响。动画演示可直接切换三种策略，展开 **规划详情**，
 查看输入对应、实际策略、约束数量、局部运动、连接缝及回退原因。编号指规范化后的轮廓，
 不是矢量路径命令下标；描边展开可能合并轮廓，中断后的编号指当前快照。
+
+`transitionMode = ExperimentalStrokeInference` 是独立的显式实验模式，默认 Auto 不变。
+它仅对具有 2–6 个明确平头端部、近似等宽、单连通无孔的直线填充轮廓尝试恢复笔画。
+识别不读取图标名称；先检查重建拓扑、新增与缺失区域的面积总和（≤原面积的 0.3%），以及双向多边形边界差（≤线宽的 0.6%）。
+区域差通过 PathOps Difference 分别保留，面积不能相互抵消。边界校验检查整条边是否被另一轮廓边的容差邻域覆盖，
+不再只检查离散边界点；浮点 PathOps 和多边形表示误差仍存在。端点仍绘制原图，近端点必须经过原有像素连续性检查。
+每端最多保留 4 个通过校验的候选，由 `InferencePlanning.kt` 比较最多 16 组实际规划。
+在 7 个中间进度、每笔画最多 33 个点上检查额外自交、交汇处分离、相对边长变化，结合对应残差和缩放量评分。
+每个推断折点另计 0.005 复杂度代价，避免为了微小残差收益让原本隐藏在交叉处的折角在动画中显露。
+旋转偏好只在质量分数相差 1e-3 内打破平局，不能增加额外自交。此采样不能证明全时刻不自交，也不代表全局最优分解。
+规划详情记录候选数、选择编号、增减面积比例、边界误差上界和新旧运动评分。
+恢复出的多条笔画在诊断中回溯到原填充轮廓 0；这是表示转换，不是将同一填充轮廓重复配对。
+已中断的填充快照不重新识别；几何/裁剪 API 暂不支持该模式并明确报错。
+
+首版验证由 `StrokeInferenceTest`（几何性质、旋转/缩放/镜像、路径起点、回退与中断）及
+`InferredStrokeIconTest`（原版 Close 与四方向箭头的双向、三旋转偏好、两插值模式、近端点）承担。
+桌面测试输出 `morph-playground/build/reports/stroke-inference/close-arrow-comparison.png`，上排为 Auto，下排为实验模式。
+同目录 `inference-plans.tsv` 保存各方向的候选决策与规划耗时；首次调用包含 JVM 预热，不能视为稳定性能基准。
+`unequal-stroke-plans.tsv` 记录 Close/Check、Add/Check、Remove/Close 双向案例的分解选择和端点检查。
+`InkDifferenceTest` 覆盖面积抵消与孔洞差异；新增候选性质覆盖目标影响分解、路径起点无关、质量不劣于保留基线（含 1e-3 平局容差）。
+既有 quick/wide 报告默认仍检验 Auto，不能用于宣称实验模式覆盖全目录。曲线、多孔洞和多块填充均未扩大适用范围。
+
+笔画推断另有独立候选套件（不会读取或覆盖 Auto 的基线）：
+
+```powershell
+./gradlew.bat :morph-playground:visualRegression '-Pmorph.visual.suite=infer-wide' '-Pmorph.visual.mode=candidate' '-Pmorph.visual.animation=none' --console=plain
+```
+
+报告位于 `morph-playground/build/reports/morph-visual/infer-wide/index.html`。
+它探测全部注册图标与原版 Close 的推断兼容性，再覆盖探测集合的全部有向组合、三种轮廓策略、三种旋转偏好和两种插值。
+目录中的自身及固定步长 37 双向组合使用默认公共边界、自动旋转、极坐标插值，检查实验模式的进入及回退。
+这与 Auto-wide 的完整配置矩阵不同；探测集合也不代表所有可能识别的几何形状或所有可接受组合。
+`inference-coverage.txt` 列出探测集合，规划详情保留实际推断决策及回退原因；现有 96px 端点容差不变。
+
+另增加两种插值下各 24 次连续中断、交替目标和旋转偏好的快照连续性性质测试。
+`large-endpoints.tsv` 记录 768px 下原图与近端点重建的覆盖差；大图的三列依次为原图、近端点、50% 中间帧。
+大尺寸累计 alpha 绝对误差比仅作为诊断指标，不设未经标定的通过阈值；测试仍检查测量值有限。
+此前沿用几何面积差的 0.3% 作为栅格硬门槛，缺乏标定依据，现已撤销。
+几何重建的 0.3% 阈值及现有 96px 端点检查均保持不变；栅格误差受分辨率、抗锯齿和重采样影响，
+应收集多尺寸、已认可与异常案例后独立标定，不能直接沿用几何面积容差。
+
+2026-09-20 验证记录：`verifyMorph --continue` 的 JVM/Desktop 测试、Android/Wasm 编译及 API 检查通过；
+quick 基线对比未通过，120 个序列中 60 个变化、60 个不变，近端点误差均为 0。
+变化集中于恢复原版图标的 Menu/Close、Search/Close、Close/Play、Add/Check、左右箭头及反向案例。
+基线未更新。另补充的“端部可识别但交汇处有额外填充不可丢失”性质测试通过；Desktop 实跑确认实验模式可用。
+
+候选选择与区域差校验迭代后，再次执行 `verifyMorph --continue`：67 项 JVM 测试、45 项 Desktop 测试、
+Android/Wasm 编译及 API 检查通过，仍只有同一组 60 个旧基线差异；未推广参考图。
+随后追加的不同笔画数量案例测试也通过。Close/箭头保留较简单的直线分解，Close/Check 与 Add/Check
+会选择不同的分解；这证明候选选择依赖目标，不代表评分能替代人工视觉审阅。wide 范围仍未验证。
+
+后续独立 `infer-wide` 验证覆盖 5,563 个序列（实际推断 3,780、回退 1,783），96px 端点误差全部为 0。
+新增连续中断测试通过；首次验证时，768px 检查在 Close → Check 的目标端超过了未经标定的栅格门槛。
+该门槛现已撤销，误差保留为诊断数据，不单独据此判定算法异常。
+撤销门槛后重新执行 `:morph-playground:desktopTest`，47 项全部通过；几何容差、既有端点断言及生产算法未改动。
+人工抽查仍发现额外折角与跨笔画交叠，故继续保留 experimental。
+首次完整验证为 68 项 JVM 通过、47 项 Desktop 中 1 项失败；编译及 API 检查通过，quick 有原有 60 项基线差异。
+具体范围、指标区别、复现案例及后续方向见 [笔画推断稳定性审阅](stroke-inference-review.md)。
+
+模块整理验证：拆分解析、对应、对齐与规划文件，复用已解析端点，移除无调用包装函数，
+合并单轮廓绘制入口，并补齐中断推断回退说明。68 项 JVM、47 项 Desktop 测试及 Android/Wasm 编译、
+API 检查通过；`verifyMorph --continue` 仍只因原有 60 项 quick 基线差异失败。
+另重跑 `infer-wide`，5,563 个序列通过，所有候选 PNG 的 SHA-256 与整理前逐一相同；
+这只证明该抽样范围的输出一致，不代表所有可能输入均已验证。参考图未更新。
 
 ## 日常验证
 

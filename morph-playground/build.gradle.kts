@@ -68,6 +68,14 @@ tasks.register<Test>("visualRegression") {
     systemProperty("morph.visual.mode", providers.gradleProperty("morph.visual.mode").getOrElse("compare"))
     systemProperty("morph.visual.suite", providers.gradleProperty("morph.visual.suite").getOrElse("quick"))
     systemProperty("morph.visual.animation", providers.gradleProperty("morph.visual.animation").getOrElse("sample"))
+    // Different suites may run alongside verifyMorph; never share Gradle's binary test results.
+    val visualSuite = providers.gradleProperty("morph.visual.suite").getOrElse("quick")
+    require(visualSuite in listOf("quick", "wide", "infer-wide"))
+    if (visualSuite != "quick") {
+        binaryResultsDirectory.set(layout.buildDirectory.dir("test-results/visualRegression-$visualSuite/binary"))
+        reports.junitXml.outputLocation.set(layout.buildDirectory.dir("test-results/visualRegression-$visualSuite"))
+        reports.html.outputLocation.set(layout.buildDirectory.dir("reports/tests/visualRegression-$visualSuite"))
+    }
     outputs.upToDateWhen { false }
     maxHeapSize = "1g"
 }

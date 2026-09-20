@@ -18,6 +18,7 @@ public final class li/songe/morph/compose/MorphAppliedStrategy : java/lang/Enum 
 	public static final field Centerline Lli/songe/morph/compose/MorphAppliedStrategy;
 	public static final field Collapse Lli/songe/morph/compose/MorphAppliedStrategy;
 	public static final field ExperimentalHoleOpening Lli/songe/morph/compose/MorphAppliedStrategy;
+	public static final field InferredCenterline Lli/songe/morph/compose/MorphAppliedStrategy;
 	public static final field Outline Lli/songe/morph/compose/MorphAppliedStrategy;
 	public static final field SharedBoundary Lli/songe/morph/compose/MorphAppliedStrategy;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
@@ -261,6 +262,7 @@ public final class li/songe/morph/compose/MorphStrokeCountStrategy : java/lang/E
 public final class li/songe/morph/compose/MorphTransitionMode : java/lang/Enum {
 	public static final field Auto Lli/songe/morph/compose/MorphTransitionMode;
 	public static final field Centerline Lli/songe/morph/compose/MorphTransitionMode;
+	public static final field ExperimentalStrokeInference Lli/songe/morph/compose/MorphTransitionMode;
 	public static final field Outline Lli/songe/morph/compose/MorphTransitionMode;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lli/songe/morph/compose/MorphTransitionMode;

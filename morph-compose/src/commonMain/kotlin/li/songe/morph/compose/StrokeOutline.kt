@@ -20,31 +20,6 @@ private data class Point(val x: Double, val y: Double) {
     operator fun times(s: Double) = Point(x * s, y * s)
 }
 
-internal fun buildInterruptedVectorPlan(from: List<SampledContour>, to: List<CubicPath>, options: MorphOptions): li.songe.morph.compose.internal.MorphPlan {
-    val sourcePaths = from.map { it.asCubicPath() }
-    if (!useOutlines(sourcePaths, to, options)) {
-        return li.songe.morph.compose.internal.buildMorphPlanFromSampledSource(from, to, options)
-    }
-    val target = to.expandStrokes(options)
-    // Representation changes require one resampling pass of the expanded ink. Keep snapshots
-    // already in outline form untouched, including their exact interpolated curve offsets.
-    return if (from.any { it.stroke != null }) {
-        li.songe.morph.compose.internal.buildMorphPlan(sourcePaths.expandStrokes(options), target, options)
-    } else li.songe.morph.compose.internal.buildMorphPlanFromSampledSource(from, target, options)
-}
-
-internal fun useOutlines(source: List<CubicPath>, target: List<CubicPath>, options: MorphOptions): Boolean {
-    val onlyStrokes = (source + target).all { it.role == MorphContourRole.Stroke && it.stroke != null }
-    return when (options.transitionMode) {
-        MorphTransitionMode.Auto -> !onlyStrokes
-        MorphTransitionMode.Outline -> true
-        MorphTransitionMode.Centerline -> {
-            require(onlyStrokes) { "Centerline mode requires stroke-only input on both sides" }
-            false
-        }
-    }
-}
-
 /** Recover the rendered cubic chain, not a second approximation of an interrupted centerline. */
 internal fun SampledContour.asCubicPath(): CubicPath {
     val detail = curveDetails
@@ -157,5 +132,5 @@ internal fun List<CubicPath>.expandStrokes(options: MorphOptions): List<CubicPat
     }
     require(!ink.isEmpty) { "Stroke expansion produced no visible geometry" }
     return morphGeometryOf(ink, Size(OutlineScale.toFloat(), OutlineScale.toFloat()),
-        (options.outlineTolerance * OutlineScale / 4).toFloat()).vector.toCubicPaths(false)
+        (options.outlineTolerance * OutlineScale / 4).toFloat()).paths
 }

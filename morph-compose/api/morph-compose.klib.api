@@ -10,6 +10,7 @@ final enum class li.songe.morph.compose/MorphAppliedStrategy : kotlin/Enum<li.so
     enum entry Centerline // li.songe.morph.compose/MorphAppliedStrategy.Centerline|null[0]
     enum entry Collapse // li.songe.morph.compose/MorphAppliedStrategy.Collapse|null[0]
     enum entry ExperimentalHoleOpening // li.songe.morph.compose/MorphAppliedStrategy.ExperimentalHoleOpening|null[0]
+    enum entry InferredCenterline // li.songe.morph.compose/MorphAppliedStrategy.InferredCenterline|null[0]
     enum entry Outline // li.songe.morph.compose/MorphAppliedStrategy.Outline|null[0]
     enum entry SharedBoundary // li.songe.morph.compose/MorphAppliedStrategy.SharedBoundary|null[0]
 
@@ -128,6 +129,7 @@ final enum class li.songe.morph.compose/MorphStrokeCountStrategy : kotlin/Enum<l
 final enum class li.songe.morph.compose/MorphTransitionMode : kotlin/Enum<li.songe.morph.compose/MorphTransitionMode> { // li.songe.morph.compose/MorphTransitionMode|null[0]
     enum entry Auto // li.songe.morph.compose/MorphTransitionMode.Auto|null[0]
     enum entry Centerline // li.songe.morph.compose/MorphTransitionMode.Centerline|null[0]
+    enum entry ExperimentalStrokeInference // li.songe.morph.compose/MorphTransitionMode.ExperimentalStrokeInference|null[0]
     enum entry Outline // li.songe.morph.compose/MorphTransitionMode.Outline|null[0]
 
     final val entries // li.songe.morph.compose/MorphTransitionMode.entries|#static{}entries[0]

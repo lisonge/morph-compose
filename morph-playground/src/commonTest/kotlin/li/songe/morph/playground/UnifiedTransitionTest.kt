@@ -25,8 +25,7 @@ class UnifiedTransitionTest {
                             assertEquals(MorphCompatibility.FullPolar, report.compatibility)
                             assertEquals(1, plan.contourCount)
                         }
-                        val strokes = mode == MorphTransitionMode.Auto && (a == "Search" || b == "Arrow back")
-                        assertEquals(strokes, report.contours.any { it.kind == MorphContourKind.Stroke }, "$from -> $to $mode")
+                        assertEquals(false, report.contours.any { it.kind == MorphContourKind.Stroke }, "$from -> $to $mode")
                     }
                 }
             }

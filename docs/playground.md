@@ -140,6 +140,23 @@ Invoke-RestMethod 'http://127.0.0.1:17321/control?from=1&to=15&rotation=ccw&prog
 `rotation` accepts `auto`, `cw`, or `ccw`. The health/control snapshots include `rotationPreference`.
 The preview, Linear comparison, and Morph Doctor all use the selected options.
 
+Choose **Infer strokes (experimental)** in the transition mode controls to try geometric stroke
+recovery on the original filled icons. For Close → Arrow back, use:
+
+```powershell
+Invoke-RestMethod 'http://127.0.0.1:17321/control?selected=1,15&from=1&to=15&transitionMode=infer&progress=0.5&details=true'
+```
+
+The original vectors stay in the catalog. Planning details distinguish accepted stroke recovery
+from outline fallback. This is an opt-in approximation for simple flat-ended polygonal strokes;
+it is not general curved-icon skeleton extraction. Auto remains the default.
+
+Choose configurations by the effect you want; not every pair needs to look good under every mode.
+If none fits, an explicitly authored stroke version is another option. See the
+[AI-assisted rebuilding prompt](../README.md#choosing-an-effect-and-rebuilding-strokes-with-ai)
+or [中文提示语](../README.zh.md#选择效果与-ai-辅助描边重建).
+Keep rebuilt icons separately named and labeled; do not silently replace the original catalog entries.
+
 Control playback:
 
 ```powershell

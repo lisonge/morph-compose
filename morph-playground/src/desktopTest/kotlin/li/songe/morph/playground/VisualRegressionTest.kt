@@ -31,7 +31,8 @@ class VisualRegressionTest {
         val mode = System.getProperty("morph.visual.mode", "compare")
         val suite = System.getProperty("morph.visual.suite", "quick")
         require(mode in listOf("compare", "candidate"))
-        require(suite in listOf("quick", "wide"))
+        require(suite in listOf("quick", "wide", "infer-wide"))
+        val inference = suite == "infer-wide"
         val output = File(root, "morph-playground/build/reports/morph-visual/$suite").apply { mkdirs() }
         val summary = File(output, "summary.json")
         summary.writeText("""{"suite":"$suite","mode":"$mode","state":"running"}""")
@@ -48,10 +49,21 @@ class VisualRegressionTest {
         val quick = representatives.map { (a, b) -> index(a) to index(b) }
             .flatMap { listOf(it, it.second to it.first) }.distinct()
         // Deterministic coverage rather than a prohibitively large all-pairs claim.
+        // Probe every catalog entry, then exercise every pair accepted with the probe.
+        // Names here define test fixtures only; production eligibility remains geometric.
+        val inferredEntries = if (inference) iconEntries.indices.filter { i ->
+            buildMorphPlan(iconEntries[i].imageVector, iconEntries[index("Close")].imageVector,
+                MorphOptions(transitionMode = MorphTransitionMode.ExperimentalStrokeInference))
+                .compatibilityReport.contours.any { it.strategy == MorphAppliedStrategy.InferredCenterline }
+        }.plus(index("Close")).distinct() else emptyList()
         val pairs = if (suite == "quick") quick else (quick + iconEntries.indices.flatMap { i ->
             val j = (i + 37) % iconEntries.size
             listOf(i to i, i to j, j to i)
-        }).distinct()
+        } + inferredEntries.flatMap { a -> inferredEntries.map { b -> a to b } }).distinct()
+        File(output, "inference-coverage.txt").writeText(if (inference)
+            "Catalog entries: ${iconEntries.size}\nProbe-compatible entries: ${inferredEntries.size}\n" +
+                inferredEntries.joinToString("\n") { "$it\t${iconEntries[it].name}" }
+            else "Transition mode: Auto\n")
         val rotations = if (suite == "quick") listOf(MorphRotationPreference.Auto) else MorphRotationPreference.entries
         val animationMode = System.getProperty("morph.visual.animation", "sample")
         require(animationMode in listOf("none", "sample", "all"))
@@ -62,10 +74,18 @@ class VisualRegressionTest {
         val manifest = mutableListOf("morph-visual-v1; pixels=$pixels; samples=64; progress=$progress; suite=$suite")
         val previousManifest = File(baseline, "manifest.txt").takeIf { it.isFile }?.readLines()
         RemoteVisualBaseline(baseline, File(root, ".cache/image")).use { references ->
-        for ((a, b) in pairs) for (policy in MorphContourStrategy.entries) for (rotation in rotations) {
-            val options = MorphOptions(contourStrategy = policy, rotationPreference = rotation)
+        for ((a, b) in pairs) {
+        // The inference matrix is exhaustive over probe-compatible pairs. Catalog fallback
+        // pairs use the default policy/direction/interpolation; Auto-wide remains separate.
+        val inferenceMatrix = inference && a in inferredEntries && b in inferredEntries
+        val policies = if (inference && !inferenceMatrix) listOf(MorphContourStrategy.SharedBoundary) else MorphContourStrategy.entries
+        val directions = if (inference && !inferenceMatrix) listOf(MorphRotationPreference.Auto) else rotations
+        val interpolations = if (inference && !inferenceMatrix) listOf(MorphInterpolation.Polar) else MorphInterpolation.entries
+        for (policy in policies) for (rotation in directions) {
+            val options = MorphOptions(contourStrategy = policy, rotationPreference = rotation,
+                transitionMode = if (inference) MorphTransitionMode.ExperimentalStrokeInference else MorphTransitionMode.Auto)
             val planning = runCatching { buildMorphPlan(iconEntries[a].imageVector, iconEntries[b].imageVector, options) }
-            for (interpolation in MorphInterpolation.entries) {
+            for (interpolation in interpolations) {
                 val id = "${a}_${b}_${policy}_${rotation}_$interpolation"
                 val title = "${iconEntries[a].name} → ${iconEntries[b].name} | $policy | $rotation | $interpolation"
                 manifest += "$id\t$title"
@@ -115,7 +135,8 @@ class VisualRegressionTest {
                 }
                 val trace = plan.compatibilityReport.contours.joinToString("\n") {
                     "轮廓 ${it.index}：${it.sourceContours} → ${it.targetContours}；${label(it.strategy.name)}；" +
-                        "公共锚点 ${it.sharedAnchorCount}，连接缝 ${it.holeOpeningCount}；${decisionLabel(it)}"
+                        "公共锚点 ${it.sharedAnchorCount}，连接缝 ${it.holeOpeningCount}；${decisionLabel(it)}" +
+                            if (inference) "；${it.decision}" else ""
                 }
                 results += Result(id, displayTitle, status, changed, endpointError, areaJump, sharedDrift, holeChanges, trace, animated)
                 } catch (error: Exception) {
@@ -123,6 +144,7 @@ class VisualRegressionTest {
                     results += Result(id, displayTitle, "ERROR", 0, 0, 0, 0, 0, "规划、渲染或基线图片加载失败，请查看桌面测试日志定位异常。")
                 }
             }
+        }
         }
         }
         File(current, "manifest.txt").writeText(manifest.joinToString("\n") + "\n")
@@ -236,6 +258,7 @@ class VisualRegressionTest {
         "ERROR" -> "异常"
         "quick" -> "快速回归"
         "wide" -> "广域抽样"
+        "infer-wide" -> "笔画推断广域抽样"
         "compare" -> "基线对比"
         "candidate" -> "候选生成"
         else -> "未识别类型"
@@ -248,6 +271,7 @@ class VisualRegressionTest {
             else -> "轮廓未能匹配，采用线性收缩或展开。"
         }
         MorphAppliedStrategy.Centerline -> "仅涉及笔画对应，不应用填充轮廓策略。"
+        MorphAppliedStrategy.InferredCenterline -> "实验性笔画识别；核对原始轮廓的重建误差后使用中心线。"
         MorphAppliedStrategy.ExperimentalHoleOpening -> "已显式启用实验策略；局部未匹配孔洞具有唯一合格父轮廓和有效连接缝。"
         MorphAppliedStrategy.SharedBoundary -> "顺序一致的公共片段支持 ${report.sharedAnchorCount} 个边界锚点。"
         MorphAppliedStrategy.Outline -> if (report.decision.startsWith("Standard policy:"))

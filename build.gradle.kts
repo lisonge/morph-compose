@@ -28,7 +28,7 @@ private val publishedModuleNames = setOf(
 
 allprojects {
     group = "li.songe.morph"
-    version = "0.3.0"
+    version = "0.4.0"
 }
 
 tasks.register("verifyMorph") {

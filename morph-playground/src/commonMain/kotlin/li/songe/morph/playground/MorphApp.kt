@@ -513,6 +513,7 @@ private fun TransitionModeControl(state: PlaygroundState) {
                     MorphTransitionMode.Auto -> "Auto"
                     MorphTransitionMode.Outline -> "Filled outlines"
                     MorphTransitionMode.Centerline -> "Centerline"
+                    MorphTransitionMode.ExperimentalStrokeInference -> "Infer strokes (experimental)"
                 }
                 ChoiceChip(label, state.transitionMode == mode) { state.changeTransitionMode(mode) }
             }

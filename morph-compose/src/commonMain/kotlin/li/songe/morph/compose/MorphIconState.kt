@@ -139,17 +139,20 @@ public class MorphIconState internal constructor(
             )
         }
         val frozenSource = plan.corePlan.snapshotContours(progress.toDouble(), interpolation)
+        val targetPaths = target.toCubicPaths(isRtl)
         return ImageVectorMorphPlan(
             corePlan =
                 buildInterruptedVectorPlan(
                     frozenSource,
-                    target.toCubicPaths(isRtl),
+                    targetPaths,
                     options,
                 ),
             from = null,
             to = target,
             defaultWidth = maxOf(plan.defaultWidth, target.defaultWidth),
             defaultHeight = maxOf(plan.defaultHeight, target.defaultHeight),
+            sourcePaths = null,
+            targetPaths = targetPaths,
         )
     }
 

@@ -17,9 +17,13 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 import kotlin.math.hypot
 import kotlin.math.sqrt
+import li.songe.morph.compose.internal.CubicPath
 
 /** Immutable, filled geometry in an explicit viewport, independent of icon packs and layout size. */
-public class MorphGeometry internal constructor(internal val vector: ImageVector)
+public class MorphGeometry internal constructor(
+    internal val vector: ImageVector,
+    internal val paths: List<CubicPath>,
+)
 
 /**
  * Copies a filled [path] into reusable morph geometry. Open subpaths are implicitly closed.
@@ -88,8 +92,9 @@ public fun morphGeometryOf(pathData: List<PathNode>, viewportSize: Size): MorphG
         viewportHeight = viewportSize.height,
     ).addPath(pathData = pathData.toList(), fill = SolidColor(Color.Black)).build()
     // Validate coordinates and topology at the input boundary, before an animation begins.
-    require(vector.toCubicPaths(isRtl = false).isNotEmpty()) { "Geometry must contain drawable contours" }
-    return MorphGeometry(vector)
+    val paths = vector.toCubicPaths(isRtl = false)
+    require(paths.isNotEmpty()) { "Geometry must contain drawable contours" }
+    return MorphGeometry(vector, paths)
 }
 
 /** A reusable correspondence between two filled geometries. */
@@ -107,7 +112,10 @@ public fun buildMorphPlan(
     from: MorphGeometry,
     to: MorphGeometry,
     options: MorphOptions = MorphOptions(sampleCount = 128),
-): MorphGeometryPlan = MorphGeometryPlan(buildMorphPlan(from.vector, to.vector, options))
+): MorphGeometryPlan {
+    requireFilledGeometryOptions(options)
+    return MorphGeometryPlan(buildVectorPlan(from.vector, to.vector, from.paths, to.paths, options))
+}
 
 @Composable
 public fun rememberMorphPlan(
@@ -142,5 +150,12 @@ public fun rememberMorphGeometryState(
     options: MorphOptions = MorphOptions(sampleCount = 128),
     interpolation: MorphInterpolation = MorphInterpolation.Polar,
 ): MorphGeometryState = remember(options, interpolation) {
+    requireFilledGeometryOptions(options)
     MorphGeometryState(MorphIconState(initialGeometry.vector, options, false, interpolation))
+}
+
+private fun requireFilledGeometryOptions(options: MorphOptions) {
+    require(options.transitionMode != MorphTransitionMode.ExperimentalStrokeInference) {
+        "ExperimentalStrokeInference currently supports ImageVector/MorphIcon only; geometry and clipping require filled outlines"
+    }
 }

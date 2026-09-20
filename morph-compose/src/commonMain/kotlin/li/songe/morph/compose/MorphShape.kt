@@ -90,8 +90,8 @@ public class MorphPathWriter internal constructor(private val renderer: MorphPat
 
 internal class MorphPathRenderer(private val plan: ImageVectorMorphPlan) {
     private val frame = plan.corePlan.createFrame()
-    private val from = plan.from?.toCubicPaths(false)
-    private val to = plan.to.toCubicPaths(false)
+    private val from = plan.sourcePaths
+    private val to = plan.targetPaths
 
     fun writePath(path: Path, progress: Float, size: Size, scale: MorphContentScale, interpolation: MorphInterpolation) {
         require(progress.isFinite()) { "progress must be finite" }
@@ -130,20 +130,25 @@ internal class MorphPathRenderer(private val plan: ImageVectorMorphPlan) {
 internal fun Path.appendMorphFrame(frame: MorphFrame, sx: Float, sy: Float, ox: Float, oy: Float,
     includeContour: (Int) -> Boolean = { true },
 ) {
-    fun x(value: Double): Float = ox + value.toFloat() * sx
-    fun y(value: Double): Float = oy + value.toFloat() * sy
     for (contour in 0 until frame.contourCount) {
         if (!includeContour(contour)) continue
-        val curves = frame.curves[contour]
-        if (curves != null && curves.isNotEmpty()) {
-            moveTo(x(curves[0]), y(curves[1]))
-            for (i in 2 until curves.size step 6) {
-                cubicTo(x(curves[i]), y(curves[i + 1]), x(curves[i + 2]), y(curves[i + 3]), x(curves[i + 4]), y(curves[i + 5]))
-            }
-        } else {
-            moveTo(x(frame.x(contour, 0)), y(frame.y(contour, 0)))
-            for (point in 1 until frame.sampleCount) lineTo(x(frame.x(contour, point)), y(frame.y(contour, point)))
-        }
-        if (frame.isClosed(contour)) close()
+        appendMorphContour(frame, contour, sx, sy, ox, oy)
     }
+}
+
+/** Append one contour without scanning the remaining contours. */
+internal fun Path.appendMorphContour(frame: MorphFrame, contour: Int, sx: Float, sy: Float, ox: Float, oy: Float) {
+    fun x(value: Double): Float = ox + value.toFloat() * sx
+    fun y(value: Double): Float = oy + value.toFloat() * sy
+    val curves = frame.curves[contour]
+    if (curves != null && curves.isNotEmpty()) {
+        moveTo(x(curves[0]), y(curves[1]))
+        for (i in 2 until curves.size step 6) {
+            cubicTo(x(curves[i]), y(curves[i + 1]), x(curves[i + 2]), y(curves[i + 3]), x(curves[i + 4]), y(curves[i + 5]))
+        }
+    } else {
+        moveTo(x(frame.x(contour, 0)), y(frame.y(contour, 0)))
+        for (point in 1 until frame.sampleCount) lineTo(x(frame.x(contour, point)), y(frame.y(contour, point)))
+    }
+    if (frame.isClosed(contour)) close()
 }
