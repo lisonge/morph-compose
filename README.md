@@ -226,6 +226,63 @@ rejects the pair. For unequal stroke counts, compare `SplitMerge` and `Collapse`
 This is an intentional redesign by the user, not an automatic replacement by the library.
 Rebuilt examples should identify their origin and purpose separately from the originals.
 
+## Generate a standalone transition with AI (no library required)
+
+For a fixed icon pair, you can ask AI to author a dedicated animation when you want precise control
+over how each part moves. This does not require morph-compose or trying every library configuration
+first. It suits a small number of important interactions; automatic transitions between arbitrary
+runtime icons remain the library's main use case. This approach can use path trimming, local timelines
+and filled geometry freely; the stroke-rebuilding restrictions above do not apply.
+
+Copy this prompt, supply both original icons, and describe the motion you want:
+
+```text
+Write a standalone Kotlin/Compose transition between the two icons below, without morph-compose
+or another morphing library. Use Compose animation and drawing APIs. Provide complete code and
+a clickable toggle example.
+
+Requirements:
+- Treat the supplied original code as the endpoint reference. Preserve viewports, dimensions,
+  position, stroke widths, caps, corners, fills and holes. Do not add rounding, change weight or
+  redesign icons to simplify animation. Explain limitations and alternatives if exact preservation is infeasible.
+- Briefly describe which parts stay, move, rotate, shrink or grow before implementing them.
+  Prefer preserving shared structure; avoid unnecessary whole-icon rotation, collapse and extra bends.
+  Do not default to crossfading.
+- Use Canvas, Path, ImageVector, path trimming and local progress intervals as appropriate.
+  You do not need to convert all fills to strokes or equalize path counts.
+- Describe geometry with one continuous progress p: 0 is the source and 1 is the target.
+  Separate progress-driven drawing from animation state so intermediate frames can be inspected manually.
+- Support repeated clicks and reversal from the current progress without resetting to an endpoint.
+  Do not abruptly switch geometry formulas based on the target boolean. State whether velocity is continuous.
+- Support modifier, tint and contentDescription; preserve aspect ratio and center within the available area.
+- Keep exact endpoints and nearby frames continuous. Do not hide mismatched intermediate geometry
+  by drawing the originals only at p=0/1. Check short-stroke caps, path birth/death and arc joins
+  for flashes, jumps and seams.
+- Avoid unnecessary per-frame allocations without changing appearance or adding unrelated infrastructure.
+- Provide original-versus-animated endpoint comparisons, frames at 0/25/50/75/100%, and examples of
+  both directions and interrupted reversal. Verify in a runnable environment when available;
+  otherwise identify unverified items instead of claiming pixel equivalence or passing tests.
+
+Source icon:
+[Paste complete ImageVector code or SVG]
+
+Target icon:
+[Paste complete ImageVector code or SVG]
+
+Desired motion:
+[For example: retain the shared slash, retract the other stroke toward the center, and grow the ring
+from specified locations; or ask AI to propose the motion]
+
+Duration and easing:
+[For example: 300ms with Compose's default tween easing]
+
+Project environment:
+[Compose platform, version, and existing Material/Material3 dependencies]
+```
+
+Review AI-generated results, especially endpoint fidelity and rapid reversal. An authored transition
+for a fixed pair does not automatically support interruption toward an arbitrary third icon.
+
 ## Inspiration
 
 This project was inspired by [morphicons](https://github.com/guillermolg00/morphicons).

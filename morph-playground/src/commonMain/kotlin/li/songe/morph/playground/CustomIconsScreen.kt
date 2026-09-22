@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import li.songe.morph.playground.custom.CanvasBackCloseIcon
 import li.songe.morph.playground.custom.CanvasSearchCloseIcon
+import li.songe.morph.playground.custom.GkBlockCloseIcon
 
 @Composable
 internal fun CustomIconsScreen(state: PlaygroundState) {
@@ -31,13 +32,16 @@ internal fun CustomIconsScreen(state: PlaygroundState) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("Handwritten icons", color = PlaygroundColors.Ink, fontSize = 24.sp)
-        Text("Original Canvas animations from GKD · click each card to toggle",
+        Text("Handwritten animations from GKD · click each card to toggle",
             color = PlaygroundColors.Muted)
         CustomIconCard("Back / Close", { state.customBackOrClose = !state.customBackOrClose }) {
             CanvasBackCloseIcon(state.customBackOrClose, Modifier.size(96.dp), tint = PlaygroundColors.Ink)
         }
         CustomIconCard("Search / Close", { state.customSearchOpen = !state.customSearchOpen }) {
             CanvasSearchCloseIcon(state.customSearchOpen, Modifier.size(96.dp), tint = PlaygroundColors.Ink)
+        }
+        CustomIconCard("Block / Close", { state.customBlockIsClose = !state.customBlockIsClose }) {
+            GkBlockCloseIcon(state.customBlockIsClose, Modifier.size(96.dp), tint = PlaygroundColors.Ink)
         }
     }
 }
