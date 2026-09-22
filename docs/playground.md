@@ -17,7 +17,7 @@ The playground provides:
 - per-module controls retained when switching tabs (state is not persisted across app restarts
   or browser reloads);
 
-- a fixed catalog of 500 Material icons;
+- a fixed catalog of 2000 Material icons;
 - ordered multi-selection supporting zero, one, or many icons;
 - cyclic morph playback through the selected sequence;
 - Last, play/pause, and Next controls;
@@ -26,6 +26,14 @@ The playground provides:
 - Auto, Clockwise, and Counterclockwise rotation preferences (changing preference pauses and resets the current pair);
 - a live Morph Doctor summary for Polar, hybrid, and unsupported pairs;
 - a light theme by default and a theme icon button fixed to the left of the scrollable top-level tabs.
+
+The icon catalog preserves the original 504 entries and their indices. The additional 1496 names
+come from [Google Fonts icon metadata](https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true),
+selected on 2026-09-22 by descending popularity among icons available in Compose Material Icons
+1.7.3 (using the highest popularity when multiple families share a name). Added entries retain
+the metadata's searchable snake_case names. All added vectors reference AndroidX `Icons.Filled`
+or `Icons.AutoMirrored.Filled` through the existing Compose Multiplatform dependency; no custom
+path data or runtime metadata download is involved.
 
 The shared UI uses Compose `BoxWithConstraints` as a container-query equivalent. Below 460 dp,
 the Polar/Linear previews stack vertically; compact control containers use icon-only transport
